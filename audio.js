@@ -1,6 +1,6 @@
 /**
  * Procedural Web Audio API Micro-Haptics Engine
- * Inspired by Teenage Engineering OP-1 & Dieter Rams industrial hardware.
+ * Real-time synthesis of mechanical detents, solenoids, relays, and telemetry chirps.
  * Zero external audio assets required. Sub-millisecond latency.
  */
 export class MicroHapticsEngine {

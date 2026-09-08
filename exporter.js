@@ -2870,7 +2870,7 @@ export class ComponentExporterEngine {
 
     try {
       const zip = new JSZip();
-      const rootFolder = zip.folder('kinetic-blueprint-ui');
+      const rootFolder = zip.folder('kinetic-ui');
 
       // 1. Fetch live tokens.css or fallback to core tokens
       let tokensContent = '';
@@ -2882,7 +2882,7 @@ export class ComponentExporterEngine {
       } catch (e) {}
 
       if (!tokensContent) {
-        tokensContent = `/* Kinetic Blueprint UI Design Tokens */
+        tokensContent = `/* Kinetic UI Design Tokens */
 :root {
   --ink: #2b2b29;
   --ink-dark: #16150f;
@@ -2944,10 +2944,10 @@ export default {
       rootFolder.file('tailwind.config.js', tailwindConfig);
 
       // 3. Comprehensive README.md
-      const readme = `# KINETIC BLUEPRINT UI // COMPLETE COMPONENT SUITE
-===================================================
-A precision industrial engineering design system and component catalog
-inspired by Dieter Rams functionalism, aerospace avionics, and developer-first tools.
+      const readme = `# KINETIC UI // COMPLETE COMPONENT SUITE
+========================================
+An independent, high-assurance industrial engineering design system and component catalog
+built for mission-critical telemetry, aerospace instrumentation, and developer platforms.
 
 ## Included Components (15 Total):
 - BlueprintButton: 8-point polygon chamfer action triggers with tactical return glyphs.
@@ -2977,7 +2977,7 @@ inspired by Dieter Rams functionalism, aerospace avionics, and developer-first t
 2. Extend tailwind.config.js with the provided color definitions.
 3. Import the components directly into your Next.js, Vite, Nuxt, or SvelteKit project.
 
-Website & Documentation: https://github.com/SalAkBuK/aesthetic-cards
+Website & Documentation: https://github.com/SalAkBuK/kinetic-ui
 `;
       rootFolder.file('README.md', readme);
 
@@ -3026,7 +3026,7 @@ Website & Documentation: https://github.com/SalAkBuK/aesthetic-cards
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'kinetic-blueprint-complete-suite.zip';
+      a.download = 'kinetic-ui-complete-suite.zip';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

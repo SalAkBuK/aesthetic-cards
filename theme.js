@@ -61,9 +61,9 @@ export const THEMES = {
     hex: '#e5e5e5',
     hoverHex: '#d4d4d4',
     rgb: '229 229 229',
-    tag: 'BRAUN / RAMS',
+    tag: 'LABORATORY',
     glow: 'rgba(229, 229, 229, 0.35)',
-    description: 'Minimalist Dieter Rams industrial functionalism'
+    description: 'High-contrast clean-room laboratory instrumentation'
   }
 };
 

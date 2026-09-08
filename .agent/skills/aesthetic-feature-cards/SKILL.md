@@ -3,9 +3,9 @@ name: aesthetic-feature-cards
 description: Generates high-end technical blueprint feature cards with chamfered silhouettes, dot grids, and orchestrated initial-load SVG stroke-drawing animations using Motion.dev or Web Animations API. Use when the user asks for aesthetic cards, technical UI cards, blueprint feature grids, or geometric line-art draw-on animations.
 ---
 
-# Aesthetic Feature Cards Skill
+# Kinetic UI Design Engineering Skill
 
-This skill provides the architectural specifications, mathematical formulas, and animation choreography required to generate technical/industrial aesthetic feature cards inspired by Linear and high-end developer tools.
+This skill provides the architectural specifications, mathematical formulas, and animation choreography required to generate high-assurance technical UI cards, chamfered geometries, and telemetry interfaces.
 
 ---
 

@@ -22,9 +22,9 @@ export const PRESETS = {
     strokeWidth: 1.35,
     bracketSize: 13
   },
-  teenage: {
-    id: 'teenage',
-    name: 'Teenage Engineering OP-1',
+  avionics: {
+    id: 'avionics',
+    name: 'Avionics Phosphor Green',
     chamfer: 10,
     accent: '#39ff14',
     accentHover: '#32e012',

@@ -1,6 +1,6 @@
 /**
  * Interactive Audio Oscilloscope & Spectrogram Engine
- * Inspired by Tektronix 2200 laboratory oscilloscopes and Teenage Engineering OP-1 instrumentation.
+ * Real-time laboratory signal analysis, FFT frequency spectrum, and waterfall sonograms.
  * Zero external dependencies. HiDPI Canvas 2D rendering.
  */
 

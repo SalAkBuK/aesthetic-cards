@@ -32,7 +32,7 @@ export const COMMANDS = [
   { id: 'theme-cyan', category: 'PALETTES', label: 'Palette // Quantum Cyan (Clean-Room Avionics)', shortcut: 'T C', action: (ctx) => { ctx.themeEngine?.setTheme('cyan'); } },
   { id: 'theme-emerald', category: 'PALETTES', label: 'Palette // Radar Emerald (Military Sonar HUD)', shortcut: 'T E', action: (ctx) => { ctx.themeEngine?.setTheme('emerald'); } },
   { id: 'theme-ruby', category: 'PALETTES', label: 'Palette // Alarm Ruby (Emergency Lockdown)', shortcut: 'T R', action: (ctx) => { ctx.themeEngine?.setTheme('ruby'); } },
-  { id: 'theme-titanium', category: 'PALETTES', label: 'Palette // Monochrome Titanium (Dieter Rams Braun)', shortcut: 'T M', action: (ctx) => { ctx.themeEngine?.setTheme('titanium'); } },
+  { id: 'theme-titanium', category: 'PALETTES', label: 'Palette // Monochrome Titanium (Clean-Room Laboratory)', shortcut: 'T M', action: (ctx) => { ctx.themeEngine?.setTheme('titanium'); } },
 
   // Presets
   { id: 'pre-ent', category: 'PRESETS', label: 'Apply Preset: 01 Production Enterprise', shortcut: 'P 1', action: () => document.querySelector('[data-param-preset="enterprise"]')?.click() },
