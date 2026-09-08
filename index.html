@@ -789,12 +789,12 @@
           </div>
         </article>
 
-        <!-- 007 — State Synthesis -->
+        <!-- 007 — State Consensus -->
         <article class="card-shell group relative" data-card="7">
           <div class="card flex h-full flex-col gap-[6px] will-change-transform">
             <div class="block chamfer relative bg-cream text-near">
             <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
-              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">State Synthesis</h3>
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">State Consensus</h3>
               <span class="font-mono text-[10px] leading-none pt-[3px] opacity-45">007</span>
             </header>
 
@@ -806,29 +806,68 @@
                 <span class="bracket bl text-near/55"></span>
                 <span class="bracket br text-near/55"></span>
 
-                <!-- Orbital Gyroscope & State Lattice -->
+                <!-- Vector Merkle DAG Tree & Byzantine Consensus Proof Arc -->
                 <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
                      stroke="currentColor" stroke-width="1.35" aria-hidden="true">
-                  <g stroke-linecap="round" stroke-linejoin="round">
-                    <ellipse class="draw orbit" cx="100" cy="100" rx="68" ry="34" stroke-width="1.1" stroke-dasharray="4 2"/>
-                    <polygon class="draw core" points="100,76 124,100 100,124 76,100" stroke-width="1.25"/>
-                    <circle class="draw node-ring" cx="100" cy="36" r="11" stroke-width="1.2"/>
-                    <circle class="draw node-ring" cx="164" cy="100" r="11" stroke-width="1.2"/>
-                    <circle class="draw node-ring" cx="100" cy="164" r="11" stroke-width="1.2"/>
-                    <circle class="draw node-ring" cx="36" cy="100" r="11" stroke-width="1.2"/>
-                    <line class="draw link" x1="100" y1="47" x2="100" y2="76" stroke-width="1.2"/>
-                    <line class="draw link" x1="124" y1="100" x2="153" y2="100" stroke-width="1.2"/>
-                    <line class="draw link" x1="100" y1="124" x2="100" y2="153" stroke-width="1.2"/>
-                    <line class="draw link" x1="76" y1="100" x2="47" y2="100" stroke-width="1.2"/>
-                    <line class="draw axis" x1="55" y1="55" x2="145" y2="145" stroke-width="0.8" stroke-dasharray="2 3"/>
-                    <line class="draw axis" x1="145" y1="55" x2="55" y2="145" stroke-width="0.8" stroke-dasharray="2 3"/>
+                  <!-- Coordinate Axis Dashes -->
+                  <g stroke-linecap="round">
+                    <line class="draw axis" x1="100" y1="18" x2="100" y2="182" stroke-width="0.8" stroke-dasharray="2 3"/>
+                    <line class="draw axis" x1="20" y1="100" x2="180" y2="100" stroke-width="0.8" stroke-dasharray="2 3"/>
                   </g>
-                  <g class="nodes" fill="currentColor">
-                    <circle class="signal-dot" cx="100" cy="100" r="3.5"/>
-                    <circle class="signal-dot" cx="100" cy="36" r="2.5"/>
-                    <circle class="signal-dot" cx="164" cy="100" r="2.5"/>
-                    <circle class="signal-dot" cx="100" cy="164" r="2.5"/>
-                    <circle class="signal-dot" cx="36" cy="100" r="2.5"/>
+
+                  <!-- Curved Byzantine Consensus Proof Arc -->
+                  <path class="draw proof-arc" d="M 24 116 C 52 168, 148 168, 176 116" stroke-width="1.1" stroke-dasharray="4 2.5"/>
+
+                  <!-- Hierarchical Merkle Branch Lines -->
+                  <g stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Root to L1 -->
+                    <path class="draw branch" d="M 100 46 V 56 L 60 68 V 74" stroke-width="1.25"/>
+                    <path class="draw branch" d="M 100 46 V 56 L 140 68 V 74" stroke-width="1.25"/>
+
+                    <!-- L1 to Leaves -->
+                    <path class="draw branch" d="M 60 88 V 98 L 38 112 V 126" stroke-width="1.1"/>
+                    <path class="draw branch" d="M 60 88 V 98 L 82 112 V 126" stroke-width="1.1"/>
+                    <path class="draw branch" d="M 140 88 V 98 L 118 112 V 126" stroke-width="1.1"/>
+                    <path class="draw branch" d="M 140 88 V 98 L 162 112 V 126" stroke-width="1.1"/>
+
+                    <!-- Leaf Pin Terminal Calipers -->
+                    <line class="draw leaf-pin" x1="38" y1="138" x2="38" y2="158" stroke-width="0.9"/>
+                    <line class="draw leaf-pin" x1="82" y1="138" x2="82" y2="158" stroke-width="0.9"/>
+                    <line class="draw leaf-pin" x1="118" y1="138" x2="118" y2="158" stroke-width="0.9"/>
+                    <line class="draw leaf-pin" x1="162" y1="138" x2="162" y2="158" stroke-width="0.9"/>
+                    <line class="draw baseline" x1="28" y1="158" x2="172" y2="158" stroke-width="0.8"/>
+                  </g>
+
+                  <!-- Merkle Nodes (Diamond Junctions at L0 & L1) -->
+                  <g stroke-linecap="round" stroke-linejoin="round">
+                    <!-- Root Diamond (L0) -->
+                    <polygon class="draw merkle-node" points="100,26 110,36 100,46 90,36" stroke-width="1.35"/>
+                    <!-- L1 Diamonds -->
+                    <polygon class="draw merkle-node" points="60,74 68,81 60,88 52,81" stroke-width="1.2"/>
+                    <polygon class="draw merkle-node" points="140,74 148,81 140,88 132,81" stroke-width="1.2"/>
+                  </g>
+
+                  <!-- Leaf Validation Circles (L2) -->
+                  <g>
+                    <circle class="draw merkle-leaf" cx="38" cy="132" r="5.5" stroke-width="1.2"/>
+                    <circle class="draw merkle-leaf" cx="82" cy="132" r="5.5" stroke-width="1.2"/>
+                    <circle class="draw merkle-leaf" cx="118" cy="132" r="5.5" stroke-width="1.2"/>
+                    <circle class="draw merkle-leaf" cx="162" cy="132" r="5.5" stroke-width="1.2"/>
+                  </g>
+
+                  <!-- Terminal Signal & Hash Dots -->
+                  <g class="dag-nodes" fill="currentColor">
+                    <circle class="signal-dot" cx="100" cy="36" r="3"/>
+                    <circle class="signal-dot" cx="60" cy="81" r="2.2"/>
+                    <circle class="signal-dot" cx="140" cy="81" r="2.2"/>
+                    <circle class="signal-dot" cx="38" cy="132" r="2"/>
+                    <circle class="signal-dot" cx="82" cy="132" r="2"/>
+                    <circle class="signal-dot" cx="118" cy="132" r="2"/>
+                    <circle class="signal-dot" cx="162" cy="132" r="2"/>
+                    <circle class="signal-dot" cx="38" cy="158" r="1.5"/>
+                    <circle class="signal-dot" cx="82" cy="158" r="1.5"/>
+                    <circle class="signal-dot" cx="118" cy="158" r="1.5"/>
+                    <circle class="signal-dot" cx="162" cy="158" r="1.5"/>
                   </g>
                 </svg>
               </div>
@@ -840,7 +879,7 @@
 
             <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
               <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
-                Deterministic state-machine transitions with cryptographic snapshot checkpoints
+                Byzantine quorum, ZK state commitments, Merkle proofs
               </p>
               <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-35">
                 <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
@@ -854,12 +893,12 @@
           <span class="node pointer-events-none absolute right-[-9px] z-10 hidden sm:block h-[12px] w-[12px] rotate-45 bg-ink"></span>
         </article>
 
-        <!-- 008 — Telemetry Mesh -->
+        <!-- 008 — Wave Synthesis -->
         <article class="card-shell group relative" data-card="8">
           <div class="card flex h-full flex-col gap-[6px] will-change-transform">
             <div class="block chamfer relative bg-cream text-near">
             <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
-              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Telemetry Mesh</h3>
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Wave Synthesis</h3>
               <span class="font-mono text-[10px] leading-none pt-[3px] opacity-45">008</span>
             </header>
 
@@ -871,24 +910,51 @@
                 <span class="bracket bl text-near/55"></span>
                 <span class="bracket br text-near/55"></span>
 
-                <!-- Harmonic Waveform & Graticule Reticle -->
+                <!-- Precision Oscilloscope Graticule & Waveform Synthesis -->
                 <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
                      stroke="currentColor" stroke-width="1.35" aria-hidden="true">
-                  <g stroke-linecap="round" stroke-linejoin="round">
-                    <rect class="draw frame" x="26" y="36" width="148" height="128" stroke-width="0.9" stroke-dasharray="3 3"/>
-                    <line class="draw axis" x1="26" y1="100" x2="174" y2="100" stroke-width="1"/>
-                    <line class="draw axis" x1="100" y1="36" x2="100" y2="164" stroke-width="0.75" stroke-dasharray="2 2"/>
-                    <path class="draw wave" d="M 26 100 Q 42 100 50 64 T 74 136 T 98 64 T 122 136 T 146 80 T 174 100" stroke-width="1.5" stroke-linecap="round"/>
-                    <path class="draw rail" d="M 26 58 H 82 V 46 H 174" stroke-width="0.85" opacity="0.6"/>
-                    <path class="draw rail" d="M 26 142 H 118 V 154 H 174" stroke-width="0.85" opacity="0.6"/>
-                    <line class="draw tick" x1="50" y1="58" x2="50" y2="70" stroke-width="1"/>
-                    <line class="draw tick" x1="98" y1="58" x2="98" y2="70" stroke-width="1"/>
+                  <!-- Outer Graticule Frame -->
+                  <rect class="draw frame" x="24" y="32" width="152" height="136" stroke-width="0.9" stroke-dasharray="3 3"/>
+
+                  <!-- Sub-pixel Dashed Grid Divisions -->
+                  <g stroke-width="0.6" stroke-dasharray="1 3" opacity="0.35">
+                    <line class="draw grid-line" x1="43" y1="32" x2="43" y2="168"/>
+                    <line class="draw grid-line" x1="62" y1="32" x2="62" y2="168"/>
+                    <line class="draw grid-line" x1="81" y1="32" x2="81" y2="168"/>
+                    <line class="draw grid-line" x1="119" y1="32" x2="119" y2="168"/>
+                    <line class="draw grid-line" x1="138" y1="32" x2="138" y2="168"/>
+                    <line class="draw grid-line" x1="157" y1="32" x2="157" y2="168"/>
+                    <line class="draw grid-line" x1="24" y1="55" x2="176" y2="55"/>
+                    <line class="draw grid-line" x1="24" y1="77" x2="176" y2="77"/>
+                    <line class="draw grid-line" x1="24" y1="123" x2="176" y2="123"/>
+                    <line class="draw grid-line" x1="24" y1="145" x2="176" y2="145"/>
                   </g>
-                  <g class="peaks" fill="currentColor">
-                    <circle class="signal-dot" cx="50" cy="64" r="2.5"/>
-                    <circle class="signal-dot" cx="98" cy="64" r="2.5"/>
-                    <circle class="signal-dot" cx="74" cy="136" r="2.5"/>
-                    <circle class="signal-dot" cx="122" cy="136" r="2.5"/>
+
+                  <!-- Coordinate Crosshairs -->
+                  <line class="draw axis" x1="18" y1="100" x2="182" y2="100" stroke-width="1.2"/>
+                  <line class="draw axis" x1="100" y1="26" x2="100" y2="174" stroke-width="1.2"/>
+
+                  <!-- High-Frequency Carrier Wave -->
+                  <path class="draw carrier" d="M 24 100 Q 30 88 36 100 T 48 100 T 60 100 T 72 100 T 84 100 T 96 100 T 108 100 T 120 100 T 132 100 T 144 100 T 156 100 T 168 100 T 176 100" stroke-width="0.8" opacity="0.4"/>
+
+                  <!-- Primary Sinusoidal Resonance Curve -->
+                  <path class="draw wave" d="M 24 100 C 42 38, 60 38, 76 100 C 92 162, 110 162, 126 100 C 142 38, 158 38, 176 100" stroke-width="1.6" stroke-linecap="round"/>
+
+                  <!-- Trigger Arrows & Calibration Markers -->
+                  <polygon class="draw trigger" points="16,97 23,100 16,103" stroke-width="1" fill="currentColor"/>
+                  <path class="draw trig-mark" d="M 97 24 H 103 M 100 24 V 32" stroke-width="1.1"/>
+
+                  <!-- Signal Peak Markers & Rings -->
+                  <g>
+                    <circle class="draw peak-ring" cx="58" cy="56" r="5" stroke-width="1"/>
+                    <circle class="draw peak-ring" cx="110" cy="144" r="5" stroke-width="1"/>
+                    <circle class="draw peak-ring" cx="160" cy="56" r="5" stroke-width="1"/>
+                  </g>
+                  <g class="wave-nodes" fill="currentColor">
+                    <circle class="signal-dot" cx="58" cy="56" r="2.2"/>
+                    <circle class="signal-dot" cx="110" cy="144" r="2.2"/>
+                    <circle class="signal-dot" cx="160" cy="56" r="2.2"/>
+                    <circle class="signal-dot" cx="100" cy="100" r="2.8"/>
                   </g>
                 </svg>
               </div>
@@ -900,7 +966,7 @@
 
             <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
               <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
-                Sub-millisecond pub/sub streaming with zero-copy stream serialization
+                Harmonic signal synthesis, FFT analysis, jitter stabilization
               </p>
               <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-35">
                 <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
@@ -914,12 +980,12 @@
           <span class="node pointer-events-none absolute right-[-9px] z-10 hidden sm:block h-[12px] w-[12px] rotate-45 bg-ink"></span>
         </article>
 
-        <!-- 009 — Circuit Pipeline (Colored: Complete 3x3 Diagonal) -->
+        <!-- 009 — Quantum Enclave (Colored: Complete 3x3 Diagonal) -->
         <article class="card-shell group relative" data-card="9">
           <div class="card flex h-full flex-col gap-[6px] will-change-transform">
             <div class="block chamfer relative bg-orange text-near">
             <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
-              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Circuit Pipeline</h3>
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Quantum Enclave</h3>
               <span class="font-mono text-[10px] leading-none pt-[3px] opacity-60">009</span>
             </header>
 
@@ -931,35 +997,57 @@
                 <span class="bracket bl text-near/70"></span>
                 <span class="bracket br text-near/70"></span>
 
-                <!-- Precision 45-degree Circuit Bus & Silicon Core -->
+                <!-- Isometric 4D Hypercube / Tesseract Projection & Tamper-Proof Core -->
                 <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
                      stroke="currentColor" stroke-width="1.35" aria-hidden="true">
-                  <g stroke-linecap="round" stroke-linejoin="round">
-                    <polygon class="draw chip" points="84,72 116,72 128,84 128,116 116,128 84,128 72,116 72,84" stroke-width="1.4"/>
-                    <rect class="draw die" x="84" y="84" width="32" height="32" stroke-width="1"/>
-                    <path class="draw trace" d="M 72 92 H 44 L 28 108" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 72 108 H 52 L 36 124" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 128 92 H 156 L 172 76" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 128 108 H 148 L 164 92" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 92 72 V 44 L 76 28" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 108 72 V 52 L 124 36" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 92 128 V 156 L 108 172" stroke-width="1.25"/>
-                    <path class="draw trace" d="M 108 128 V 148 L 124 164" stroke-width="1.25"/>
-                    <circle class="draw via" cx="28" cy="108" r="4.5" stroke-width="1.1"/>
-                    <circle class="draw via" cx="36" cy="124" r="4" stroke-width="1.1"/>
-                    <circle class="draw via" cx="172" cy="76" r="4.5" stroke-width="1.1"/>
-                    <circle class="draw via" cx="164" cy="92" r="4" stroke-width="1.1"/>
-                    <circle class="draw via" cx="76" cy="28" r="4.5" stroke-width="1.1"/>
-                    <circle class="draw via" cx="124" cy="36" r="4" stroke-width="1.1"/>
-                    <circle class="draw via" cx="108" cy="172" r="4.5" stroke-width="1.1"/>
-                    <circle class="draw via" cx="124" cy="164" r="4" stroke-width="1.1"/>
+                  <!-- Orbital Rotation Ellipses -->
+                  <g stroke-linecap="round">
+                    <ellipse class="draw orbit" cx="100" cy="100" rx="76" ry="24" stroke-width="0.9" stroke-dasharray="4 2.5" transform="rotate(-15 100 100)"/>
+                    <ellipse class="draw orbit" cx="100" cy="100" rx="64" ry="20" stroke-width="0.75" stroke-dasharray="2 3" transform="rotate(75 100 100)"/>
                   </g>
-                  <g class="vias-core" fill="currentColor">
-                    <circle class="signal-dot" cx="100" cy="100" r="3"/>
-                    <circle class="signal-dot" cx="28" cy="108" r="1.8"/>
-                    <circle class="signal-dot" cx="172" cy="76" r="1.8"/>
-                    <circle class="signal-dot" cx="76" cy="28" r="1.8"/>
-                    <circle class="signal-dot" cx="108" cy="172" r="1.8"/>
+
+                  <!-- Outer Isometric Cube Polygon -->
+                  <polygon class="draw outer-cube" points="100,28 160,63 160,137 100,172 40,137 40,63" stroke-width="1.4" stroke-linejoin="round"/>
+
+                  <!-- Inner Isometric Cube Polygon -->
+                  <polygon class="draw inner-cube" points="100,64 130,81 130,119 100,136 70,119 70,81" stroke-width="1.15" stroke-linejoin="round"/>
+
+                  <!-- 4D Projection Interconnect Struts -->
+                  <g stroke-linecap="round" stroke-linejoin="round">
+                    <line class="draw strut" x1="100" y1="28" x2="100" y2="64" stroke-width="1.2"/>
+                    <line class="draw strut" x1="160" y1="63" x2="130" y2="81" stroke-width="1.2"/>
+                    <line class="draw strut" x1="160" y1="137" x2="130" y2="119" stroke-width="1.2"/>
+                    <line class="draw strut" x1="100" y1="172" x2="100" y2="136" stroke-width="1.2"/>
+                    <line class="draw strut" x1="40" y1="137" x2="70" y2="119" stroke-width="1.2"/>
+                    <line class="draw strut" x1="40" y1="63" x2="70" y2="81" stroke-width="1.2"/>
+
+                    <!-- Internal Axis Rays -->
+                    <line class="draw axis-ray" x1="100" y1="100" x2="100" y2="64" stroke-width="0.9" stroke-dasharray="2 2"/>
+                    <line class="draw axis-ray" x1="100" y1="100" x2="130" y2="119" stroke-width="0.9" stroke-dasharray="2 2"/>
+                    <line class="draw axis-ray" x1="100" y1="100" x2="70" y2="119" stroke-width="0.9" stroke-dasharray="2 2"/>
+                  </g>
+
+                  <!-- Central Cryptographic Tamper-Proof Core -->
+                  <g stroke-linecap="round" stroke-linejoin="round">
+                    <polygon class="draw enclave-core" points="100,90 110,100 100,110 90,100" stroke-width="1.35"/>
+                    <circle class="draw core-ring" cx="100" cy="100" r="7" stroke-width="0.9" stroke-dasharray="2 2"/>
+                  </g>
+
+                  <!-- Vertex Nodes & Security Core Beacon -->
+                  <g class="enclave-nodes" fill="currentColor">
+                    <circle class="signal-dot" cx="100" cy="100" r="3.2"/>
+                    <circle class="signal-dot" cx="100" cy="28" r="2.2"/>
+                    <circle class="signal-dot" cx="160" cy="63" r="2.2"/>
+                    <circle class="signal-dot" cx="160" cy="137" r="2.2"/>
+                    <circle class="signal-dot" cx="100" cy="172" r="2.2"/>
+                    <circle class="signal-dot" cx="40" cy="137" r="2.2"/>
+                    <circle class="signal-dot" cx="40" cy="63" r="2.2"/>
+                    <circle class="signal-dot" cx="100" cy="64" r="1.8"/>
+                    <circle class="signal-dot" cx="130" cy="81" r="1.8"/>
+                    <circle class="signal-dot" cx="130" cy="119" r="1.8"/>
+                    <circle class="signal-dot" cx="100" cy="136" r="1.8"/>
+                    <circle class="signal-dot" cx="70" cy="119" r="1.8"/>
+                    <circle class="signal-dot" cx="70" cy="81" r="1.8"/>
                   </g>
                 </svg>
               </div>
@@ -971,7 +1059,7 @@
 
             <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
               <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
-                Zero-knowledge execution circuits with byte-exact deterministic replay
+                Hardware security modules, memory-safe isolation, zero-trust enclave
               </p>
               <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-45">
                 <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>

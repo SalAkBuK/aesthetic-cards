@@ -512,117 +512,173 @@ print("Proof Valid:", verification.is_valid)`,
     },
     7: {
       index: '007',
-      tag: 'DOSSIER // STATE SYNTHESIS',
-      title: 'Deterministic State Machine & Checkpoints',
-      desc: 'Byzantine fault-tolerant consensus and state replication across autonomous agent swarms with zero-drift state snapshots.',
+      tag: 'DOSSIER // STATE CONSENSUS',
+      title: 'State Consensus & Merkle DAG',
+      desc: 'Byzantine quorum replication with zero-knowledge state commitments, Sparse Merkle Patricia Tries, and sub-millisecond finality.',
       specs: [
-        { key: 'CONSENSUS MODEL', value: 'Raft / PBFT Hybrid' },
-        { key: 'CHECKPOINT INTERVAL', value: '100ms Delta Compression' },
-        { key: 'STATE SERIALIZATION', value: 'Deterministic FlatBuffers' },
-        { key: 'RECOVERY TIME (RTO)', value: '< 2.4ms' },
+        { key: 'FAULT TOLERANCE', value: 'Byzantine Fault Tolerance (2f + 1)' },
+        { key: 'CONSENSUS PROTOCOL', value: 'HotStuff-BFT Pipeline' },
+        { key: 'STATE ACCUMULATOR', value: 'Sparse Merkle Patricia Trie' },
+        { key: 'FINALITY LATENCY', value: 'Sub-Millisecond Quorum Finality (<0.4ms)' },
       ],
       code: {
-        ts: `const snapshot = await kinetic.state.checkpoint({
-  sessionId: 'session_alpha_77',
-  compression: 'zstd_level_3',
-  syncReplication: true
+        ts: `import { Kinetic } from '@kinetic/sdk';
+
+const consensus = new Kinetic.Consensus({
+  quorum: '2f_plus_1',
+  protocol: 'HotStuff-BFT',
+  accumulator: 'SparseMerkleTree'
 });
 
-console.log('State Root Merkle:', snapshot.merkleRoot);`,
-        py: `snapshot = client.state.checkpoint(
-    session_id="session_alpha_77",
-    compression="zstd_level_3",
-    sync_replication=True
+// Commit state transition with verifiable Merkle proof
+const receipt = await consensus.commitStateTransition({
+  stateRoot: '0x7e1b40a...99cf',
+  deltaPayload: txBatch,
+  requireZKProof: true
+});
+
+console.log('Finality latency:', receipt.finalityMs); // 0.38ms`,
+        py: `from kinetic import Consensus
+
+engine = Consensus(
+    quorum="2f_plus_1",
+    protocol="HotStuff-BFT",
+    accumulator="SparseMerkleTree"
 )
-print("State Root Merkle:", snapshot.merkle_root)`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/state/checkpoint \\
+
+receipt = engine.commit_state_transition(
+    state_root="0x7e1b40a...99cf",
+    delta_payload=tx_batch,
+    require_zk_proof=True
+)
+print(f"Quorum Achieved: {receipt.quorum_achieved}")`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/consensus/commit \\
   -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"sessionId": "session_alpha_77"}'`
+  -d '{
+    "protocol": "HotStuff-BFT",
+    "quorum": "2f_plus_1",
+    "stateRoot": "0x7e1b40a...99cf"
+  }'`
       },
       simOutput: {
-        snapshot_id: 'snap_9921_07',
-        merkle_root: '0x88f219c0...ea31',
-        active_nodes_synced: 16,
-        delta_size_bytes: 412,
-        sync_duration_ms: 0.84
+        status: 'QUORUM_COMMITTED',
+        consensus_model: 'HotStuff-BFT (2f + 1)',
+        validators_signed: '11/16 nodes (68.75%)',
+        sparse_merkle_root: '0x7e1b40a92d1c...99cf',
+        finality_latency_ms: 0.38,
+        zk_stark_proof: '0x9924a...bc01 (VALID)'
       }
     },
     8: {
       index: '008',
-      tag: 'DOSSIER // TELEMETRY MESH',
-      title: 'Real-time Stream Fabric & Pub/Sub',
-      desc: 'Sub-millisecond pub/sub streaming pipeline with zero-copy ring buffers and dynamic subscriber backpressure.',
+      tag: 'DOSSIER // WAVE SYNTHESIS',
+      title: 'Wave Synthesis & DSP Pipeline',
+      desc: 'Precision digital signal processing engine with high-order harmonic synthesis, FFT spectral analysis, and picosecond-grade jitter stabilization.',
       specs: [
-        { key: 'STREAM PROTOCOL', value: 'QUIC / WebTransport / gRPC' },
-        { key: 'RING BUFFER SIZE', value: '64MB Shared Memory' },
-        { key: 'THROUGHPUT', value: '1.8M Events / Sec / Core' },
-        { key: 'END-TO-END LATENCY', value: '0.42ms p99' },
+        { key: 'AUDIO PIPELINE', value: '192 kHz / 32-bit Float Audio' },
+        { key: 'SPECTRAL TRANSFORM', value: '4096-Point Radix-4 FFT' },
+        { key: 'PHASE JITTER', value: '< 1.4ps RMS Phase Jitter' },
+        { key: 'HARMONIC TRACKING', value: 'Real-Time Dynamic Peak Locking' },
       ],
       code: {
-        ts: `const stream = await kinetic.mesh.subscribe({
-  topic: 'telemetry.nodes.v1',
-  sampleRateHz: 1000,
-  backpressure: 'drop_oldest'
+        ts: `import { KineticDSP } from '@kinetic/dsp';
+
+const dsp = new KineticDSP({
+  sampleRate: 192000,
+  bitDepth: 32,
+  fftSize: 4096
 });
 
-stream.on('event', (msg) => {
-  console.log(\`[\${msg.timestamp}] \${msg.topic}:\`, msg.metrics);
-});`,
-        py: `stream = client.mesh.subscribe(
-    topic="telemetry.nodes.v1",
-    sample_rate_hz=1000,
-    backpressure="drop_oldest"
-)
+// Run real-time harmonic FFT decomposition with jitter stabilization
+const spectrum = await dsp.synthesizeHarmonics({
+  fundamentalHz: 440.0,
+  harmonicsCount: 16,
+  jitterClockSync: 'hardware_ptp'
+});
 
-for msg in stream:
-    print(f"[{msg.timestamp}] {msg.topic}:", msg.metrics)`,
-        curl: `curl -N https://api.kinetic.dev/v1/mesh/stream?topic=telemetry.nodes.v1 \\
-  -H "Authorization: Bearer $KINETIC_KEY"`
+console.log('RMS Phase Jitter:', spectrum.phaseJitterPs); // 1.18ps`,
+        py: `from kinetic_dsp import DSPStream
+
+dsp = DSPStream(sample_rate=192000, bit_depth=32, fft_size=4096)
+
+spectrum = dsp.synthesize_harmonics(
+    fundamental_hz=440.0,
+    harmonics_count=16,
+    jitter_clock_sync="hardware_ptp"
+)
+print(f"FFT Peak Lock: {spectrum.peak_locked}")`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/dsp/synthesize \\
+  -H "Authorization: Bearer $KINETIC_KEY" \\
+  -d '{
+    "sampleRate": 192000,
+    "fftSize": 4096,
+    "jitterStabilization": true
+  }'`
       },
       simOutput: {
-        stream_status: 'ACTIVE_SUBSCRIBED',
-        events_ingested: 48201,
-        dropped_frames: 0,
-        jitter_us: 18.4,
-        bandwidth_mbps: 12.8
+        stream_status: 'SYNCHRONIZED',
+        sample_rate_khz: 192,
+        bit_depth: '32-bit float',
+        fft_resolution_bins: 4096,
+        phase_jitter_rms_ps: 1.18,
+        harmonic_thd_db: -128.4
       }
     },
     9: {
       index: '009',
-      tag: 'DOSSIER // CIRCUIT PIPELINE',
-      title: 'Deterministic Hardware-Accelerated Circuits',
-      desc: 'Silicon-grade circuit execution pipeline with pre-compiled graph kernels and byte-exact hardware deterministic execution.',
+      tag: 'DOSSIER // QUANTUM ENCLAVE',
+      title: 'Quantum Enclave Secure Isolation',
+      desc: 'Hardware security modules, memory-safe deterministic isolation, and post-quantum lattice cryptography with zero-trust enclave attestation.',
       specs: [
-        { key: 'EXECUTION TARGET', value: 'SIMD AVX-512 / Apple Metal / CUDA' },
-        { key: 'KERNEL LATENCY', value: '14 microseconds' },
-        { key: 'PIPELINE DEPTH', value: '8 Concurrent Stages' },
-        { key: 'BYTE DETERMINISM', value: '100% Cross-Architecture' },
+        { key: 'HARDWARE ISOLATION', value: 'Hardware TPM 2.0 / Nitro Hypervisor' },
+        { key: 'PQC CIPHERSUITE', value: 'Kyber-1024 + Dilithium-3 Post-Quantum' },
+        { key: 'MEMORY ISOLATION', value: 'Deterministic Memory Partitions' },
+        { key: 'SECURITY BOUNDARY', value: 'Zero-Trust Enclave Attestation' },
       ],
       code: {
-        ts: `const circuit = await kinetic.pipeline.compile({
-  graphId: 'pipeline_neural_core_9',
-  optimizationLevel: 'O3_FPGA_TARGET',
-  enableZeroCopy: true
+        ts: `import { QuantumEnclave } from '@kinetic/enclave';
+
+const enclave = await QuantumEnclave.bootstrap({
+  hypervisor: 'Nitro_TPM_2_0',
+  cipherSuite: 'ML_KEM_1024_Kyber',
+  signatureScheme: 'Dilithium_3'
 });
 
-const result = await circuit.execute({ payload: inputTensor });`,
-        py: `circuit = client.pipeline.compile(
-    graph_id="pipeline_neural_core_9",
-    optimization_level="O3_FPGA_TARGET",
-    enable_zero_copy=True
+// Execute confidential workload in isolated memory partition
+const attestedReceipt = await enclave.executeConfidential({
+  sealedPayload: encryptedBlob,
+  verifyHardwarePcr: true
+});
+
+console.log('Enclave PCR Attested:', attestedReceipt.isVerified);`,
+        py: `from kinetic_enclave import QuantumEnclave
+
+enclave = QuantumEnclave.bootstrap(
+    hypervisor="Nitro_TPM_2_0",
+    cipher_suite="ML_KEM_1024_Kyber",
+    signature_scheme="Dilithium_3"
 )
 
-result = circuit.execute(payload=input_tensor)`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/pipeline/execute \\
+receipt = enclave.execute_confidential(
+    sealed_payload=encrypted_blob,
+    verify_hardware_pcr=True
+)
+print(f"PQC Attested: {receipt.is_verified}")`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/enclave/execute \\
   -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"graphId": "pipeline_neural_core_9"}'`
+  -d '{
+    "isolation": "Nitro_TPM_2_0",
+    "ciphersuite": "Kyber1024_Dilithium3",
+    "verifyHardwarePcr": true
+  }'`
       },
       simOutput: {
-        circuit_id: 'ckt_9901_core',
-        execution_time_us: 13.8,
-        deterministic_hash: '0x3c99a0f...f91a',
-        hardware_target: 'AVX-512 VNNI',
-        verified: true
+        enclave_state: 'ISOLATED_LOCKED',
+        hypervisor: 'AWS Nitro / Hardware TPM 2.0',
+        pqc_key_exchange: 'ML-KEM-1024 (Kyber-1024)',
+        pqc_signature: 'ML-DSA-87 (Dilithium-3)',
+        memory_partition_safe: true,
+        attestation_pcr_match: true
       }
     }
   };
