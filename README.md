@@ -262,6 +262,34 @@ const telemetryTable = initTelemetryTable({
 
 ---
 
+## Technical Forms & Hardware Parameter Rack
+
+Hardware-inspired configuration rack engineered for precision parameter tuning and environment management ([`forms.js`](./forms.js) & [`components.html#forms`](./components.html#forms)).
+
+### 1. Architectural Highlights
+- **Multi-State Segmented Switches**: Chamfered 3-way toggle buttons for operational failover modes (`COLD`, `WARM`, `HOT`), sandbox runtime engines (`V8 ISOLATE`, `WASM EDGE`, `CONTAINER`), and dispatch topologies (`ANYCAST MESH`, `ROUND ROBIN`, `GEO NEAREST`).
+- **Precision Numeric Steppers**: Tactile step buttons (`.stepper-btn`, `--c: 4px`) with audio micro-detent feedback (`sfx.tick()`) for worker thread allocation (1–64) and ingestion batch windows (8–512ms).
+- **Dual-Threshold Rate Limiting**: Interactive double-slider floor/burst limiter with synchronized track illumination.
+- **Dynamic Key-Value Environment Rack**: Real-time type-checked configuration editor supporting `STRING`, `NUMBER`, `BOOLEAN`, and `SECRET` types with toggleable secret masking.
+- **Live Reactive Exporters**: Generates production-ready `.env` and `config.yaml` specs dynamically as parameters change, with one-click clipboard copy.
+- **Pre-Configured Hardware Presets**: One-click switching between `01 PRODUCTION ENTERPRISE`, `02 LOW-LATENCY EDGE`, and `03 DEBUG / SANDBOX`.
+
+### 2. Usage & Controller Initialization
+```javascript
+import { initParameterRack } from './forms.js';
+import { sfx } from './audio.js';
+
+const paramRack = initParameterRack({
+  sfx,
+  containerId: 'paramRackContainer',
+  envPairsListId: 'paramEnvPairsList',
+  codeOutputId: 'paramCodeOutput',
+  formatLabelId: 'paramFormatLabel'
+});
+```
+
+---
+
 ## Universal Prompt for LLMs
 
 To generate similar cards with Claude, ChatGPT, v0, or Cursor:

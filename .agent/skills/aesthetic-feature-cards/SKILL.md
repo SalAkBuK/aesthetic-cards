@@ -313,3 +313,57 @@ Each row can expand to reveal a dark nested telemetry drawer (`bg-near/80 border
 - Formatted state JSON block with 1-click clipboard copy.
 - Telemetry matrix (jitter, cipher, SLA uptime, failover peer).
 - Trigger procedural sound cues on expand (`sfx.modalOpen()`) and collapse (`sfx.modalClose()`).
+
+---
+
+## 11. Technical Forms & Hardware Parameter Racks
+
+When designing industrial settings panels, configuration racks, or environment variable editors:
+
+### 1. Chamfered Numeric Stepper Construction
+Steppers replace standard spinboxes with tactile, hardware-grade buttons:
+```css
+.stepper-btn {
+  --c: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--cream);
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms var(--ease-out);
+  cursor: pointer;
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0,
+    100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%,
+    0 calc(100% - var(--c)), 0 var(--c)
+  );
+}
+.stepper-btn:hover {
+  background: var(--orange);
+  color: var(--ink-dark);
+}
+```
+- Couple with `sfx.tick()` on value change and bounds clamping (`Math.max(min, Math.min(max, nextVal))`).
+
+### 2. Multi-State Segmented Switches
+Group 3 related options inside a dark recess container (`bg-black/50 p-1 border border-white/10`):
+- Non-active states: `hover:bg-white/10 text-cream/60`.
+- Active state: chamfered orange pill `bg-orange text-near font-bold`.
+- Audio cue: `sfx.click()` on toggle.
+
+### 3. Dual-Threshold Range Sliders
+Visualizes floor vs. burst ceilings with an inner highlighted track (`left: minPct; width: maxPct - minPct`):
+- Floor threshold slider & ceiling burst slider prevent inverted state (`if (min > max - margin) min = max - margin`).
+
+### 4. Dynamic Key-Value Environment Editor
+- Support structured typing (`STRING`, `NUMBER`, `BOOLEAN`, `SECRET`).
+- Type `SECRET` renders input as `type="password"` with a toggleable reveal/mask button (`👁`/`✱`).
+- Auto-uppercase and sanitize keys: `key.toUpperCase().replace(/[^A-Z0-9_]/g, '_')`.
+- Real-time serialization to `.env` (dotenv) and `config.yaml` specs.
+

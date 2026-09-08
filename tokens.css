@@ -485,3 +485,58 @@
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
 }
+
+/* --------------------------------------------------------------------------
+   Hardware Parameter Rack & Form Components
+   -------------------------------------------------------------------------- */
+.stepper-btn {
+  --c: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--cream);
+  font-family: ui-monospace, monospace;
+  font-weight: 700;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 120ms var(--ease-out);
+  cursor: pointer;
+  user-select: none;
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0,
+    100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%,
+    0 calc(100% - var(--c)), 0 var(--c)
+  );
+}
+.stepper-btn:hover {
+  background: var(--orange);
+  color: var(--ink-dark);
+  border-color: var(--orange);
+  transform: translateY(-1px);
+}
+.stepper-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+.input-tech {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--cream);
+  font-family: ui-monospace, monospace;
+  transition: all 140ms var(--ease-out);
+}
+.input-tech:focus {
+  border-color: var(--orange);
+  outline: none;
+  background: rgba(244, 85, 29, 0.04);
+}
+
+.param-switch-pill {
+  cursor: pointer;
+  user-select: none;
+  font-family: ui-monospace, monospace;
+}
+

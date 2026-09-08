@@ -63,7 +63,9 @@
       <span class="text-white/20">|</span>
       <a href="#icons" class="hover:text-cream text-cream/70 transition">Icons (32)</a>
       <span class="text-white/20">|</span>
-      <a href="#telemetry" class="hover:text-orange text-cream/70 transition">Telemetry Table</a>
+      <a href="#telemetry" class="hover:text-cream text-cream/70 transition">Telemetry Table</a>
+      <span class="text-white/20">|</span>
+      <a href="#forms" class="hover:text-orange text-cream/70 transition">Forms Rack</a>
       <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
       <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
@@ -803,6 +805,219 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 9: TECHNICAL FORMS & HARDWARE PARAMETER RACK -->
+    <section class="space-y-6" id="forms">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">09 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Technical Forms & Hardware Parameter Rack</h2>
+        </div>
+        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+          <span class="inline-block w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+          <span>CONFIGURATION ENGINE: HOT-RELOAD ACTIVE</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Industrial instrument panel for infrastructure tuning. Combines multi-state segmented switches, precision numeric steppers, dual-threshold rate limiters, dynamic key-value environment editors, and real-time generation of production <code>.env</code> and <code>config.yaml</code> specifications.
+      </p>
+
+      <!-- Preset Quick-Load Bar -->
+      <div class="flex items-center gap-2 flex-wrap font-mono text-xs p-2.5 rounded-lg bg-ink2/50 border border-white/10">
+        <span class="text-[10px] uppercase text-cream/50 tracking-wider">LOAD SPEC PRESET:</span>
+        <button class="px-2.5 py-1 rounded bg-orange text-near font-bold transition text-[10.5px] cursor-pointer" data-param-preset="enterprise">01 PRODUCTION ENTERPRISE</button>
+        <button class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px] cursor-pointer" data-param-preset="edge">02 LOW-LATENCY EDGE</button>
+        <button class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px] cursor-pointer" data-param-preset="sandbox">03 DEBUG / SANDBOX</button>
+      </div>
+
+      <!-- Main Parameter Grid: Left Controls (7 cols) + Right Code Export (5 cols) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start font-mono" id="paramRackContainer">
+        
+        <!-- Left: Interactive Form Controls -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- 1. Multi-State Segmented Switches Panel -->
+          <div class="p-4 sm:p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4">
+            <span class="text-orange font-bold text-xs uppercase block pb-2 border-b border-white/10">01 // MULTI-STATE SEGMENTED SWITCHES</span>
+            
+            <!-- Failover Mode Switch -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-cream font-semibold">CLUSTER FAILOVER POLICY</span>
+                <span class="text-[9.5px] text-cream/40">RFC-792 HOT STANDBY</span>
+              </div>
+              <div class="flex items-center gap-1 bg-black/50 p-1 rounded border border-white/10">
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-failover="cold">COLD SPARE</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-failover="warm">WARM STANDBY</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase font-bold bg-orange text-near transition" data-switch-failover="hot">HOT REPLICATION</button>
+              </div>
+            </div>
+
+            <!-- Isolation Engine Switch -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-cream font-semibold">SANDBOX ISOLATION RUNTIME</span>
+                <span class="text-[9.5px] text-cream/40">ZERO-OVERHEAD ISOLATE</span>
+              </div>
+              <div class="flex items-center gap-1 bg-black/50 p-1 rounded border border-white/10">
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-isolation="v8">V8 ISOLATE</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase font-bold bg-orange text-near transition" data-switch-isolation="wasm">WASM EDGE</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-isolation="container">CONTAINER</button>
+              </div>
+            </div>
+
+            <!-- Routing Strategy Switch -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-[11px]">
+                <span class="text-cream font-semibold">TRAFFIC DISPATCH TOPOLOGY</span>
+                <span class="text-[9.5px] text-cream/40">SUB-MS RESOLUTION</span>
+              </div>
+              <div class="flex items-center gap-1 bg-black/50 p-1 rounded border border-white/10">
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase font-bold bg-orange text-near transition" data-switch-routing="anycast">ANYCAST MESH</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-routing="rr">ROUND ROBIN</button>
+                <button class="param-switch-pill flex-1 py-1 text-center rounded text-[10.5px] uppercase text-cream/60 hover:bg-white/10 transition" data-switch-routing="geo">GEO NEAREST</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Numeric Steppers & Safety Toggles -->
+          <div class="p-4 sm:p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4">
+            <span class="text-orange font-bold text-xs uppercase block pb-2 border-b border-white/10">02 // PRECISION STEPPERS & SAFETY FLAGS</span>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Stepper: Worker Threads -->
+              <div class="p-3 rounded bg-black/40 border border-white/10 space-y-2">
+                <span class="text-[10px] uppercase text-cream/50 block">CONCURRENT WORKERS</span>
+                <div class="flex items-center justify-between">
+                  <button id="paramWorkersDec" class="stepper-btn" title="Decrease workers">−</button>
+                  <span id="paramWorkersVal" class="text-lg font-bold text-cream tracking-widest px-3">08</span>
+                  <button id="paramWorkersInc" class="stepper-btn" title="Increase workers">+</button>
+                </div>
+                <span class="text-[9px] text-cream/40 block text-center">RANGE: 01 – 64 THREADS</span>
+              </div>
+
+              <!-- Stepper: Batch Ingestion Window -->
+              <div class="p-3 rounded bg-black/40 border border-white/10 space-y-2">
+                <span class="text-[10px] uppercase text-cream/50 block">BATCH INGESTION WINDOW</span>
+                <div class="flex items-center justify-between">
+                  <button id="paramBatchDec" class="stepper-btn" title="Decrease batch window">−</button>
+                  <span id="paramBatchVal" class="text-lg font-bold text-orange tracking-widest px-3">64ms</span>
+                  <button id="paramBatchInc" class="stepper-btn" title="Increase batch window">+</button>
+                </div>
+                <span class="text-[9px] text-cream/40 block text-center">GRANULARITY: 8ms STEPS</span>
+              </div>
+            </div>
+
+            <!-- Hardware Safety Toggles -->
+            <div class="space-y-2.5 pt-2 border-t border-white/10">
+              <span class="text-[10.5px] uppercase text-cream/50 block">HARDWARE SECURITY & TELEMETRY</span>
+              <div class="space-y-2">
+                <label class="flex items-center justify-between p-2 rounded bg-black/30 hover:bg-black/50 border border-white/10 transition cursor-pointer">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" id="paramZkToggle" class="checkbox-chamfer" checked />
+                    <span class="text-xs text-cream">Zero-Knowledge STARK Verification</span>
+                  </div>
+                  <span class="text-[9.5px] text-emerald-400 font-bold">STARK-256</span>
+                </label>
+
+                <label class="flex items-center justify-between p-2 rounded bg-black/30 hover:bg-black/50 border border-white/10 transition cursor-pointer">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" id="paramTlsToggle" class="checkbox-chamfer" checked />
+                    <span class="text-xs text-cream">Enforce Strict TLS 1.3 Ciphers</span>
+                  </div>
+                  <span class="text-[9.5px] text-cream/50">CHACHA20</span>
+                </label>
+
+                <label class="flex items-center justify-between p-2 rounded bg-black/30 hover:bg-black/50 border border-white/10 transition cursor-pointer">
+                  <div class="flex items-center gap-2">
+                    <input type="checkbox" id="paramStreamToggle" class="checkbox-chamfer" checked />
+                    <span class="text-xs text-cream">Live gRPC Telemetry Stream</span>
+                  </div>
+                  <span class="text-[9.5px] text-orange font-bold">PORT 9091</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Dual-Threshold Rate Limiter Slider -->
+          <div class="p-4 sm:p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3">
+            <div class="flex justify-between items-center pb-2 border-b border-white/10">
+              <span class="text-orange font-bold text-xs uppercase">03 // DUAL-THRESHOLD RATE LIMIT BANDWIDTH</span>
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-cream/50">FLOOR: <strong id="paramRateMinVal" class="text-cream font-bold">25k</strong></span>
+                <span class="text-white/20">|</span>
+                <span class="text-cream/50">BURST: <strong id="paramRateMaxVal" class="text-orange font-bold">120k ops/s</strong></span>
+              </div>
+            </div>
+
+            <div class="relative pt-4 pb-2">
+              <div class="h-2 bg-black/60 rounded-full relative overflow-hidden border border-white/15">
+                <div id="paramRateTrackBar" class="absolute top-0 bottom-0 bg-orange/70 rounded-full transition-all" style="left: 12.5%; width: 47.5%;"></div>
+              </div>
+              <div class="grid grid-cols-2 gap-4 mt-3">
+                <div>
+                  <span class="text-[9.5px] text-cream/40 block mb-1">SUSTAINED FLOOR</span>
+                  <input id="paramRateMin" type="range" min="5" max="100" value="25" class="w-full accent-orange cursor-pointer" />
+                </div>
+                <div>
+                  <span class="text-[9.5px] text-cream/40 block mb-1">BURST MAXIMUM</span>
+                  <input id="paramRateMax" type="range" min="30" max="200" value="120" class="w-full accent-orange cursor-pointer" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Dynamic Key-Value Environment Editor -->
+          <div class="p-4 sm:p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="text-orange font-bold text-xs uppercase">04 // ENVIRONMENT & SECRETS RACK</span>
+                <span class="text-[10px] text-cream/40">(TYPE-CHECKED)</span>
+              </div>
+              <button id="paramAddEnvBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-2.5 py-1 text-[10px] uppercase font-bold transition flex items-center gap-1 cursor-pointer">
+                <span>+ ADD PARAMETER</span>
+              </button>
+            </div>
+
+            <div id="paramEnvPairsList" class="space-y-2">
+              <!-- Dynamically rendered via forms.js -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Live Code Export Deck (Sticky) -->
+        <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-20">
+          <div class="p-4 sm:p-5 rounded-xl bg-ink2/60 border border-white/10 space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+              <div class="flex items-center gap-1 bg-black/50 p-0.5 rounded text-[10px]">
+                <button class="px-2.5 py-1 rounded bg-white/20 text-white font-bold cursor-pointer transition" data-param-export-tab="env">.ENV</button>
+                <button class="px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer transition" data-param-export-tab="yaml">YAML</button>
+              </div>
+
+              <button id="paramCopyCodeBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                <span>COPY SPEC</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] text-cream/40 pb-1">
+              <span id="paramFormatLabel">.ENV SPECIFICATION</span>
+              <span>LIVE REACTIVE</span>
+            </div>
+
+            <pre class="text-cream/90 text-[11px] overflow-x-auto p-3 bg-black/60 rounded-lg max-h-[440px] leading-relaxed border border-white/10"><code id="paramCodeOutput"></code></pre>
+
+            <div class="pt-2 text-[9.5px] text-cream/40 flex items-center justify-between">
+              <span>FORMAT: UTF-8 STRICT</span>
+              <span>IDEMPOTENCY: DETERMINISTIC</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -817,6 +1032,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { initOscilloscope } from './oscilloscope.js';
     import { initConfigurator } from './configurator.js';
     import { initTelemetryTable } from './table.js';
+    import { initParameterRack } from './forms.js';
 
     // Attach sound listeners
     sfx.attachListeners();
@@ -830,6 +1046,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       selectedCountId: 'telemetrySelectedCount',
       batchActionsId: 'telemetryBatchActions',
       selectAllId: 'telemetrySelectAll'
+    });
+
+    // Initialize Technical Forms & Hardware Parameter Rack
+    const paramRack = initParameterRack({
+      sfx,
+      containerId: 'paramRackContainer',
+      envPairsListId: 'paramEnvPairsList',
+      codeOutputId: 'paramCodeOutput',
+      formatLabelId: 'paramFormatLabel'
     });
 
     // Initialize Blueprint Configurator
