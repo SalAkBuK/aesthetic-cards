@@ -364,7 +364,13 @@
           <span class="text-orange font-bold">05 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Audio & Micro-Haptics Rack</h2>
         </div>
-        <span class="text-xs text-orange font-mono uppercase tracking-wider">TEENAGE ENGINEERING SOUND PROFILE</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="audio" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add useBlueprintSFX audio hook to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <span class="text-xs text-orange font-mono uppercase tracking-wider hidden sm:inline">TEENAGE ENGINEERING SOUND PROFILE</span>
+        </div>
       </div>
 
       <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
@@ -566,11 +572,17 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">06 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Blueprint SVG Icon Library</h2>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[11px] text-cream/50 uppercase font-mono">EXPORT:</span>
-          <button id="iconFormatToggle" class="badge-tech bg-orange/20 border-orange/40 text-orange cursor-pointer hover:bg-orange/30 transition text-[10px]" title="Toggle Copy Format">
-            <span id="formatLabel">MODE: RAW SVG</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="icon" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintIcon component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
           </button>
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-cream/50 uppercase font-mono">EXPORT:</span>
+            <button id="iconFormatToggle" class="badge-tech bg-orange/20 border-orange/40 text-orange cursor-pointer hover:bg-orange/30 transition text-[10px]" title="Toggle Copy Format">
+              <span id="formatLabel">MODE: RAW SVG</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1025,9 +1037,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">09 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Technical Forms & Hardware Parameter Rack</h2>
         </div>
-        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
-          <span class="inline-block w-2 h-2 rounded-full bg-orange animate-pulse"></span>
-          <span>CONFIGURATION ENGINE: HOT-RELOAD ACTIVE</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="params" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add ParameterRack component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+            <span class="inline-block w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+            <span>CONFIGURATION ENGINE: HOT-RELOAD ACTIVE</span>
+          </div>
         </div>
       </div>
 
@@ -1269,10 +1287,16 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
               Keyboard-first fuzzy instruction discovery. Jump to sections, toggle mechanical audio, execute batch commands, and apply system presets.
             </p>
           </div>
-          <button data-open-palette class="btn-chamfer w-full bg-white/10 hover:bg-orange hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
-            <span>LAUNCH PALETTE</span>
-            <span class="opacity-50 text-[10px]">⌘K</span>
-          </button>
+          <div class="flex gap-2 mt-2">
+            <button data-open-palette class="btn-chamfer flex-1 bg-white/10 hover:bg-orange hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>LAUNCH PALETTE</span>
+              <span class="opacity-50 text-[10px]">⌘K</span>
+            </button>
+            <button data-export-component="command-palette" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1 cursor-pointer select-none" title="Add CommandPalette component to project">
+              <span>&lt;/&gt;</span>
+              <span>ADD</span>
+            </button>
+          </div>
         </div>
 
         <!-- Card 2: Two-Phase Safety Latch Trigger -->
@@ -1287,10 +1311,16 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
               Physical interlock design for destructive operations. Requires disarming a safety barrier and typing a manual verification override token.
             </p>
           </div>
-          <button data-open-safety-latch data-safety-title="FORCE OVERRIDE CLUSTER ROUTING" data-safety-target="PROD-MESH-CLUSTER-01" class="btn-chamfer w-full bg-ruby/20 hover:bg-ruby hover:text-white text-ruby border border-ruby/40 py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
-            <span>ARM OVERRIDE LATCH</span>
-            <span class="opacity-60 text-[10px]">⚠</span>
-          </button>
+          <div class="flex gap-2 mt-2">
+            <button data-open-safety-latch data-safety-title="FORCE OVERRIDE CLUSTER ROUTING" data-safety-target="PROD-MESH-CLUSTER-01" class="btn-chamfer flex-1 bg-ruby/20 hover:bg-ruby hover:text-white text-ruby border border-ruby/40 py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>ARM OVERRIDE LATCH</span>
+              <span class="opacity-60 text-[10px]">⚠</span>
+            </button>
+            <button data-export-component="modal" class="px-2.5 py-1 rounded bg-ruby/15 hover:bg-ruby hover:text-white text-ruby text-[10.5px] font-mono border border-ruby/40 transition flex items-center gap-1 cursor-pointer select-none" title="Add SafetyConfirmationModal component to project">
+              <span>&lt;/&gt;</span>
+              <span>ADD</span>
+            </button>
+          </div>
         </div>
 
         <!-- Card 3: Telemetry Drawer Trigger -->
@@ -1305,10 +1335,16 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
               Slide-out technical diagnostics panel with real-time streaming event logs, memory allocations, and cluster quorum telemetry.
             </p>
           </div>
-          <button data-open-drawer class="btn-chamfer w-full bg-white/10 hover:bg-cyan-400 hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
-            <span>SLIDE OPEN DRAWER</span>
-            <span class="opacity-50 text-[10px]">→</span>
-          </button>
+          <div class="flex gap-2 mt-2">
+            <button data-open-drawer class="btn-chamfer flex-1 bg-white/10 hover:bg-cyan-400 hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer">
+              <span>SLIDE OPEN DRAWER</span>
+              <span class="opacity-50 text-[10px]">→</span>
+            </button>
+            <button data-export-component="drawer" class="px-2.5 py-1 rounded bg-cyan-400/15 hover:bg-cyan-400 hover:text-near text-cyan-400 text-[10.5px] font-mono border border-cyan-400/40 transition flex items-center gap-1 cursor-pointer select-none" title="Add TelemetryDrawer component to project">
+              <span>&lt;/&gt;</span>
+              <span>ADD</span>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1404,7 +1440,13 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
                 <span class="text-amber font-bold">02 // TACHOMETER GAUGE</span>
                 <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber/20 border border-amber/40 text-amber font-bold">270° SWEEP</span>
               </div>
-              <span id="tachStatusBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-amber/20 text-amber border border-amber/40">NOMINAL HIGH</span>
+              <div class="flex items-center gap-2">
+                <button data-export-component="gauge" class="px-2 py-0.5 rounded bg-amber/15 hover:bg-amber hover:text-near text-amber text-[9.5px] font-mono border border-amber/40 transition flex items-center gap-1 cursor-pointer select-none" title="Add TachometerGauge component to project">
+                  <span>&lt;/&gt;</span>
+                  <span>ADD</span>
+                </button>
+                <span id="tachStatusBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-amber/20 text-amber border border-amber/40">NOMINAL HIGH</span>
+              </div>
             </div>
 
             <!-- Radial Dial SVG Viewport -->
@@ -1602,9 +1644,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">12 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Blueprint Node Flow Graph & Circuit Pipeline</h2>
         </div>
-        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>TOPOLOGY ENGINE READY</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="pipeline" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintNode pipeline component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>TOPOLOGY ENGINE READY</span>
+          </div>
         </div>
       </div>
 

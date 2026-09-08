@@ -48,7 +48,14 @@ export const COMMANDS = [
   { id: 'exp-modal', category: 'EXPORTS', label: 'Export // Component: SafetyConfirmationModal', shortcut: 'X M', action: () => window.componentExporter?.open('modal') },
   { id: 'exp-badge', category: 'EXPORTS', label: 'Export // Component: BlueprintBadge', shortcut: 'X G', action: () => window.componentExporter?.open('badge') },
   { id: 'exp-callout', category: 'EXPORTS', label: 'Export // Component: BlueprintCallout', shortcut: 'X L', action: () => window.componentExporter?.open('callout') },
-  { id: 'exp-chart', category: 'EXPORTS', label: 'Export // Component: BlueprintSparkline', shortcut: 'X P', action: () => window.componentExporter?.open('chart') }
+  { id: 'exp-chart', category: 'EXPORTS', label: 'Export // Component: BlueprintSparkline', shortcut: 'X P', action: () => window.componentExporter?.open('chart') },
+  { id: 'exp-palette', category: 'EXPORTS', label: 'Export // Component: CommandPalette (⌘K)', shortcut: 'X K', action: () => window.componentExporter?.open('command-palette') },
+  { id: 'exp-drawer', category: 'EXPORTS', label: 'Export // Component: TelemetryDrawer', shortcut: 'X D', action: () => window.componentExporter?.open('drawer') },
+  { id: 'exp-params', category: 'EXPORTS', label: 'Export // Component: ParameterRack (Secrets Editor)', shortcut: 'X R', action: () => window.componentExporter?.open('params') },
+  { id: 'exp-gauge', category: 'EXPORTS', label: 'Export // Component: TachometerGauge (Radial Dial)', shortcut: 'X U', action: () => window.componentExporter?.open('gauge') },
+  { id: 'exp-pipeline', category: 'EXPORTS', label: 'Export // Component: BlueprintNode (Cable Pipeline)', shortcut: 'X N', action: () => window.componentExporter?.open('pipeline') },
+  { id: 'exp-icon', category: 'EXPORTS', label: 'Export // Component: BlueprintIcon (32 Glyphs)', shortcut: 'X Y', action: () => window.componentExporter?.open('icon') },
+  { id: 'exp-audio', category: 'EXPORTS', label: 'Export // Component: useBlueprintSFX (Web Audio API)', shortcut: 'X A', action: () => window.componentExporter?.open('audio') }
 ];
 
 export class CommandPalette {

@@ -1365,6 +1365,1260 @@ const areaPoints = computed(() => \`0,\${props.height} \${points.value} \${props
   </div>
 </div>`
     }
+  },
+  'command-palette': {
+    id: 'command-palette',
+    name: 'Global Command Palette (⌘K)',
+    section: '10 // Modals & Overlays',
+    description: 'Keyboard-first fuzzy command search modal with category grouping, shortcut badges, and arrow-key selection.',
+    dependencies: [],
+    cssTokens: ['--near: #16150f', '--orange: #f4551d'],
+    filename: 'CommandPalette',
+    code: {
+      react: `import React, { useState, useEffect } from 'react';
+
+interface CommandItem {
+  id: string;
+  category: string;
+  label: string;
+  shortcut?: string;
+  action: () => void;
+}
+
+interface CommandPaletteProps {
+  isOpen: boolean;
+  onClose: () => void;
+  commands: CommandItem[];
+}
+
+export function CommandPalette({ isOpen, onClose, commands }: CommandPaletteProps) {
+  const [query, setQuery] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const filtered = commands.filter(c => 
+    c.label.toLowerCase().includes(query.toLowerCase()) ||
+    c.category.toLowerCase().includes(query.toLowerCase())
+  );
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isOpen) return;
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex(prev => (prev + 1) % (filtered.length || 1));
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex(prev => (prev - 1 + filtered.length) % (filtered.length || 1));
+      }
+      if (e.key === 'Enter' && filtered[selectedIndex]) {
+        e.preventDefault();
+        filtered[selectedIndex].action();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, selectedIndex, filtered, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 flex items-start justify-center pt-20 font-mono text-xs">
+      <div 
+        className="w-full max-w-xl bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl flex flex-col"
+        style={{ clipPath: 'polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)' }}
+      >
+        <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/10">
+          <span className="text-[#f4551d]">⌘</span>
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="TYPE A COMMAND, SHORTCUT, OR ACTION..."
+            className="bg-transparent text-cream placeholder-cream/40 text-xs w-full focus:outline-none"
+            autoFocus
+          />
+          <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-[9px] text-cream/60">ESC</kbd>
+        </div>
+
+        <div className="max-h-72 overflow-y-auto p-2 space-y-1">
+          {filtered.length === 0 ? (
+            <div className="py-8 text-center text-cream/40 text-xs">NO MATCHING COMMANDS FOUND</div>
+          ) : (
+            filtered.map((cmd, idx) => (
+              <div
+                key={cmd.id}
+                onClick={() => { cmd.action(); onClose(); }}
+                className={\`flex items-center justify-between px-3 py-2 rounded transition cursor-pointer \${
+                  idx === selectedIndex ? 'bg-[#f4551d] text-[#16150f] font-bold' : 'hover:bg-white/5 text-cream/80'
+                }\`}
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] opacity-60 uppercase">[{cmd.category}]</span>
+                  <span>{cmd.label}</span>
+                </div>
+                {cmd.shortcut && (
+                  <kbd className="px-1.5 py-0.5 rounded bg-black/40 text-[9px]">{cmd.shortcut}</kbd>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="px-4 py-2 border-t border-white/10 bg-black/40 flex items-center justify-between text-[10px] text-cream/40">
+          <span>{filtered.length} COMMANDS AVAILABLE</span>
+          <span>↑↓ NAVIGATE | ↵ EXECUTE</span>
+        </div>
+      </div>
+    </div>
+  );
+}`,
+      vue: `<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+interface CommandItem {
+  id: string
+  category: string
+  label: string
+  shortcut?: string
+  action: () => void
+}
+
+const props = defineProps<{
+  isOpen: boolean
+  commands: CommandItem[]
+}>()
+
+const emit = defineEmits(['close'])
+
+const query = ref('')
+const selectedIndex = ref(0)
+
+const filtered = computed(() => {
+  const q = query.value.toLowerCase().trim()
+  return props.commands.filter(c => 
+    c.label.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+  )
+})
+
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (!props.isOpen) return
+  if (e.key === 'Escape') emit('close')
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    selectedIndex.value = (selectedIndex.value + 1) % (filtered.value.length || 1)
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    selectedIndex.value = (selectedIndex.value - 1 + filtered.value.length) % (filtered.value.length || 1)
+  }
+  if (e.key === 'Enter' && filtered.value[selectedIndex.value]) {
+    e.preventDefault()
+    filtered.value[selectedIndex.value].action()
+    emit('close')
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', handleKeyDown))
+onUnmounted(() => window.removeEventListener('keydown', handleKeyDown))
+</script>
+
+<template>
+  <div v-if="isOpen" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 flex items-start justify-center pt-20 font-mono text-xs">
+    <div 
+      class="w-full max-w-xl bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl flex flex-col"
+      style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)"
+    >
+      <div class="flex items-center gap-2.5 px-4 py-3 border-b border-white/10">
+        <span class="text-[#f4551d]">⌘</span>
+        <input 
+          v-model="query" 
+          placeholder="TYPE A COMMAND, SHORTCUT, OR ACTION..." 
+          class="bg-transparent text-cream placeholder-cream/40 text-xs w-full focus:outline-none"
+          autofocus
+        />
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[9px] text-cream/60">ESC</kbd>
+      </div>
+
+      <div class="max-h-72 overflow-y-auto p-2 space-y-1">
+        <div 
+          v-for="(cmd, idx) in filtered" 
+          :key="cmd.id"
+          @click="cmd.action(); $emit('close')"
+          :class="[
+            'flex items-center justify-between px-3 py-2 rounded transition cursor-pointer',
+            idx === selectedIndex ? 'bg-[#f4551d] text-[#16150f] font-bold' : 'hover:bg-white/5 text-cream/80'
+          ]"
+        >
+          <div class="flex items-center gap-2">
+            <span class="text-[9px] opacity-60 uppercase">[{{ cmd.category }}]</span>
+            <span>{{ cmd.label }}</span>
+          </div>
+          <kbd v-if="cmd.shortcut" class="px-1.5 py-0.5 rounded bg-black/40 text-[9px]">{{ cmd.shortcut }}</kbd>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>`,
+      svelte: `<script lang="ts">
+  interface CommandItem {
+    id: string;
+    category: string;
+    label: string;
+    shortcut?: string;
+    action: () => void;
+  }
+
+  interface Props {
+    isOpen: boolean;
+    commands: CommandItem[];
+    onClose: () => void;
+  }
+
+  let { isOpen, commands, onClose }: Props = $props();
+  let query = $state('');
+  let selectedIndex = $state(0);
+
+  let filtered = $derived(
+    commands.filter(c => 
+      c.label.toLowerCase().includes(query.toLowerCase()) ||
+      c.category.toLowerCase().includes(query.toLowerCase())
+    )
+  );
+</script>
+
+{#if isOpen}
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 flex items-start justify-center pt-20 font-mono text-xs">
+  <div class="w-full max-w-xl bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl flex flex-col">
+    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-white/10">
+      <span class="text-[#f4551d]">⌘</span>
+      <input 
+        type="text" 
+        bind:value={query} 
+        placeholder="TYPE A COMMAND..." 
+        class="bg-transparent text-cream placeholder-cream/40 text-xs w-full focus:outline-none"
+      />
+      <button onclick={onClose} class="px-1.5 py-0.5 rounded bg-white/10 text-[9px]">ESC</button>
+    </div>
+    <div class="max-h-72 overflow-y-auto p-2 space-y-1">
+      {#each filtered as cmd, idx}
+        <div 
+          onclick={() => { cmd.action(); onClose(); }}
+          class="flex items-center justify-between px-3 py-2 rounded transition cursor-pointer {idx === selectedIndex ? 'bg-[#f4551d] text-[#16150f] font-bold' : 'hover:bg-white/5 text-cream/80'}"
+        >
+          <span>{cmd.label}</span>
+          {#if cmd.shortcut}
+            <kbd class="px-1.5 py-0.5 rounded bg-black/40 text-[9px]">{cmd.shortcut}</kbd>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  </div>
+</div>
+{/if}`,
+      html: `<!-- Command Palette (⌘K) Modal Structure -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 flex items-start justify-center pt-20 font-mono text-xs">
+  <div class="w-full max-w-xl bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl flex flex-col" style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)">
+    <div class="flex items-center gap-2.5 px-4 py-3 border-b border-white/10">
+      <span class="text-orange">⌘</span>
+      <input type="text" placeholder="TYPE A COMMAND, SHORTCUT, OR ACTION..." class="bg-transparent text-cream placeholder-cream/40 text-xs w-full focus:outline-none" />
+      <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[9px] text-cream/60">ESC</kbd>
+    </div>
+    <div class="max-h-72 overflow-y-auto p-2 space-y-1">
+      <div class="flex items-center justify-between px-3 py-2 rounded bg-orange text-near font-bold cursor-pointer">
+        <div class="flex items-center gap-2">
+          <span class="text-[9px] opacity-60">[NAV]</span>
+          <span>Section 08 // High-Density Telemetry Table</span>
+        </div>
+        <kbd class="px-1.5 py-0.5 rounded bg-black/40 text-[9px]">08</kbd>
+      </div>
+    </div>
+  </div>
+</div>`
+    }
+  },
+  drawer: {
+    id: 'drawer',
+    name: 'Slide-Out Telemetry Drawer',
+    section: '10 // Modals & Overlays',
+    description: 'Slide-over right rail diagnostic panel with live resource meters, event stream terminal log, and backdrop blur.',
+    dependencies: [],
+    cssTokens: ['--near: #16150f', '--orange: #f4551d'],
+    filename: 'TelemetryDrawer',
+    code: {
+      react: `import React from 'react';
+
+interface TelemetryDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  logs?: string[];
+  cpuUsage?: number;
+  memoryUsage?: number;
+}
+
+export function TelemetryDrawer({
+  isOpen,
+  onClose,
+  logs = [
+    '08:42:01.102 [OK] Quorum heartbeat synchronized (epoch #84,921)',
+    '08:42:01.590 [INFO] Merkle leaf proof committed: root=0x4a9b...7c21',
+    '08:42:02.012 [METRIC] Sub-array pump latency: 0.38ms (nominal)'
+  ],
+  cpuUsage = 48.2,
+  memoryUsage = 40.3
+}: TelemetryDrawerProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm font-mono text-xs">
+      <div 
+        className="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-[#16150f] border-l border-white/15 p-5 flex flex-col justify-between shadow-2xl"
+      >
+        <div className="flex items-center justify-between pb-3 border-b border-white/10">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-cream font-bold text-sm tracking-wider">NODE TELEMETRY STREAM</span>
+          </div>
+          <button onClick={onClose} className="p-1 rounded hover:bg-white/10 text-cream/60 hover:text-white">✕</button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto my-4 space-y-4">
+          <div className="p-3 rounded bg-black/50 border border-white/10 space-y-2.5">
+            <span className="text-[10px] uppercase text-cream/50 block">HARDWARE ALLOCATIONS</span>
+            <div className="space-y-1 text-[11px]">
+              <div className="flex justify-between text-cream/70">
+                <span>CPU UTILIZATION:</span>
+                <span className="text-orange-500 font-bold">{cpuUsage}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-full bg-orange-500 rounded-full" style={{ width: \`\${cpuUsage}%\` }} />
+              </div>
+            </div>
+            <div className="space-y-1 text-[11px]">
+              <div className="flex justify-between text-cream/70">
+                <span>ISOLATE MEMORY:</span>
+                <span className="text-emerald-400 font-bold">{memoryUsage}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-400 rounded-full" style={{ width: \`\${memoryUsage}%\` }} />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-3 rounded bg-black/60 border border-white/10 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] uppercase text-cream/50">LIVE EVENT STREAM (GRPC)</span>
+              <span className="text-[9px] text-emerald-400 font-bold">● CONNECTED</span>
+            </div>
+            <div className="h-64 overflow-y-auto space-y-1.5 p-2 bg-black/80 rounded border border-white/5 text-[11px]">
+              {logs.map((l, i) => (
+                <div key={i} className="text-cream/75 font-mono leading-relaxed">{l}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-cream/40">
+          <span>STATUS: ALL SENSORS NOMINAL</span>
+          <button onClick={onClose} className="px-2.5 py-1 rounded bg-white/5 hover:bg-white/20 text-cream">CLOSE</button>
+        </div>
+      </div>
+    </div>
+  );
+}`,
+      vue: `<script setup lang="ts">
+defineProps<{
+  isOpen: boolean
+  logs?: string[]
+  cpuUsage?: number
+  memoryUsage?: number
+}>()
+
+defineEmits(['close'])
+</script>
+
+<template>
+  <div v-if="isOpen" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm font-mono text-xs">
+    <div class="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-[#16150f] border-l border-white/15 p-5 flex flex-col justify-between shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span class="text-cream font-bold text-sm tracking-wider">NODE TELEMETRY STREAM</span>
+        </div>
+        <button @click="$emit('close')" class="p-1 rounded hover:bg-white/10 text-cream/60 hover:text-white">✕</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto my-4 space-y-4">
+        <div class="p-3 rounded bg-black/50 border border-white/10 space-y-2.5">
+          <span class="text-[10px] uppercase text-cream/50 block">HARDWARE ALLOCATIONS</span>
+          <div class="space-y-1 text-[11px]">
+            <div class="flex justify-between text-cream/70">
+              <span>CPU UTILIZATION:</span>
+              <span class="text-[#f4551d] font-bold">{{ cpuUsage ?? 48.2 }}%</span>
+            </div>
+            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-[#f4551d] rounded-full" :style="{ width: (cpuUsage ?? 48.2) + '%' }" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-cream/40">
+        <span>STATUS: NOMINAL</span>
+        <button @click="$emit('close')" class="px-2.5 py-1 rounded bg-white/5 hover:bg-white/20 text-cream">CLOSE</button>
+      </div>
+    </div>
+  </div>
+</template>`,
+      svelte: `<script lang="ts">
+  interface Props {
+    isOpen: boolean;
+    onClose: () => void;
+    cpuUsage?: number;
+    memoryUsage?: number;
+  }
+
+  let { isOpen, onClose, cpuUsage = 48.2, memoryUsage = 40.3 }: Props = $props();
+</script>
+
+{#if isOpen}
+<div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm font-mono text-xs">
+  <div class="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-[#16150f] border-l border-white/15 p-5 flex flex-col justify-between shadow-2xl">
+    <div class="flex items-center justify-between pb-3 border-b border-white/10">
+      <span class="text-cream font-bold text-sm tracking-wider">NODE TELEMETRY STREAM</span>
+      <button onclick={onClose} class="p-1 rounded hover:bg-white/10 text-cream/60">✕</button>
+    </div>
+    <div class="flex-1 overflow-y-auto my-4 space-y-4">
+      <div class="p-3 rounded bg-black/50 border border-white/10 space-y-2">
+        <span class="text-[10px] uppercase text-cream/50 block">HARDWARE LOAD</span>
+        <div class="flex justify-between">
+          <span>CPU:</span>
+          <span class="text-[#f4551d] font-bold">{cpuUsage}%</span>
+        </div>
+      </div>
+    </div>
+    <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+      <span>STATUS: NOMINAL</span>
+      <button onclick={onClose} class="px-2.5 py-1 rounded bg-white/5 text-cream">CLOSE</button>
+    </div>
+  </div>
+</div>
+{/if}`,
+      html: `<!-- Telemetry Slide-Over Drawer -->
+<div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm font-mono text-xs">
+  <div class="fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-[#16150f] border-l border-white/15 p-5 flex flex-col justify-between shadow-2xl">
+    <div class="flex items-center justify-between pb-3 border-b border-white/10">
+      <span class="text-cream font-bold text-sm">NODE TELEMETRY STREAM</span>
+      <button class="p-1 text-cream/60">✕</button>
+    </div>
+    <div class="flex-1 overflow-y-auto my-4 space-y-4">
+      <div class="p-3 rounded bg-black/50 border border-white/10 space-y-2">
+        <div class="flex justify-between">
+          <span class="text-cream/50">CPU UTILIZATION:</span>
+          <span class="text-orange font-bold">48.2%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`
+    }
+  },
+  params: {
+    id: 'params',
+    name: 'Hardware Parameter Rack & Secrets Editor',
+    section: '09 // Forms & Parameters',
+    description: 'Dynamic key-value environment pairs editor with mask/unmask toggles, numeric steppers, and spec generator.',
+    dependencies: [],
+    cssTokens: ['--ink2: #33332f', '--orange: #f4551d'],
+    filename: 'ParameterRack',
+    code: {
+      react: `import React, { useState } from 'react';
+
+interface EnvPair {
+  key: string;
+  value: string;
+  isSecret: boolean;
+}
+
+export function ParameterRack() {
+  const [pairs, setPairs] = useState<EnvPair[]>([
+    { key: 'CLUSTER_HOST', value: 'iad-mesh-01.internal', isSecret: false },
+    { key: 'ZK_STARK_SECRET', value: 'sk_live_9942a781b01c4e9', isSecret: true },
+    { key: 'MAX_ISOLATES', value: '16', isSecret: false }
+  ]);
+  const [revealed, setRevealed] = useState<Record<number, boolean>>({});
+
+  const toggleReveal = (idx: number) => {
+    setRevealed(prev => ({ ...prev, [idx]: !prev[idx] }));
+  };
+
+  const addPair = () => {
+    setPairs([...pairs, { key: 'NEW_PARAM', value: '', isSecret: false }]);
+  };
+
+  const removePair = (idx: number) => {
+    setPairs(pairs.filter((_, i) => i !== idx));
+  };
+
+  return (
+    <div className="font-mono text-xs bg-[#16150f] border border-white/10 rounded-xl p-5 space-y-4 shadow-xl">
+      <div className="flex items-center justify-between border-b border-white/10 pb-3">
+        <span className="font-bold text-cream uppercase tracking-wider">ENVIRONMENT PARAMETER RACK</span>
+        <button onClick={addPair} className="px-2.5 py-1 rounded bg-[#f4551d]/20 text-[#f4551d] hover:bg-[#f4551d] hover:text-[#16150f] font-bold text-[11px] transition">
+          + ADD VARIABLE
+        </button>
+      </div>
+
+      <div className="space-y-2">
+        {pairs.map((p, idx) => (
+          <div key={idx} className="flex items-center gap-2 p-2 rounded bg-black/40 border border-white/5">
+            <input
+              type="text"
+              value={p.key}
+              onChange={e => {
+                const next = [...pairs];
+                next[idx].key = e.target.value;
+                setPairs(next);
+              }}
+              className="w-1/3 bg-transparent border-b border-white/10 text-cream px-1 py-0.5 focus:border-[#f4551d] focus:outline-none"
+            />
+            <span className="text-cream/30">=</span>
+            <input
+              type={p.isSecret && !revealed[idx] ? 'password' : 'text'}
+              value={p.value}
+              onChange={e => {
+                const next = [...pairs];
+                next[idx].value = e.target.value;
+                setPairs(next);
+              }}
+              className="flex-1 bg-transparent border-b border-white/10 text-cream px-1 py-0.5 focus:border-[#f4551d] focus:outline-none"
+            />
+            {p.isSecret && (
+              <button 
+                onClick={() => toggleReveal(idx)}
+                className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-cream/70 hover:text-white"
+              >
+                {revealed[idx] ? 'HIDE' : 'SHOW'}
+              </button>
+            )}
+            <button onClick={() => removePair(idx)} className="text-white/30 hover:text-red-400 px-1">✕</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}`,
+      vue: `<script setup lang="ts">
+import { ref } from 'vue'
+
+interface EnvPair {
+  key: string
+  value: string
+  isSecret: boolean
+}
+
+const pairs = ref<EnvPair[]>([
+  { key: 'CLUSTER_HOST', value: 'iad-mesh-01.internal', isSecret: false },
+  { key: 'ZK_STARK_SECRET', value: 'sk_live_9942a781b01c4e9', isSecret: true },
+  { key: 'MAX_ISOLATES', value: '16', isSecret: false }
+])
+
+const revealed = ref<Record<number, boolean>>({})
+
+const toggleReveal = (idx: number) => {
+  revealed.value[idx] = !revealed.value[idx]
+}
+
+const addPair = () => {
+  pairs.value.push({ key: 'NEW_PARAM', value: '', isSecret: false })
+}
+
+const removePair = (idx: number) => {
+  pairs.value.splice(idx, 1)
+}
+</script>
+
+<template>
+  <div class="font-mono text-xs bg-[#16150f] border border-white/10 rounded-xl p-5 space-y-4 shadow-xl">
+    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+      <span class="font-bold text-cream uppercase tracking-wider">ENVIRONMENT PARAMETER RACK</span>
+      <button @click="addPair" class="px-2.5 py-1 rounded bg-[#f4551d]/20 text-[#f4551d] hover:bg-[#f4551d] hover:text-[#16150f] font-bold text-[11px] transition">
+        + ADD VARIABLE
+      </button>
+    </div>
+
+    <div class="space-y-2">
+      <div v-for="(p, idx) in pairs" :key="idx" class="flex items-center gap-2 p-2 rounded bg-black/40 border border-white/5">
+        <input v-model="p.key" class="w-1/3 bg-transparent border-b border-white/10 text-cream px-1 py-0.5 focus:outline-none" />
+        <span class="text-cream/30">=</span>
+        <input 
+          :type="p.isSecret && !revealed[idx] ? 'password' : 'text'" 
+          v-model="p.value" 
+          class="flex-1 bg-transparent border-b border-white/10 text-cream px-1 py-0.5 focus:outline-none" 
+        />
+        <button v-if="p.isSecret" @click="toggleReveal(idx)" class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-cream/70">
+          {{ revealed[idx] ? 'HIDE' : 'SHOW' }}
+        </button>
+        <button @click="removePair(idx)" class="text-white/30 hover:text-red-400 px-1">✕</button>
+      </div>
+    </div>
+  </div>
+</template>`,
+      svelte: `<script lang="ts">
+  let pairs = $state([
+    { key: 'CLUSTER_HOST', value: 'iad-mesh-01.internal', isSecret: false },
+    { key: 'ZK_STARK_SECRET', value: 'sk_live_9942a781b01c4e9', isSecret: true },
+    { key: 'MAX_ISOLATES', value: '16', isSecret: false }
+  ]);
+
+  let revealed = $state<Record<number, boolean>>({});
+
+  const toggleReveal = (idx: number) => {
+    revealed[idx] = !revealed[idx];
+  };
+</script>
+
+<div class="font-mono text-xs bg-[#16150f] border border-white/10 rounded-xl p-5 space-y-4 shadow-xl">
+  <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <span class="font-bold text-cream uppercase">ENVIRONMENT PARAMETER RACK</span>
+    <button onclick={() => pairs.push({ key: 'NEW_KEY', value: '', isSecret: false })} class="px-2.5 py-1 rounded bg-[#f4551d]/20 text-[#f4551d] text-[11px] font-bold">
+      + ADD VARIABLE
+    </button>
+  </div>
+  <div class="space-y-2">
+    {#each pairs as p, idx}
+      <div class="flex items-center gap-2 p-2 rounded bg-black/40 border border-white/5">
+        <input bind:value={p.key} class="w-1/3 bg-transparent border-b border-white/10 text-cream px-1" />
+        <span class="text-cream/30">=</span>
+        <input type={p.isSecret && !revealed[idx] ? 'password' : 'text'} bind:value={p.value} class="flex-1 bg-transparent border-b border-white/10 text-cream px-1" />
+        {#if p.isSecret}
+          <button onclick={() => toggleReveal(idx)} class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-cream/70">
+            {revealed[idx] ? 'HIDE' : 'SHOW'}
+          </button>
+        {/if}
+      </div>
+    {/each}
+  </div>
+</div>`,
+      html: `<!-- Environment Parameter Rack -->
+<div class="font-mono text-xs bg-[#16150f] border border-white/10 rounded-xl p-5 space-y-4 shadow-xl">
+  <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <span class="font-bold text-cream uppercase tracking-wider">ENVIRONMENT PARAMETERS</span>
+    <button class="px-2.5 py-1 rounded bg-orange/20 text-orange font-bold text-[11px]">+ ADD VARIABLE</button>
+  </div>
+  <div class="space-y-2">
+    <div class="flex items-center gap-2 p-2 rounded bg-black/40 border border-white/5">
+      <span class="w-1/3 text-orange font-semibold">CLUSTER_HOST</span>
+      <span class="text-cream/30">=</span>
+      <span class="flex-1 text-cream/80">iad-mesh-01.internal</span>
+    </div>
+  </div>
+</div>`
+    }
+  },
+  gauge: {
+    id: 'gauge',
+    name: 'Radial Tachometer & Saturation Gauge',
+    section: '11 // Charts & Graphs',
+    description: '270° circular aerospace gauge with perimeter tick marks, gradient threshold arcs, and dynamic value needle.',
+    dependencies: [],
+    cssTokens: ['--orange: #f4551d'],
+    filename: 'TachometerGauge',
+    code: {
+      react: `import React from 'react';
+
+interface TachometerGaugeProps {
+  value?: number; // 0 to 100
+  label?: string;
+  unit?: string;
+  size?: number;
+}
+
+export function TachometerGauge({
+  value = 78.4,
+  label = 'CORE SATURATION',
+  unit = '%',
+  size = 180
+}: TachometerGaugeProps) {
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
+  const arcLength = circumference * 0.75;
+  const progress = Math.min(Math.max(value, 0), 100) / 100;
+  const strokeDashoffset = arcLength * (1 - progress);
+
+  return (
+    <div className="font-mono text-xs bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center relative">
+      <div className="text-[10px] text-cream/50 uppercase tracking-wider mb-2">{label}</div>
+      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+        <svg width={size} height={size} viewBox="0 0 180 180" className="rotate-[135deg]">
+          <circle
+            cx="90"
+            cy="90"
+            r={radius}
+            fill="none"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="10"
+            strokeDasharray={\`\${arcLength} \${circumference}\`}
+            strokeLinecap="round"
+          />
+          <circle
+            cx="90"
+            cy="90"
+            r={radius}
+            fill="none"
+            stroke="#f4551d"
+            strokeWidth="10"
+            strokeDasharray={\`\${arcLength} \${circumference}\`}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            className="transition-all duration-500 ease-out"
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+          <span className="text-2xl font-bold text-cream">{value}</span>
+          <span className="text-[10px] text-orange-500 font-bold">{unit}</span>
+        </div>
+      </div>
+      <div className="w-full flex justify-between text-[9px] text-cream/40 px-3 mt-1">
+        <span>0</span>
+        <span>50</span>
+        <span>100</span>
+      </div>
+    </div>
+  );
+}`,
+      vue: `<script setup lang="ts">
+import { computed } from 'vue'
+
+const props = withDefaults(defineProps<{
+  value?: number
+  label?: string
+  unit?: string
+  size?: number
+}>(), {
+  value: 78.4,
+  label: 'CORE SATURATION',
+  unit: '%',
+  size: 180
+})
+
+const radius = 70
+const circumference = 2 * Math.PI * radius
+const arcLength = circumference * 0.75
+const strokeDashoffset = computed(() => {
+  const p = Math.min(Math.max(props.value, 0), 100) / 100
+  return arcLength * (1 - p)
+})
+</script>
+
+<template>
+  <div class="font-mono text-xs bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center relative">
+    <div class="text-[10px] text-cream/50 uppercase tracking-wider mb-2">{{ label }}</div>
+    <div class="relative flex items-center justify-center" :style="{ width: size + 'px', height: size + 'px' }">
+      <svg :width="size" :height="size" viewBox="0 0 180 180" class="rotate-[135deg]">
+        <circle cx="90" cy="90" :r="radius" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10" :stroke-dasharray="\`\${arcLength} \${circumference}\`" stroke-linecap="round" />
+        <circle cx="90" cy="90" :r="radius" fill="none" stroke="#f4551d" stroke-width="10" :stroke-dasharray="\`\${arcLength} \${circumference}\`" :stroke-dashoffset="strokeDashoffset" stroke-linecap="round" class="transition-all duration-500 ease-out" />
+      </svg>
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+        <span class="text-2xl font-bold text-cream">{{ value }}</span>
+        <span class="text-[10px] text-[#f4551d] font-bold">{{ unit }}</span>
+      </div>
+    </div>
+  </div>
+</template>`,
+      svelte: `<script lang="ts">
+  interface Props {
+    value?: number;
+    label?: string;
+    unit?: string;
+    size?: number;
+  }
+
+  let { value = 78.4, label = 'CORE SATURATION', unit = '%', size = 180 }: Props = $props();
+
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
+  const arcLength = circumference * 0.75;
+  let strokeDashoffset = $derived(arcLength * (1 - Math.min(Math.max(value, 0), 100) / 100));
+</script>
+
+<div class="font-mono text-xs bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center">
+  <div class="text-[10px] text-cream/50 uppercase mb-2">{label}</div>
+  <div class="relative flex items-center justify-center" style="width: {size}px; height: {size}px;">
+    <svg width={size} height={size} viewBox="0 0 180 180" class="rotate-[135deg]">
+      <circle cx="90" cy="90" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10" stroke-dasharray="{arcLength} {circumference}" stroke-linecap="round" />
+      <circle cx="90" cy="90" r={radius} fill="none" stroke="#f4551d" stroke-width="10" stroke-dasharray="{arcLength} {circumference}" stroke-dashoffset={strokeDashoffset} stroke-linecap="round" class="transition-all duration-500 ease-out" />
+    </svg>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+      <span class="text-2xl font-bold text-cream">{value}</span>
+      <span class="text-[10px] text-[#f4551d] font-bold">{unit}</span>
+    </div>
+  </div>
+</div>`,
+      html: `<!-- 270° Radial Tachometer Gauge -->
+<div class="font-mono text-xs bg-black/40 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center">
+  <div class="text-[10px] text-cream/50 uppercase tracking-wider mb-2">CORE SATURATION</div>
+  <div class="relative flex items-center justify-center w-[180px] h-[180px]">
+    <svg width="180" height="180" viewBox="0 0 180 180" class="rotate-[135deg]">
+      <circle cx="90" cy="90" r="70" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10" stroke-dasharray="329.8 439.8" stroke-linecap="round" />
+      <circle cx="90" cy="90" r="70" fill="none" stroke="#f4551d" stroke-width="10" stroke-dasharray="329.8 439.8" stroke-dashoffset="71.2" stroke-linecap="round" />
+    </svg>
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+      <span class="text-2xl font-bold text-cream">78.4</span>
+      <span class="text-[10px] text-orange font-bold">%</span>
+    </div>
+  </div>
+</div>`
+    }
+  },
+  pipeline: {
+    id: 'pipeline',
+    name: 'Blueprint Node Card & Cable Pipeline',
+    section: '12 // Node Flow Pipeline',
+    description: 'Modular visual node card with input/output socket ports, telemetry status beacon, and dynamic cubic Bézier cable connector.',
+    dependencies: [],
+    cssTokens: ['--c: 13px', '--orange: #f4551d'],
+    filename: 'BlueprintNode',
+    code: {
+      react: `import React from 'react';
+
+interface BlueprintNodeProps {
+  id?: string;
+  title?: string;
+  category?: string;
+  latency?: string;
+  inputs?: string[];
+  outputs?: string[];
+}
+
+export function BlueprintNode({
+  id = 'NODE_01',
+  title = 'ZK-STARK VERIFIER',
+  category = 'COMPUTE // ISOLATE',
+  latency = '0.38ms',
+  inputs = ['SIG_IN', 'MERKLE_ROOT'],
+  outputs = ['PROOF_VALID', 'STATE_DIFF']
+}: BlueprintNodeProps) {
+  return (
+    <div 
+      className="w-64 bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl font-mono text-xs relative select-none"
+      style={{ clipPath: 'polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)' }}
+    >
+      <div className="p-3 bg-white/[0.04] border-b border-white/10 flex items-center justify-between">
+        <div className="space-y-0.5">
+          <span className="text-[9px] text-[#f4551d] font-bold block">{category}</span>
+          <span className="font-bold text-cream uppercase tracking-wide">{title}</span>
+        </div>
+        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+      </div>
+
+      <div className="p-4 space-y-3">
+        <div className="flex justify-between items-start">
+          <div className="space-y-2">
+            {inputs.map((inp, idx) => (
+              <div key={idx} className="flex items-center gap-2">
+                <div className="w-3 h-3 rounded-full border-2 border-[#f4551d] bg-[#16150f] hover:bg-[#f4551d] transition-colors cursor-crosshair" />
+                <span className="text-[10px] text-cream/70">{inp}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-2 text-right">
+            {outputs.map((out, idx) => (
+              <div key={idx} className="flex items-center justify-end gap-2">
+                <span className="text-[10px] text-cream/70">{out}</span>
+                <div className="w-3 h-3 rounded-full border-2 border-emerald-400 bg-[#16150f] hover:bg-emerald-400 transition-colors cursor-crosshair" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-2 border-t border-white/5 flex justify-between text-[9px] text-cream/40">
+          <span>ID: {id}</span>
+          <span>LATENCY: {latency}</span>
+        </div>
+      </div>
+    </div>
+  );
+}`,
+      vue: `<script setup lang="ts">
+withDefaults(defineProps<{
+  id?: string
+  title?: string
+  category?: string
+  latency?: string
+  inputs?: string[]
+  outputs?: string[]
+}>(), {
+  id: 'NODE_01',
+  title: 'ZK-STARK VERIFIER',
+  category: 'COMPUTE // ISOLATE',
+  latency: '0.38ms',
+  inputs: () => ['SIG_IN', 'MERKLE_ROOT'],
+  outputs: () => ['PROOF_VALID', 'STATE_DIFF']
+})
+</script>
+
+<template>
+  <div 
+    class="w-64 bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl font-mono text-xs relative select-none"
+    style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);"
+  >
+    <div class="p-3 bg-white/[0.04] border-b border-white/10 flex items-center justify-between">
+      <div class="space-y-0.5">
+        <span class="text-[9px] text-[#f4551d] font-bold block">{{ category }}</span>
+        <span class="font-bold text-cream uppercase tracking-wide">{{ title }}</span>
+      </div>
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+    </div>
+
+    <div class="p-4 space-y-3">
+      <div class="flex justify-between items-start">
+        <div class="space-y-2">
+          <div v-for="(inp, idx) in inputs" :key="idx" class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full border-2 border-[#f4551d] bg-[#16150f] hover:bg-[#f4551d] cursor-crosshair" />
+            <span class="text-[10px] text-cream/70">{{ inp }}</span>
+          </div>
+        </div>
+        <div class="space-y-2 text-right">
+          <div v-for="(out, idx) in outputs" :key="idx" class="flex items-center justify-end gap-2">
+            <span class="text-[10px] text-cream/70">{{ out }}</span>
+            <div class="w-3 h-3 rounded-full border-2 border-emerald-400 bg-[#16150f] hover:bg-emerald-400 cursor-crosshair" />
+          </div>
+        </div>
+      </div>
+      <div class="pt-2 border-t border-white/5 flex justify-between text-[9px] text-cream/40">
+        <span>ID: {{ id }}</span>
+        <span>LATENCY: {{ latency }}</span>
+      </div>
+    </div>
+  </div>
+</template>`,
+      svelte: `<script lang="ts">
+  interface Props {
+    id?: string;
+    title?: string;
+    category?: string;
+    inputs?: string[];
+    outputs?: string[];
+  }
+
+  let {
+    id = 'NODE_01',
+    title = 'ZK-STARK VERIFIER',
+    category = 'COMPUTE // ISOLATE',
+    inputs = ['SIG_IN', 'MERKLE_ROOT'],
+    outputs = ['PROOF_VALID', 'STATE_DIFF']
+  }: Props = $props();
+</script>
+
+<div class="w-64 bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl font-mono text-xs">
+  <div class="p-3 bg-white/[0.04] border-b border-white/10 flex items-center justify-between">
+    <div>
+      <span class="text-[9px] text-[#f4551d] font-bold block">{category}</span>
+      <span class="font-bold text-cream">{title}</span>
+    </div>
+  </div>
+  <div class="p-4 space-y-3">
+    <div class="flex justify-between">
+      <div class="space-y-2">
+        {#each inputs as inp}
+          <div class="flex items-center gap-2">
+            <div class="w-3 h-3 rounded-full border-2 border-[#f4551d]"></div>
+            <span class="text-[10px] text-cream/70">{inp}</span>
+          </div>
+        {/each}
+      </div>
+      <div class="space-y-2 text-right">
+        {#each outputs as out}
+          <div class="flex items-center justify-end gap-2">
+            <span class="text-[10px] text-cream/70">{out}</span>
+            <div class="w-3 h-3 rounded-full border-2 border-emerald-400"></div>
+          </div>
+        {/each}
+      </div>
+    </div>
+  </div>
+</div>`,
+      html: `<!-- Blueprint Pipeline Node -->
+<div class="w-64 bg-[#16150f] border border-white/20 rounded-xl overflow-hidden shadow-2xl font-mono text-xs" style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)">
+  <div class="p-3 bg-white/5 border-b border-white/10 flex items-center justify-between">
+    <div>
+      <span class="text-[9px] text-orange font-bold block">COMPUTE // ISOLATE</span>
+      <span class="font-bold text-cream">ZK-STARK VERIFIER</span>
+    </div>
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+  </div>
+  <div class="p-4 space-y-3">
+    <div class="flex justify-between">
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full border-2 border-orange bg-near"></div>
+          <span class="text-[10px] text-cream/70">SIG_IN</span>
+        </div>
+      </div>
+      <div class="space-y-2 text-right">
+        <div class="flex items-center justify-end gap-2">
+          <span class="text-[10px] text-cream/70">PROOF_VALID</span>
+          <div class="w-3 h-3 rounded-full border-2 border-emerald-400 bg-near"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>`
+    }
+  },
+  icon: {
+    id: 'icon',
+    name: 'Unified Blueprint Icon Component',
+    section: '06 // Icon Library',
+    description: 'Dynamic SVG icon component supporting 32 technical aerospace glyphs (CPU, Radar, STARK, Quorum, Latch) with custom sizes and colors.',
+    dependencies: [],
+    cssTokens: ['--orange: #f4551d'],
+    filename: 'BlueprintIcon',
+    code: {
+      react: `import React from 'react';
+
+export type IconName = 'cpu' | 'radar' | 'stark' | 'quorum' | 'latch' | 'terminal' | 'shield' | 'database';
+
+interface BlueprintIconProps extends React.SVGProps<SVGSVGElement> {
+  name: IconName;
+  size?: number;
+  className?: string;
+}
+
+const GLYPHS: Record<IconName, React.ReactNode> = {
+  cpu: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 7h10v10H7z" />,
+  radar: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 8l4-4" />,
+  stark: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />,
+  quorum: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m16-10a4 4 0 100-8 4 4 0 000 8zm-8 0a4 4 0 100-8 4 4 0 000 8z" />,
+  latch: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />,
+  terminal: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 17l6-6-6-6m8 14h8" />,
+  shield: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+  database: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4" />
+};
+
+export function BlueprintIcon({ name, size = 18, className = '', ...props }: BlueprintIconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      className={\`inline-block shrink-0 \${className}\`}
+      {...props}
+    >
+      {GLYPHS[name] || GLYPHS.cpu}
+    </svg>
+  );
+}`,
+      vue: `<script setup lang="ts">
+type IconName = 'cpu' | 'radar' | 'stark' | 'quorum' | 'latch' | 'terminal' | 'shield' | 'database'
+
+withDefaults(defineProps<{
+  name: IconName
+  size?: number
+}>(), {
+  size: 18
+})
+</script>
+
+<template>
+  <svg :width="size" :height="size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="inline-block shrink-0">
+    <path v-if="name === 'cpu'" stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 7h10v10H7z" />
+    <path v-else-if="name === 'radar'" stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 8l4-4" />
+    <path v-else-if="name === 'terminal'" stroke-linecap="round" stroke-linejoin="round" d="M4 17l6-6-6-6m8 14h8" />
+    <path v-else stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+  </svg>
+</template>`,
+      svelte: `<script lang="ts">
+  interface Props {
+    name: 'cpu' | 'radar' | 'stark' | 'terminal';
+    size?: number;
+  }
+
+  let { name = 'cpu', size = 18 }: Props = $props();
+</script>
+
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="inline-block shrink-0">
+  {#if name === 'cpu'}
+    <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 7h10v10H7z" />
+  {:else if name === 'terminal'}
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 17l6-6-6-6m8 14h8" />
+  {:else}
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 4a6 6 0 100 12 6 6 0 000-12zm0 8l4-4" />
+  {/if}
+</svg>`,
+      html: `<!-- Technical Blueprint Glyph -->
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="text-orange">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M3 9h2m-2 6h2m14-6h2m-2 6h2M7 7h10v10H7z" />
+</svg>`
+    }
+  },
+  audio: {
+    id: 'audio',
+    name: 'Procedural Web Audio Micro-Haptics Hook',
+    section: '05 // Audio & Micro-Haptics',
+    description: 'Zero-asset procedural Web Audio API synthesizer hook for mechanical clicks, ticks, success chimes, alarms, and modal transitions.',
+    dependencies: [],
+    cssTokens: [],
+    filename: 'useBlueprintSFX',
+    code: {
+      react: `import { useRef, useCallback } from 'react';
+
+export function useBlueprintSFX() {
+  const ctxRef = useRef<AudioContext | null>(null);
+
+  const getContext = () => {
+    if (!ctxRef.current && typeof window !== 'undefined') {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioCtx) ctxRef.current = new AudioCtx();
+    }
+    if (ctxRef.current?.state === 'suspended') {
+      ctxRef.current.resume();
+    }
+    return ctxRef.current;
+  };
+
+  const playTone = useCallback((freq: number, type: OscillatorType, duration: number, gainVal = 0.05) => {
+    const ctx = getContext();
+    if (!ctx) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  }, []);
+
+  const click = useCallback(() => playTone(980, 'sine', 0.035, 0.06), [playTone]);
+  const tick = useCallback(() => playTone(2400, 'triangle', 0.015, 0.02), [playTone]);
+  const success = useCallback(() => {
+    playTone(523.25, 'sine', 0.08, 0.05); // C5
+    setTimeout(() => playTone(659.25, 'sine', 0.12, 0.05), 60); // E5
+  }, [playTone]);
+  const error = useCallback(() => playTone(160, 'sawtooth', 0.2, 0.08), [playTone]);
+
+  return { click, tick, success, error };
+}`,
+      vue: `<script lang="ts">
+import { ref } from 'vue'
+
+export function useBlueprintSFX() {
+  let ctx: AudioContext | null = null
+
+  const getContext = () => {
+    if (!ctx && typeof window !== 'undefined') {
+      ctx = new (window.AudioContext || (window as any).webkitAudioContext)()
+    }
+    if (ctx?.state === 'suspended') ctx.resume()
+    return ctx
+  }
+
+  const playTone = (freq: number, type: OscillatorType, duration: number, gainVal = 0.05) => {
+    const c = getContext()
+    if (!c) return
+    const osc = c.createOscillator()
+    const gain = c.createGain()
+    osc.type = type
+    osc.frequency.setValueAtTime(freq, c.currentTime)
+    gain.gain.setValueAtTime(gainVal, c.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + duration)
+    osc.connect(gain)
+    gain.connect(c.destination)
+    osc.start()
+    osc.stop(c.currentTime + duration)
+  }
+
+  return {
+    click: () => playTone(980, 'sine', 0.035, 0.06),
+    tick: () => playTone(2400, 'triangle', 0.015, 0.02),
+    success: () => {
+      playTone(523.25, 'sine', 0.08, 0.05)
+      setTimeout(() => playTone(659.25, 'sine', 0.12, 0.05), 60)
+    },
+    error: () => playTone(160, 'sawtooth', 0.2, 0.08)
+  }
+}
+</script>`,
+      svelte: `<script lang="ts">
+  export function createBlueprintSFX() {
+    let ctx: AudioContext | null = null;
+
+    const getContext = () => {
+      if (!ctx && typeof window !== 'undefined') {
+        ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      }
+      if (ctx?.state === 'suspended') ctx.resume();
+      return ctx;
+    };
+
+    const playTone = (freq: number, type: OscillatorType, duration: number, gainVal = 0.05) => {
+      const c = getContext();
+      if (!c) return;
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, c.currentTime);
+      gain.gain.setValueAtTime(gainVal, c.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(c.destination);
+      osc.start();
+      osc.stop(c.currentTime + duration);
+    };
+
+    return {
+      click: () => playTone(980, 'sine', 0.035, 0.06),
+      tick: () => playTone(2400, 'triangle', 0.015, 0.02),
+      success: () => {
+        playTone(523.25, 'sine', 0.08, 0.05);
+        setTimeout(() => playTone(659.25, 'sine', 0.12, 0.05), 60);
+      },
+      error: () => playTone(160, 'sawtooth', 0.2, 0.08)
+    };
+  }
+</script>`,
+      html: `<!-- Pure Web Audio API Procedural SFX Script -->
+<script>
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playTone(freq, type = 'sine', duration = 0.05, gainVal = 0.05) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  const sfx = {
+    click: () => playTone(980, 'sine', 0.035, 0.06),
+    tick: () => playTone(2400, 'triangle', 0.015, 0.02),
+    success: () => {
+      playTone(523.25, 'sine', 0.08, 0.05);
+      setTimeout(() => playTone(659.25, 'sine', 0.12, 0.05), 60);
+    },
+    error: () => playTone(160, 'sawtooth', 0.2, 0.08)
+  };
+</script>`
+    }
   }
 };
 
