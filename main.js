@@ -3,6 +3,7 @@ import { sfx } from './audio.js';
 import { initHeroRadar } from './radar.js';
 import { initOscilloscope } from './oscilloscope.js';
 import { initThemeEngine } from './theme.js';
+import { downloadCompleteZip } from './exporter.js';
 
 // Initialize Theme & CRT Engine
 const themeEngine = initThemeEngine({ sfx });
@@ -887,4 +888,18 @@ pingBtn?.addEventListener('click', (e) => {
   } else {
     sfx.telemetry();
   }
+});
+
+// Complete Kit ZIP Downloader Triggers on Landing Page
+const exportLandingKitBtn = document.getElementById('exportLandingKitBtn');
+const heroDownloadKitBtn = document.getElementById('heroDownloadKitBtn');
+
+exportLandingKitBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  downloadCompleteZip(exportLandingKitBtn, sfx);
+});
+
+heroDownloadKitBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  downloadCompleteZip(heroDownloadKitBtn, sfx);
 });

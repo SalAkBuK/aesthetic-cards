@@ -261,6 +261,11 @@
         </a>
       </nav>
 
+      <button id="exportLandingKitBtn" class="btn-chamfer bg-white/10 hover:bg-white/20 text-cream font-mono font-medium px-3 py-1.5 text-[11px] flex items-center gap-1.5 uppercase tracking-wider transition cursor-pointer" title="Download Complete Design System Suite (15 Components ZIP)">
+        <span class="text-orange">📦</span>
+        <span>KIT (ZIP)</span>
+      </button>
+
       <a href="#features" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-3 py-1.5 text-[11px] flex items-center gap-1.5 uppercase tracking-wider">
         <span>Console</span>
         <span class="opacity-60 text-[9px]">↵</span>
@@ -297,12 +302,17 @@
 
           <!-- CTA Console & Command Box -->
           <div class="hero-reveal flex flex-wrap items-center gap-3 sm:gap-4 w-full">
-            <a href="#features" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-5 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-orange/15">
-              <span>Explore Capabilities</span>
+            <button id="heroDownloadKitBtn" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-4 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-orange/20 transition cursor-pointer" title="Download Complete Suite: 15 Components (React, Vue, Svelte, HTML) + Tokens + Config (ZIP)">
+              <span>📦</span>
+              <span>DOWNLOAD COMPLETE KIT (ZIP)</span>
+            </button>
+
+            <a href="#features" class="btn-chamfer bg-white/10 hover:bg-white/20 border border-white/15 text-cream font-medium px-4 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2">
+              <span>Explore Features</span>
               <span class="opacity-50 text-[10px] font-mono">↵</span>
             </a>
 
-            <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="btn-chamfer bg-ink2/80 hover:bg-ink2 border border-white/15 text-cream font-medium px-4 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2">
+            <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="btn-chamfer bg-ink2/80 hover:bg-ink2 border border-white/15 text-cream font-medium px-3.5 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2">
               <span>GitHub</span>
               <span class="opacity-50 text-[10px] font-mono">↗</span>
             </a>
@@ -1178,6 +1188,10 @@
 
       </div>
     </div>
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-orange text-near px-4 py-2 rounded-lg font-mono text-xs font-bold shadow-2xl flex items-center gap-2 transition-all">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Complete Design System ZIP downloaded!</span>
   </div>
 
   <script type="module" src="./main.js"></script>

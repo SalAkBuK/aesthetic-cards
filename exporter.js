@@ -1,3 +1,5 @@
+import JSZip from 'jszip';
+
 /**
  * Multi-Framework Component Exporter Engine (shadcn/ui style)
  * Generates copy-pasteable, production-ready code snippets and downloadable
@@ -2643,6 +2645,10 @@ export class ComponentExporterEngine {
     this.closeBtn = document.getElementById('exportCloseBtn');
     this.tabButtons = document.querySelectorAll('.export-framework-tab');
 
+    // Expose globally for cross-module & command palette access
+    window.componentExporter = this;
+    window.downloadCompleteZip = (btn) => this.downloadCompleteZip(btn);
+
     this.init();
   }
 
@@ -2665,7 +2671,7 @@ export class ComponentExporterEngine {
       this.copyCode();
     });
 
-    // Download File Button
+    // Download Single File Button
     this.downloadBtn?.addEventListener('click', () => {
       this.downloadCurrentFile();
     });
@@ -2687,12 +2693,24 @@ export class ComponentExporterEngine {
       }
     });
 
-    // Global Export Starter Kit Button in Header HUD
-    const exportBundleBtn = document.getElementById('exportStarterBundleBtn');
-    exportBundleBtn?.addEventListener('click', () => {
-      if (this.sfx) this.sfx.telemetry();
-      this.downloadStarterKit();
-    });
+    // Complete Kit ZIP Download Triggers
+    const bindZipBtn = (selector) => {
+      const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+      if (el && !el.__hasZipBinding) {
+        el.__hasZipBinding = true;
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.downloadCompleteZip(el);
+        });
+      }
+    };
+
+    bindZipBtn('#exportStarterBundleBtn');
+    bindZipBtn('#heroExportFullZipBtn');
+    bindZipBtn('#exportModalAllZipBtn');
+    bindZipBtn('#exportLandingKitBtn');
+    bindZipBtn('#heroDownloadKitBtn');
+    document.querySelectorAll('[data-download-kit-zip]').forEach(btn => bindZipBtn(btn));
   }
 
   bindButtons() {
@@ -2782,9 +2800,12 @@ export class ComponentExporterEngine {
 
     // Update download button label with extension
     if (this.downloadBtn) {
-      const ext = this.activeFramework === 'react' ? '.tsx' :
-                  this.activeFramework === 'vue' ? '.vue' :
-                  this.activeFramework === 'svelte' ? '.svelte' : '.html';
+      const isAudio = comp.id === 'audio';
+      const ext = isAudio
+        ? (this.activeFramework === 'html' ? '.js' : '.ts')
+        : (this.activeFramework === 'react' ? '.tsx' :
+           this.activeFramework === 'vue' ? '.vue' :
+           this.activeFramework === 'svelte' ? '.svelte' : '.html');
       this.downloadBtn.textContent = `DOWNLOAD ${comp.filename}${ext}`;
     }
   }
@@ -2813,9 +2834,12 @@ export class ComponentExporterEngine {
     if (!comp) return;
 
     const snippet = comp.code[this.activeFramework] || comp.code.react;
-    const ext = this.activeFramework === 'react' ? '.tsx' :
-                this.activeFramework === 'vue' ? '.vue' :
-                this.activeFramework === 'svelte' ? '.svelte' : '.html';
+    const isAudio = comp.id === 'audio';
+    const ext = isAudio
+      ? (this.activeFramework === 'html' ? '.js' : '.ts')
+      : (this.activeFramework === 'react' ? '.tsx' :
+         this.activeFramework === 'vue' ? '.vue' :
+         this.activeFramework === 'svelte' ? '.svelte' : '.html');
     const filename = `${comp.filename}${ext}`;
 
     const blob = new Blob([snippet], { type: 'text/plain;charset=utf-8' });
@@ -2831,18 +2855,46 @@ export class ComponentExporterEngine {
     if (this.sfx) this.sfx.success();
   }
 
-  downloadStarterKit() {
-    const tokensSnippet = `/* Kinetic Blueprint UI Design Tokens */
+  /**
+   * Generates and downloads the complete 15-component Kinetic Blueprint UI suite as a ZIP archive.
+   * Includes /react, /vue, /svelte, /html directories, tokens.css, tailwind.config.js, and README.md.
+   */
+  async downloadCompleteZip(triggerBtn = null) {
+    let originalHtml = '';
+    if (triggerBtn) {
+      originalHtml = triggerBtn.innerHTML;
+      triggerBtn.innerHTML = '<span>⏳</span><span>PACKING KIT...</span>';
+      triggerBtn.disabled = true;
+    }
+    if (this.sfx) this.sfx.telemetry();
+
+    try {
+      const zip = new JSZip();
+      const rootFolder = zip.folder('kinetic-blueprint-ui');
+
+      // 1. Fetch live tokens.css or fallback to core tokens
+      let tokensContent = '';
+      try {
+        const resp = await fetch('./tokens.css');
+        if (resp.ok) {
+          tokensContent = await resp.text();
+        }
+      } catch (e) {}
+
+      if (!tokensContent) {
+        tokensContent = `/* Kinetic Blueprint UI Design Tokens */
 :root {
   --ink: #2b2b29;
-  --ink2: #33332f;
-  --near: #16150f;
+  --ink-dark: #16150f;
+  --ink-surface: #33332f;
   --cream: #e9e2d3;
-  --cream2: #e2dac9;
+  --cream-well: #e2dac9;
+  --sand: #d8cdb4;
   --orange: #f4551d;
   --orange-hover: #ea4f1a;
   --orange-rgb: 244 85 29;
   --theme-glow: rgba(244, 85, 29, 0.45);
+  --border-line: #3d3d39;
   --c: 13px;
 }
 
@@ -2860,10 +2912,16 @@ export class ComponentExporterEngine {
   background-size: 7px 7px;
 }
 `;
+      }
+      rootFolder.file('tokens.css', tokensContent);
 
-    const tailwindSnippet = `/** @type {import('tailwindcss').Config} */
+      // 2. tailwind.config.js
+      const tailwindConfig = `/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,js,ts,jsx,tsx,vue,svelte}"],
+  content: [
+    "./src/**/*.{html,js,ts,jsx,tsx,vue,svelte}",
+    "./components/**/*.{html,js,ts,jsx,tsx,vue,svelte}"
+  ],
   theme: {
     extend: {
       colors: {
@@ -2877,30 +2935,135 @@ export default {
       },
       fontFamily: {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-        sans: ['"Inter Tight"', 'sans-serif']
+        sans: ['"Inter Tight"', 'system-ui', 'sans-serif']
       }
     }
   }
 };
 `;
+      rootFolder.file('tailwind.config.js', tailwindConfig);
 
-    const manifest = `# KINETIC BLUEPRINT UI // STARTER KIT
-=========================================
-1. Add tokens.css to your global stylesheet.
-2. Extend your tailwind.config.js with the provided palette.
-3. Import your chosen framework components into your project.`;
+      // 3. Comprehensive README.md
+      const readme = `# KINETIC BLUEPRINT UI // COMPLETE COMPONENT SUITE
+===================================================
+A precision industrial engineering design system and component catalog
+inspired by Dieter Rams functionalism, aerospace avionics, and developer-first tools.
 
-    // Download manifest bundle
-    const content = `/* === 1. TOKENS.CSS === */\n\n${tokensSnippet}\n\n/* === 2. TAILWIND.CONFIG.JS === */\n\n${tailwindSnippet}\n\n/* === 3. MANIFEST === */\n\n${manifest}`;
-    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'kinetic-blueprint-starter-kit.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+## Included Components (15 Total):
+- BlueprintButton: 8-point polygon chamfer action triggers with tactical return glyphs.
+- BlueprintInput: Monospace coordinate form inputs with live focus indicators.
+- BlueprintBadge: Status tags with radar-pulse LEDs and severity tokens.
+- BlueprintCallout: Tactical warning and info callouts with corner crop brackets.
+- BlueprintCard: Chamfered technical cards with dot-grid canvas and seam diamond nodes.
+- TelemetryTable: Dense telemetry log grid with sparklines and status filtering.
+- ParameterRack: Environment variable and secrets editor with masked toggle.
+- CommandPalette: Keyboard-first command discovery palette (⌘K / Ctrl+K).
+- SafetyConfirmationModal: Two-phase safety confirmation latch for dangerous actions.
+- TelemetryDrawer: Slide-out hardware inspector and real-time metric panel.
+- BlueprintSparkline: Canvas & SVG live streaming sparkline graph.
+- TachometerGauge: Precision radial tachometer dial gauge with arc fill.
+- BlueprintNode: Flow graph circuit node with patch cable connection sockets.
+- BlueprintIcon: 32 technical SVG vector icons with viewBox="0 0 24 24".
+- useBlueprintSFX: Web Audio API procedural sound synthesizer (zero audio assets).
+
+## Framework Directories:
+- /react     -> React TypeScript (.tsx / .ts)
+- /vue       -> Vue 3 Single File Components (.vue / .ts)
+- /svelte    -> Svelte 5 Components (.svelte / .ts)
+- /html      -> HTML5 + Tailwind CSS standalone snippets (.html / .js)
+
+## Quick Start:
+1. Copy tokens.css into your styles and import it into your root layout.
+2. Extend tailwind.config.js with the provided color definitions.
+3. Import the components directly into your Next.js, Vite, Nuxt, or SvelteKit project.
+
+Website & Documentation: https://github.com/SalAkBuK/aesthetic-cards
+`;
+      rootFolder.file('README.md', readme);
+
+      // 4. Framework Folders
+      const reactFolder = rootFolder.folder('react');
+      const vueFolder = rootFolder.folder('vue');
+      const svelteFolder = rootFolder.folder('svelte');
+      const htmlFolder = rootFolder.folder('html');
+
+      Object.values(REGISTRY).forEach(comp => {
+        const isAudio = comp.id === 'audio';
+
+        // React
+        const reactExt = isAudio ? '.ts' : '.tsx';
+        if (comp.code.react) {
+          reactFolder.file(`${comp.filename}${reactExt}`, comp.code.react);
+        }
+
+        // Vue
+        const vueExt = isAudio ? '.ts' : '.vue';
+        if (comp.code.vue) {
+          vueFolder.file(`${comp.filename}${vueExt}`, comp.code.vue);
+        }
+
+        // Svelte
+        const svelteExt = isAudio ? '.ts' : '.svelte';
+        if (comp.code.svelte) {
+          svelteFolder.file(`${comp.filename}${svelteExt}`, comp.code.svelte);
+        }
+
+        // HTML
+        const htmlExt = isAudio ? '.js' : '.html';
+        if (comp.code.html) {
+          htmlFolder.file(`${comp.filename}${htmlExt}`, comp.code.html);
+        }
+      });
+
+      // Generate the ZIP file
+      const blob = await zip.generateAsync({
+        type: 'blob',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 9 }
+      });
+
+      // Trigger download
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'kinetic-blueprint-complete-suite.zip';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      if (this.sfx) this.sfx.success();
+
+      // UI Toast feedback
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (toast && toastMsg) {
+        toastMsg.textContent = 'Complete Design System ZIP (15 components) downloaded!';
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3500);
+      }
+
+      if (triggerBtn) {
+        triggerBtn.innerHTML = '<span>✓</span><span>DOWNLOADED!</span>';
+        triggerBtn.classList.add('bg-emerald-500', 'text-near');
+        setTimeout(() => {
+          triggerBtn.innerHTML = originalHtml;
+          triggerBtn.classList.remove('bg-emerald-500', 'text-near');
+          triggerBtn.disabled = false;
+        }, 2500);
+      }
+    } catch (err) {
+      console.error('Failed to generate complete ZIP:', err);
+      if (this.sfx) this.sfx.error();
+      if (triggerBtn) {
+        triggerBtn.innerHTML = originalHtml;
+        triggerBtn.disabled = false;
+      }
+    }
+  }
+
+  downloadStarterKit(triggerBtn = null) {
+    return this.downloadCompleteZip(triggerBtn);
   }
 }
 
@@ -2909,4 +3072,12 @@ export default {
  */
 export function initComponentExporter(options = {}) {
   return new ComponentExporterEngine(options);
+}
+
+/**
+ * Standalone Complete ZIP Downloader
+ */
+export async function downloadCompleteZip(triggerBtn = null, sfx = null) {
+  const engine = window.componentExporter || new ComponentExporterEngine({ sfx });
+  return engine.downloadCompleteZip(triggerBtn);
 }

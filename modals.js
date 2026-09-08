@@ -40,7 +40,8 @@ export const COMMANDS = [
   { id: 'pre-sand', category: 'PRESETS', label: 'Apply Preset: 03 Debug / Sandbox', shortcut: 'P 3', action: () => document.querySelector('[data-param-preset="sandbox"]')?.click() },
 
   // Component Exporters (shadcn/ui style)
-  { id: 'exp-starter', category: 'EXPORTS', label: 'Export // Complete Starter Kit (Tokens + Config + Manifest)', shortcut: 'X S', action: () => document.getElementById('exportStarterBundleBtn')?.click() },
+  { id: 'exp-complete-zip', category: 'EXPORTS', label: 'Export // Complete Suite ZIP (15 Components across 4 Frameworks)', shortcut: 'X Z', action: () => (window.downloadCompleteZip?.() || document.getElementById('exportStarterBundleBtn')?.click() || document.getElementById('exportLandingKitBtn')?.click()) },
+  { id: 'exp-starter', category: 'EXPORTS', label: 'Export // Download Full Kit ZIP', shortcut: 'X S', action: () => (window.downloadCompleteZip?.() || document.getElementById('exportStarterBundleBtn')?.click() || document.getElementById('exportLandingKitBtn')?.click()) },
   { id: 'exp-button', category: 'EXPORTS', label: 'Export // Component: BlueprintButton', shortcut: 'X B', action: () => window.componentExporter?.open('button') },
   { id: 'exp-card', category: 'EXPORTS', label: 'Export // Component: BlueprintCard', shortcut: 'X C', action: () => window.componentExporter?.open('card') },
   { id: 'exp-table', category: 'EXPORTS', label: 'Export // Component: TelemetryTable', shortcut: 'X T', action: () => window.componentExporter?.open('table') },

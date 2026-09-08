@@ -126,9 +126,9 @@
       </button>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition hidden lg:inline">GitHub</a>
       <a href="./tokens.css" download class="btn-secondary py-1 px-2.5 text-[10.5px]">tokens.css</a>
-      <button id="exportStarterBundleBtn" class="btn-primary py-1 px-3 text-[10.5px] flex items-center gap-1.5 cursor-pointer" title="Export Design System Starter Kit (Tokens + Tailwind Config + Manifest)">
+      <button id="exportStarterBundleBtn" class="btn-primary py-1 px-3 text-[10.5px] flex items-center gap-1.5 cursor-pointer font-mono" title="Download Complete Design System Suite (15 Components across React, Vue, Svelte, HTML in ZIP)">
         <span>📦</span>
-        <span>STARTER KIT</span>
+        <span>DOWNLOAD KIT (ZIP)</span>
       </button>
     </div>
   </header>
@@ -147,6 +147,22 @@
       <p class="text-base text-cream/75 max-w-[65ch] leading-relaxed">
         A reusable, copy-pasteable technical design system inspired by Linear, Bauhaus architecture, and developer-first tools. Built on 8-point chamfered polygons, blueprint coordinate grids, and precision monospace telemetry.
       </p>
+
+      <!-- Primary Download Suite Action Bar -->
+      <div class="mt-6 flex flex-wrap items-center gap-3 font-mono text-xs">
+        <button id="heroExportFullZipBtn" class="btn-primary py-2 px-4 text-xs font-mono flex items-center gap-2 cursor-pointer shadow-lg shadow-orange/20" title="Download Complete Suite: 15 Components (React, Vue, Svelte, HTML) + Tokens + Config (ZIP)">
+          <span>📦</span>
+          <span class="font-bold">DOWNLOAD COMPLETE KIT (15 COMPONENTS ZIP)</span>
+        </button>
+        <a href="./tokens.css" download class="btn-secondary py-2 px-3.5 text-xs font-mono flex items-center gap-1.5">
+          <span>↓</span>
+          <span>tokens.css</span>
+        </a>
+        <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="px-3.5 py-2 rounded bg-white/5 hover:bg-white/10 text-cream/70 hover:text-white border border-white/10 text-xs font-mono transition flex items-center gap-1.5">
+          <span>GitHub</span>
+          <span class="opacity-50 text-[10px]">↗</span>
+        </a>
+      </div>
     </section>
 
     <!-- SECTION 1: BUTTONS -->
@@ -2020,7 +2036,11 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       <!-- Footer Action Bar -->
       <div class="px-5 py-3 border-t border-white/10 bg-black/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <span class="text-[11px] text-cream/50">Production-ready template. Drop directly into Next.js, Vite, Nuxt, or SvelteKit.</span>
-        <div class="flex items-center gap-2.5 shrink-0 justify-end">
+        <div class="flex items-center gap-2.5 shrink-0 justify-end flex-wrap">
+          <button id="exportModalAllZipBtn" class="px-3.5 py-1.5 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange font-mono text-xs font-semibold border border-orange/40 transition cursor-pointer flex items-center gap-1.5" title="Download entire 15-component library across all frameworks (ZIP)">
+            <span>📦</span>
+            <span>DOWNLOAD ALL (ZIP)</span>
+          </button>
           <button id="exportDownloadBtn" class="px-4 py-1.5 rounded bg-white/10 hover:bg-white/20 text-cream font-mono text-xs font-semibold border border-white/15 transition cursor-pointer flex items-center gap-1.5">
             DOWNLOAD FILE
           </button>
