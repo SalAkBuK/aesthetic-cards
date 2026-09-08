@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Specialized Industrial Modals, Global Command Palette & Telemetry Drawer Engine
  * Provides keyboard-driven command discovery, two-phase safety confirmation latches,
  * and slide-out telemetry drawer with procedural Web Audio API micro-haptics.
@@ -15,6 +15,7 @@ export const COMMANDS = [
   { id: 'nav-table', category: 'NAVIGATION', label: 'Section 08 // High-Density Telemetry Table', shortcut: '08', action: () => document.getElementById('telemetry')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-forms', category: 'NAVIGATION', label: 'Section 09 // Technical Forms & Parameter Rack', shortcut: '09', action: () => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-modals', category: 'NAVIGATION', label: 'Section 10 // Industrial Modals & Overlays', shortcut: '10', action: () => document.getElementById('modals')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-visualizations', category: 'NAVIGATION', label: 'Section 11 // Kinetic Visualizations & Telemetry Charts', shortcut: '11', action: () => document.getElementById('visualizations')?.scrollIntoView({ behavior: 'smooth' }) },
 
   // Actions
   { id: 'act-sfx', category: 'ACTIONS', label: 'Toggle Mechanical Audio Micro-Haptics', shortcut: 'S', action: (ctx) => { ctx.sfx?.toggle(); } },

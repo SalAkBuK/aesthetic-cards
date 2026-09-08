@@ -268,6 +268,31 @@ export class MicroHapticsEngine {
     });
   }
 
+  // 7. Tactical Sonar Chirp (HUD Reticle Pings & Telemetry Targets)
+  // Rapid rising frequency chirp: 420Hz -> 1800Hz with exponential decay
+  playChirp(startFreq = 420, endFreq = 1800, duration = 0.22) {
+    if (!this.enabled) return;
+    this.ensureContext();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(startFreq, t);
+    osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.75);
+
+    gain.gain.setValueAtTime(0.24, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(t);
+    osc.stop(t + duration + 0.01);
+  }
+
   // --- Analyser & Diagnostics API ---
 
   getByteTimeDomainData(array) {

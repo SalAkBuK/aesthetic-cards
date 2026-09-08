@@ -67,7 +67,9 @@
       <span class="text-white/20">|</span>
       <a href="#forms" class="hover:text-cream text-cream/70 transition">Forms Rack</a>
       <span class="text-white/20">|</span>
-      <a href="#modals" class="hover:text-orange text-cream/70 transition">Modals</a>
+      <a href="#modals" class="hover:text-cream text-cream/70 transition">Modals</a>
+      <span class="text-white/20">|</span>
+      <a href="#visualizations" class="hover:text-orange text-cream/70 transition">Charts</a>
       <span class="text-white/20">|</span>
       <button data-open-palette class="px-2 py-0.5 rounded bg-white/10 hover:bg-orange hover:text-near text-cream border border-white/15 transition flex items-center gap-1 cursor-pointer" title="Open Global Command Palette (⌘K / Ctrl+K)">
         <span class="text-orange font-bold">⌘K</span>
@@ -1217,6 +1219,281 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 11: KINETIC DATA VISUALIZATIONS & TELEMETRY CHARTS -->
+    <section class="space-y-6" id="visualizations">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">11 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Kinetic Data Visualizations & Telemetry Charts</h2>
+        </div>
+        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>60 FPS KINETIC ENGINE ACTIVE</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Mission-critical telemetry instrumentation inspired by industrial aerospace avionics and cyberpunk HUD interfaces. Real-time 60FPS canvas waveforms, 270° radial tachometer saturation gauge, multi-core isolate load distribution meters, and target-tracking reticle viewports.
+      </p>
+
+      <!-- 4 Telemetry Instruments Grid (2x2) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 font-mono">
+        
+        <!-- Card 1: Rolling Time-Series Canvas Chart -->
+        <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4 relative flex flex-col justify-between group hover:border-orange/30 transition">
+          <div class="space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[11px] gap-2">
+              <div class="flex items-center gap-2">
+                <span class="text-orange font-bold">01 // TELEMETRY WAVEFORM</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded bg-orange/20 border border-orange/40 text-orange font-bold">60 FPS CANVAS</span>
+              </div>
+              <div class="flex items-center gap-3 text-[10.5px]">
+                <span class="text-cream/60">OPS: <span id="chartLiveThroughput" class="text-orange font-bold">85.4k</span>/s</span>
+                <span class="text-cream/40">|</span>
+                <span class="text-cream/60">LATENCY: <span id="chartLiveLatency" class="text-emerald-400 font-bold">0.32ms</span></span>
+              </div>
+            </div>
+
+            <!-- Controls Toolbar: Buffers, Profiles, Pause -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-white/5 text-[10px]">
+              <!-- Time Window -->
+              <div class="flex items-center gap-1">
+                <span class="text-cream/40 mr-1">WINDOW:</span>
+                <button class="chart-window-btn px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-cream/70 border border-white/10 transition cursor-pointer" data-window="10">10S</button>
+                <button class="chart-window-btn px-2 py-0.5 rounded bg-orange text-near font-bold border border-white/10 transition cursor-pointer" data-window="30">30S</button>
+                <button class="chart-window-btn px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-cream/70 border border-white/10 transition cursor-pointer" data-window="60">60S</button>
+              </div>
+
+              <!-- Profiles & Pause -->
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1">
+                  <span class="text-cream/40 mr-1 hidden sm:inline">SIGNAL:</span>
+                  <button class="chart-profile-btn px-2 py-0.5 rounded bg-white/20 text-white font-bold border border-white/10 transition cursor-pointer" data-profile="gaussian">GAUSS</button>
+                  <button class="chart-profile-btn px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-cream/60 border border-white/10 transition cursor-pointer" data-profile="spike">SPIKE</button>
+                  <button class="chart-profile-btn px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-cream/60 border border-white/10 transition cursor-pointer" data-profile="stable">STABLE</button>
+                </div>
+                <button id="chartPauseBtn" class="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 border border-white/10 text-[10px] font-mono text-cream transition cursor-pointer select-none">
+                  <span id="chartPauseDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span id="chartPauseLabel">RUNNING</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Viewport with Corner Brackets -->
+            <div class="relative w-full h-48 sm:h-52 bg-black/80 rounded-lg border border-white/10 overflow-hidden group/canvas">
+              <span class="bracket tl border-t-2 border-l-2 border-white/30 z-10"></span>
+              <span class="bracket tr border-t-2 border-r-2 border-white/30 z-10"></span>
+              <span class="bracket bl border-b-2 border-l-2 border-white/30 z-10"></span>
+              <span class="bracket br border-b-2 border-r-2 border-white/30 z-10"></span>
+              <canvas id="chartTimeSeries" class="w-full h-full block cursor-crosshair"></canvas>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] text-cream/50 pt-2 border-t border-white/5">
+            <span>HOVER CANVAS FOR VOLUMETRIC CROSSHAIRS & PEEK METRICS</span>
+            <span class="text-cream/40 font-mono">CHANNEL // A-01</span>
+          </div>
+        </div>
+
+        <!-- Card 2: Radial Dial & Tachometer Saturation Gauge -->
+        <div id="tachometerContainer" class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4 relative flex flex-col justify-between group hover:border-amber/30 transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-[11px]">
+              <div class="flex items-center gap-2">
+                <span class="text-amber font-bold">02 // TACHOMETER GAUGE</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber/20 border border-amber/40 text-amber font-bold">270° SWEEP</span>
+              </div>
+              <span id="tachStatusBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-amber/20 text-amber border border-amber/40">NOMINAL HIGH</span>
+            </div>
+
+            <!-- Radial Dial SVG Viewport -->
+            <div class="relative w-full h-48 flex items-center justify-center bg-black/60 rounded-lg border border-white/10 p-2">
+              <span class="bracket tl border-t border-l border-white/20"></span>
+              <span class="bracket tr border-t border-r border-white/20"></span>
+              <span class="bracket bl border-b-2 border-l-2 border-white/20"></span>
+              <span class="bracket br border-b-2 border-r-2 border-white/20"></span>
+              
+              <svg id="tachSvgDial" class="w-44 h-44 overflow-visible" viewBox="0 0 200 200">
+                <!-- Dial tick marks injected by RadialTachometerGauge -->
+              </svg>
+
+              <!-- Central Digital Readout Badge -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-1">
+                <span id="tachValDisplay" class="text-3xl sm:text-4xl font-bold font-mono tracking-tight text-cream">76.4%</span>
+                <span class="text-[9px] uppercase tracking-widest font-mono text-cream/40 mt-0.5">CORE PRESSURE</span>
+                <div class="flex items-center gap-1.5 mt-1 text-[9.5px] font-mono text-cream/60">
+                  <span>PEAK:</span>
+                  <span id="tachPeakDisplay" class="text-cream font-bold">89.2%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Manual Throttle Stress-Test Slider -->
+            <div class="space-y-1.5 pt-1">
+              <div class="flex items-center justify-between text-[10px] text-cream/60">
+                <span>MANUAL THROTTLE STRESS-TEST</span>
+                <span class="text-[9.5px] text-cream/40">DRAG TO OVERLOAD</span>
+              </div>
+              <input type="range" id="tachManualSlider" min="0" max="100" step="0.5" value="76.4" class="w-full accent-orange h-1.5 bg-white/10 rounded cursor-pointer" />
+              <div class="flex justify-between text-[9px] text-cream/40 font-mono">
+                <span>00.0% [IDLE]</span>
+                <span>50.0% [NORMAL]</span>
+                <span>100.0% [CRITICAL]</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] text-cream/50 pt-2 border-t border-white/5">
+            <span>CALIBRATED WITH 36 STEPPED LED DETENT TICK ARCS</span>
+            <span class="text-cream/40 font-mono">SENS-08 // QUORUM</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Multi-Core Isolate Resource Monitor -->
+        <div id="resourceMonitorContainer" class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4 relative flex flex-col justify-between group hover:border-emerald-500/30 transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-[11px]">
+              <div class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">03 // ISOLATE LOAD DISTRIBUTION</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold">8-CORE CLUSTER</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-[10px] text-emerald-400 font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>THREAD POOL HEALTHY</span>
+              </div>
+            </div>
+
+            <!-- 8-Core Stacked Segment Bars Grid -->
+            <div class="p-3 bg-black/60 rounded-lg border border-white/10">
+              <div class="flex items-center justify-between text-[10px] text-cream/40 mb-1 border-b border-white/5 pb-1">
+                <span>WORKER THREAD ISOLATES</span>
+                <span>UTILIZATION RATE</span>
+              </div>
+              <div id="coreBarsGrid" class="grid grid-cols-4 sm:grid-cols-8 gap-2.5 py-2">
+                <!-- Injected dynamically by MultiCoreResourceMonitor -->
+              </div>
+            </div>
+
+            <!-- Memory Allocation Partition & Network Duplex Throughput -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              <!-- Memory Partition -->
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 space-y-1.5">
+                <div class="flex justify-between text-[10px] text-cream/60">
+                  <span>MEMORY ALLOCATION</span>
+                  <span class="text-cream font-bold">12.4 / 16.0 GB</span>
+                </div>
+                <div class="h-2 w-full bg-white/10 rounded flex overflow-hidden">
+                  <div class="bg-orange h-full" style="width: 48%;" title="ACTIVE USAGE: 48%"></div>
+                  <div class="bg-amber h-full" style="width: 30%;" title="BUFFER CACHE: 30%"></div>
+                  <div class="bg-emerald-500/60 h-full" style="width: 22%;" title="AVAILABLE: 22%"></div>
+                </div>
+                <div class="flex justify-between text-[8.5px] text-cream/40 font-mono pt-0.5">
+                  <span class="text-orange">● USED 48%</span>
+                  <span class="text-amber">● CACHE 30%</span>
+                  <span class="text-emerald-400">● FREE 22%</span>
+                </div>
+              </div>
+
+              <!-- Duplex Transfer -->
+              <div class="p-2.5 rounded bg-black/40 border border-white/5 space-y-1.5">
+                <div class="flex justify-between text-[10px] text-cream/60">
+                  <span>DUPLEX TRANSFER I/O</span>
+                  <span class="text-emerald-400 font-bold">0.000% LOSS</span>
+                </div>
+                <div class="grid grid-cols-2 gap-2 text-[10.5px] pt-0.5">
+                  <div class="flex flex-col">
+                    <span class="text-[9px] text-cream/40">TX EGRESS</span>
+                    <span id="resTxRate" class="text-emerald-400 font-bold">4.62 GB/s</span>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[9px] text-cream/40">RX INGRESS</span>
+                    <span id="resRxRate" class="text-orange font-bold">8.14 GB/s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] text-cream/50 pt-2 border-t border-white/5">
+            <span>PER-CORE LED METERS WITH THREE-TIER SEVERITY COLOR CODING</span>
+            <span class="text-cream/40 font-mono">SYS // MESH-04</span>
+          </div>
+        </div>
+
+        <!-- Card 4: Interactive HUD Reticle Viewport -->
+        <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4 relative flex flex-col justify-between group hover:border-cyan-400/30 transition">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-[11px]">
+              <div class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">04 // HUD RETICLE VIEWPORT</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded bg-cyan-400/20 border border-cyan-400/40 text-cyan-400 font-bold">LERP INTERPOLATION</span>
+              </div>
+              <span id="hudLockBadge" class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">TARGET ACQUIRED</span>
+            </div>
+
+            <!-- HUD Radar Screen Viewport -->
+            <div id="hudReticleContainer" class="relative w-full h-48 sm:h-52 bg-black/90 rounded-lg border border-white/15 overflow-hidden cursor-crosshair select-none">
+              <!-- Corner Brackets -->
+              <span class="bracket tl border-t-2 border-l-2 border-cyan-400/40 z-10"></span>
+              <span class="bracket tr border-t-2 border-r-2 border-cyan-400/40 z-10"></span>
+              <span class="bracket bl border-b-2 border-l-2 border-cyan-400/40 z-10"></span>
+              <span class="bracket br border-b-2 border-r-2 border-cyan-400/40 z-10"></span>
+
+              <!-- Radar Grid Background Overlay -->
+              <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="hudGridPattern" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="currentColor" stroke-width="0.5" class="text-cyan-400" />
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#hudGridPattern)" />
+                <!-- Polar circles -->
+                <circle cx="50%" cy="50%" r="45" fill="none" stroke="currentColor" stroke-width="0.75" class="text-cyan-400" />
+                <circle cx="50%" cy="50%" r="90" fill="none" stroke="currentColor" stroke-width="0.75" class="text-cyan-400" stroke-dasharray="3 3" />
+                <line x1="50%" y1="0" x2="50%" y2="100%" stroke="currentColor" stroke-width="0.5" class="text-cyan-400" stroke-opacity="0.4" />
+                <line x1="0" y1="50%" x2="100%" y2="50%" stroke="currentColor" stroke-width="0.5" class="text-cyan-400" stroke-opacity="0.4" />
+              </svg>
+
+              <!-- Top Telemetry Bar inside HUD -->
+              <div class="absolute top-2.5 inset-x-3 flex items-center justify-between text-[9.5px] font-mono pointer-events-none z-10">
+                <span class="text-cyan-400/80 font-bold tracking-wider">RADAR // GRID 4X</span>
+                <span id="hudCoordText" class="text-orange font-bold bg-black/80 px-1.5 py-0.5 rounded border border-white/10">[X: 140.0, Y: 100.0]</span>
+              </div>
+
+              <!-- Animated Damped Reticle Crosshair -->
+              <div id="hudCrosshair" class="hud-reticle-crosshair absolute top-0 left-0 w-12 h-12 -ml-6 -mt-6 pointer-events-none z-20 flex items-center justify-center">
+                <svg class="w-12 h-12 text-orange" viewBox="0 0 48 48" fill="none" stroke="currentColor">
+                  <!-- Outer dashed circle -->
+                  <circle cx="24" cy="24" r="18" stroke-width="1" stroke-dasharray="4 2" stroke-opacity="0.7" />
+                  <!-- Inner reticle ring -->
+                  <circle cx="24" cy="24" r="8" stroke-width="1.2" stroke-opacity="0.9" />
+                  <!-- Crosshairs extending outwards -->
+                  <line x1="24" y1="2" x2="24" y2="13" stroke-width="1.5" />
+                  <line x1="24" y1="35" x2="24" y2="46" stroke-width="1.5" />
+                  <line x1="2" y1="24" x2="13" y2="24" stroke-width="1.5" />
+                  <line x1="35" y1="24" x2="46" y2="24" stroke-width="1.5" />
+                  <!-- Center pip -->
+                  <circle cx="24" cy="24" r="2" fill="currentColor" />
+                </svg>
+              </div>
+
+              <!-- Bottom Telemetry Bar inside HUD -->
+              <div class="absolute bottom-2.5 inset-x-3 flex items-center justify-between text-[9.5px] font-mono pointer-events-none z-10">
+                <span id="hudBearingText" class="text-cream/75 bg-black/80 px-1.5 py-0.5 rounded border border-white/10">BEARING: 086.0° // ELEV: +22.5°</span>
+                <span class="text-cyan-400/60 hidden sm:inline">CLICK FOR SONAR CHIRP</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[10px] text-cream/50 pt-2 border-t border-white/5">
+            <span>PHYSICS LERP DAMPING WITH PROCEDURAL SONAR ACOUSTIC PING</span>
+            <span class="text-cream/40 font-mono">OPTIC // 09-X</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -1415,12 +1692,16 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { initTelemetryTable } from './table.js';
     import { initParameterRack } from './forms.js';
     import { initIndustrialModals } from './modals.js';
+    import { initKineticCharts } from './charts.js';
 
     // Attach sound listeners
     sfx.attachListeners();
 
     // Initialize Industrial Modals, Command Palette & Telemetry Drawer
     const industrialModals = initIndustrialModals({ sfx });
+
+    // Initialize Kinetic Data Visualizations & Telemetry Charts (Section 11)
+    const kineticCharts = initKineticCharts({ sfx });
     sfx.attachListeners();
 
     // Initialize High-Density Telemetry Table

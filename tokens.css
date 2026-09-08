@@ -622,3 +622,43 @@
   box-shadow: 0 0 28px -4px rgba(244, 85, 29, 0.35) !important;
 }
 
+/* --------------------------------------------------------------------------
+   Section 11: Kinetic Data Visualizations & Telemetry Charts
+   -------------------------------------------------------------------------- */
+@keyframes sonar-ping {
+  0% {
+    transform: translate(-50%, -50%) scale(0.15);
+    opacity: 1;
+  }
+  65% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.2);
+    opacity: 0;
+  }
+}
+
+.hud-sonar-ripple {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--orange);
+  box-shadow: 0 0 18px var(--orange);
+  pointer-events: none;
+  animation: sonar-ping 0.85s cubic-bezier(0.1, 0.8, 0.25, 1) forwards;
+}
+
+.hud-reticle-crosshair {
+  pointer-events: none;
+  position: absolute;
+  transition: transform 0.04s ease-out;
+  will-change: transform;
+}
+
+.meter-segment {
+  transition: background-color 0.12s ease, opacity 0.12s ease;
+}
+
+
