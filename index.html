@@ -194,6 +194,19 @@
 
     <!-- Actions & Navigation -->
     <div class="flex items-center gap-2.5 sm:gap-3">
+      <!-- Tactical Theme Palette Selector -->
+      <div class="relative" id="themeSelectorContainer">
+        <button id="themeMenuBtn" class="flex items-center gap-1.5 px-2 py-1 rounded bg-white/10 hover:bg-white/20 border border-white/15 text-[10.5px] font-mono transition cursor-pointer select-none" title="Select Industrial Theme Palette">
+          <span id="themeActiveSwatch" class="w-2.5 h-2.5 rounded-full bg-orange"></span>
+          <span id="themeActiveLabel" class="text-cream font-bold hidden sm:inline">ORANGE</span>
+          <span class="text-cream/40 text-[9px]">▾</span>
+        </button>
+        <!-- Dropdown Menu -->
+        <div id="themeDropdown" class="hidden absolute top-full mt-1.5 left-0 w-52 bg-near border border-white/15 rounded-lg shadow-2xl p-1.5 space-y-0.5 z-50 font-mono text-xs backdrop-blur-md">
+          <!-- Populated dynamically by ThemeEngine -->
+        </div>
+      </div>
+
       <!-- Phosphor CRT Display Toggle -->
       <button id="crtToggle" class="crt-toggle crt-muted" title="Toggle Cathode Ray Tube (CRT) Scanlines & Phosphor Bloom">
         <span class="w-1.5 h-1.5 rounded-full bg-cream/30" id="crtDot"></span>
@@ -276,6 +289,40 @@
               </div>
               <button id="copyCliBtn" class="shrink-0 ml-2 p-1 hover:bg-white/10 rounded text-cream/60 hover:text-white transition" title="Copy install command">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tactical Color Palette Matrix (Instant Landing Page Theme Switcher) -->
+          <div class="hero-reveal mt-5 w-full flex flex-col sm:flex-row sm:items-center gap-2.5 pt-3.5 border-t border-white/10 font-mono text-[11px]">
+            <div class="flex items-center gap-2 text-cream/60 tracking-wider shrink-0">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-orange animate-pulse"></span>
+              <span class="text-[10px] uppercase font-bold text-cream/80">PALETTE:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5" id="heroPaletteStrip">
+              <button data-set-theme="orange" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Kinetic Orange - Aerospace High-Contrast">
+                <span class="w-2 h-2 rounded-full bg-[#f4551d] shadow-[0_0_6px_#f4551d]"></span>
+                <span>ORANGE</span>
+              </button>
+              <button data-set-theme="amber" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Synth Amber - Cathode CRT Warm Phosphor">
+                <span class="w-2 h-2 rounded-full bg-[#f59e0b] shadow-[0_0_6px_#f59e0b]"></span>
+                <span>AMBER</span>
+              </button>
+              <button data-set-theme="cyan" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Quantum Cyan - Clean-Room Avionics">
+                <span class="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_6px_#06b6d4]"></span>
+                <span>CYAN</span>
+              </button>
+              <button data-set-theme="emerald" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Radar Emerald - Submarine Sonar HUD">
+                <span class="w-2 h-2 rounded-full bg-[#10b981] shadow-[0_0_6px_#10b981]"></span>
+                <span>EMERALD</span>
+              </button>
+              <button data-set-theme="ruby" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Alarm Ruby - Critical Telemetry Lockdown">
+                <span class="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_6px_#ef4444]"></span>
+                <span>RUBY</span>
+              </button>
+              <button data-set-theme="titanium" class="px-2.5 py-1 rounded border border-white/10 bg-white/5 text-cream/60 font-mono text-[10.5px] flex items-center gap-1.5 transition hover:scale-[1.02] active:scale-95 cursor-pointer" title="Monochrome Titanium - Dieter Rams Braun Functionalism">
+                <span class="w-2 h-2 rounded-full bg-[#e5e5e5] shadow-[0_0_6px_#e5e5e5]"></span>
+                <span>TITANIUM</span>
               </button>
             </div>
           </div>

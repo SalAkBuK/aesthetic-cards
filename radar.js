@@ -4,6 +4,22 @@
  * multiple telemetry modes (Gimbal, Icosahedron, Polar Radar), and live HUD readouts.
  */
 
+let cachedAccentRgb = '244 85 29';
+function updateCachedAccentRgb() {
+  if (typeof window === 'undefined') return;
+  const style = getComputedStyle(document.documentElement);
+  cachedAccentRgb = style.getPropertyValue('--orange-rgb').trim() || '244 85 29';
+}
+if (typeof window !== 'undefined') {
+  updateCachedAccentRgb();
+  window.addEventListener('aesthetic:themechange', updateCachedAccentRgb);
+}
+
+function getAccentRgba(alpha = 1) {
+  const parts = cachedAccentRgb.split(' ');
+  return `rgba(${parts[0] || 244}, ${parts[1] || 85}, ${parts[2] || 29}, ${alpha})`;
+}
+
 export class HeroRadar {
   constructor(canvasId, options = {}) {
     this.canvas = typeof canvasId === 'string' ? document.getElementById(canvasId) : canvasId;
@@ -279,7 +295,7 @@ export class HeroRadar {
       const isMajor = i % 6 === 0;
       const r1 = radius * (isMajor ? 0.94 : 0.97);
       const r2 = radius * 1.02;
-      ctx.strokeStyle = isMajor ? 'rgba(244, 85, 29, 0.6)' : 'rgba(255, 255, 255, 0.15)';
+      ctx.strokeStyle = isMajor ? getAccentRgba(0.6) : 'rgba(255, 255, 255, 0.15)';
       ctx.beginPath();
       ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
       ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2);
@@ -294,7 +310,7 @@ export class HeroRadar {
     ctx.lineWidth = 1.35;
 
     // Draw XY ring
-    ctx.strokeStyle = 'rgba(244, 85, 29, 0.85)';
+    ctx.strokeStyle = getAccentRgba(0.85);
     this.drawRing(ctx, this.gimbalXY, cx, cy, radius);
 
     // Draw YZ ring
@@ -313,7 +329,7 @@ export class HeroRadar {
       { x: 0, y: 0, z: 1 }, { x: 0, y: 0, z: -1 }
     ].map(p => this.project(p.x, p.y, p.z, cx, cy, coreScale));
 
-    ctx.strokeStyle = 'rgba(244, 85, 29, 0.9)';
+    ctx.strokeStyle = getAccentRgba(0.9);
     const coreEdges = [
       [0, 2], [2, 1], [1, 3], [3, 0],
       [0, 4], [2, 4], [1, 4], [3, 4],
@@ -359,7 +375,7 @@ export class HeroRadar {
     // Vertex Nodes
     proj.forEach(p => {
       const size = (p.z + 1.5) * 1.5;
-      ctx.fillStyle = 'rgba(244, 85, 29, 0.9)';
+      ctx.fillStyle = getAccentRgba(0.9);
       ctx.beginPath();
       ctx.arc(p.x, p.y, Math.max(1, size), 0, Math.PI * 2);
       ctx.fill();
@@ -378,7 +394,7 @@ export class HeroRadar {
       const a2 = this.sweepAngle - ((i + 1) / sweepSegments) * (Math.PI * 0.35);
       const alpha = (1 - i / sweepSegments) * 0.18;
 
-      ctx.fillStyle = `rgba(244, 85, 29, ${alpha})`;
+      ctx.fillStyle = getAccentRgba(alpha);
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, radius, a2, a1);
@@ -387,7 +403,7 @@ export class HeroRadar {
     }
 
     // 2. Leading Scan Ray
-    ctx.strokeStyle = 'rgba(244, 85, 29, 0.95)';
+    ctx.strokeStyle = getAccentRgba(0.95);
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(cx, cy);
@@ -411,7 +427,7 @@ export class HeroRadar {
       const by = cy + Math.sin(blip.theta) * (radius * blip.r);
 
       // Blip diamond
-      ctx.fillStyle = `rgba(244, 85, 29, ${blip.alpha})`;
+      ctx.fillStyle = getAccentRgba(blip.alpha);
       ctx.strokeStyle = `rgba(233, 226, 211, ${blip.alpha})`;
       ctx.lineWidth = 1;
 
@@ -445,7 +461,7 @@ export class HeroRadar {
       rip.r += 3.5;
       rip.alpha *= 0.94;
 
-      ctx.strokeStyle = `rgba(244, 85, 29, ${rip.alpha * 0.8})`;
+      ctx.strokeStyle = getAccentRgba(rip.alpha * 0.8);
       ctx.beginPath();
       ctx.arc(cx, cy, rip.r, 0, Math.PI * 2);
       ctx.stroke();
@@ -459,7 +475,7 @@ export class HeroRadar {
 
   drawCenterReticle(ctx, cx, cy) {
     ctx.save();
-    ctx.strokeStyle = 'rgba(244, 85, 29, 0.95)';
+    ctx.strokeStyle = getAccentRgba(0.95);
     ctx.lineWidth = 1.2;
 
     // Small center cross

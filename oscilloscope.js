@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Interactive Audio Oscilloscope & Spectrogram Engine
  * Inspired by Tektronix 2200 laboratory oscilloscopes and Teenage Engineering OP-1 instrumentation.
  * Zero external dependencies. HiDPI Canvas 2D rendering.
@@ -77,12 +77,34 @@ export class AudioOscilloscope {
     this.dpr = window.devicePixelRatio || 1;
 
     // Setup canvas resolution & listeners
+    this.updateThemeColor();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('aesthetic:themechange', () => this.updateThemeColor());
+    }
     this.resize();
     this.resizeObserver = new ResizeObserver(() => this.resize());
     this.resizeObserver.observe(this.canvas);
 
     this.render = this.render.bind(this);
     this.render();
+  }
+
+  updateThemeColor() {
+    if (typeof window === 'undefined') return;
+    const style = getComputedStyle(document.documentElement);
+    const rgb = style.getPropertyValue('--orange-rgb').trim() || '244 85 29';
+    const parts = rgb.split(' ').map(n => parseInt(n, 10) || 0);
+    const [r, g, b] = [parts[0] ?? 244, parts[1] ?? 85, parts[2] ?? 29];
+    this.palettes.amber = {
+      primary: `rgb(${r}, ${g}, ${b})`,
+      primaryGlow: `rgba(${r}, ${g}, ${b}, 0.4)`,
+      trace: `rgba(${r}, ${g}, ${b}, 0.95)`,
+      grid: 'rgba(255, 255, 255, 0.07)',
+      gridCenter: `rgba(${r}, ${g}, ${b}, 0.25)`,
+      peak: `rgb(${Math.min(255, r + 40)}, ${Math.min(255, g + 40)}, ${Math.min(255, b + 40)})`,
+      fill: `rgba(${r}, ${g}, ${b}, 0.12)`,
+      bgFade: 'rgba(25, 24, 21, 0.26)'
+    };
   }
 
   setMode(mode) {

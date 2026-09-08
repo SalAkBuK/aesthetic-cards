@@ -131,6 +131,18 @@ export class ThemeEngine {
       });
     }
 
+    // Update any standalone theme selector chips on the page (e.g. Hero palette bar)
+    document.querySelectorAll('[data-set-theme]').forEach(chip => {
+      const isSelected = chip.dataset.setTheme === theme.id;
+      if (isSelected) {
+        chip.classList.add('border-orange', 'bg-orange/20', 'text-white', 'is-active');
+        chip.classList.remove('border-white/10', 'text-cream/60', 'bg-white/5');
+      } else {
+        chip.classList.remove('border-orange', 'bg-orange/20', 'text-white', 'is-active');
+        chip.classList.add('border-white/10', 'text-cream/60', 'bg-white/5');
+      }
+    });
+
     // Play micro-haptics audio
     if (!silent && this.sfx) {
       this.sfx.tick();
@@ -238,6 +250,17 @@ export class ThemeEngine {
       if (themeId) {
         this.setTheme(themeId);
         this.themeDropdown?.classList.add('hidden');
+      }
+    });
+
+    // Delegated click for any [data-set-theme] buttons anywhere across the page
+    document.addEventListener('click', (e) => {
+      const themeBtn = e.target.closest('[data-set-theme]');
+      if (themeBtn) {
+        const themeId = themeBtn.dataset.setTheme;
+        if (themeId) {
+          this.setTheme(themeId);
+        }
       }
     });
 
