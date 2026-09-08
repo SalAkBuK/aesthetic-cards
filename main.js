@@ -153,6 +153,33 @@ function run({ animate, inView, stagger }) {
         if (hatch) {
           animate(hatch, { opacity: [0, 0.9] }, { duration: 0.45, ease: EASE_OUT, delay: base + 0.5 });
         }
+
+        const signalDots = card.querySelectorAll('.signal-dot');
+        if (signalDots.length) {
+          animate(
+            signalDots,
+            { opacity: [0, 1] },
+            { duration: 0.35, ease: EASE_OUT, delay: stagger(0.04, { startDelay: base + 0.3 }) },
+          );
+        }
+
+        const blips = card.querySelectorAll('.blip-node');
+        if (blips.length) {
+          animate(
+            blips,
+            { opacity: [0, 1] },
+            { duration: 0.4, ease: EASE_OUT, delay: stagger(0.06, { startDelay: base + 0.4 }) },
+          );
+        }
+
+        const guardCore = card.querySelector('.guard-core');
+        if (guardCore) {
+          animate(
+            guardCore,
+            { opacity: [0, 1] },
+            { duration: 0.35, ease: EASE_OUT, delay: base + 0.45 },
+          );
+        }
       },
       { amount: 0.15, margin: '0px 0px -10% 0px' },
     );
