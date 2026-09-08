@@ -65,7 +65,13 @@
       <span class="text-white/20">|</span>
       <a href="#telemetry" class="hover:text-cream text-cream/70 transition">Telemetry Table</a>
       <span class="text-white/20">|</span>
-      <a href="#forms" class="hover:text-orange text-cream/70 transition">Forms Rack</a>
+      <a href="#forms" class="hover:text-cream text-cream/70 transition">Forms Rack</a>
+      <span class="text-white/20">|</span>
+      <a href="#modals" class="hover:text-orange text-cream/70 transition">Modals</a>
+      <span class="text-white/20">|</span>
+      <button data-open-palette class="px-2 py-0.5 rounded bg-white/10 hover:bg-orange hover:text-near text-cream border border-white/15 transition flex items-center gap-1 cursor-pointer" title="Open Global Command Palette (⌘K / Ctrl+K)">
+        <span class="text-orange font-bold">⌘K</span>
+      </button>
       <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
       <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
@@ -1018,12 +1024,271 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 10: INDUSTRIAL MODALS & OVERLAY SYSTEMS -->
+    <section class="space-y-6" id="modals">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">10 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Industrial Modals & Overlay Systems</h2>
+        </div>
+        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>INTERLOCK & PALETTE ACTIVE</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Mission-critical overlay architecture featuring a global fuzzy <code>⌘K</code> command palette, two-phase safety confirmation latches with mechanical barrier interlocks, and full-height live telemetry diagnostic slide-overs.
+      </p>
+
+      <!-- 3 Modal Launch Triggers Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono">
+        
+        <!-- Card 1: Command Palette Trigger -->
+        <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3 flex flex-col justify-between group hover:border-orange/40 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-orange font-bold">01 // COMMAND PALETTE</span>
+              <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[9.5px] text-cream/60 border border-white/10">⌘K / CTRL+K</kbd>
+            </div>
+            <h3 class="text-sm font-semibold text-cream">Global Command Palette</h3>
+            <p class="text-xs text-cream/65 leading-relaxed">
+              Keyboard-first fuzzy instruction discovery. Jump to sections, toggle mechanical audio, execute batch commands, and apply system presets.
+            </p>
+          </div>
+          <button data-open-palette class="btn-chamfer w-full bg-white/10 hover:bg-orange hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+            <span>LAUNCH PALETTE</span>
+            <span class="opacity-50 text-[10px]">⌘K</span>
+          </button>
+        </div>
+
+        <!-- Card 2: Two-Phase Safety Latch Trigger -->
+        <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3 flex flex-col justify-between group hover:border-ruby/40 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-ruby font-bold">02 // SAFETY INTERLOCK</span>
+              <span class="text-[9.5px] px-1.5 py-0.5 rounded bg-ruby/20 border border-ruby/40 text-ruby">TWO-PHASE</span>
+            </div>
+            <h3 class="text-sm font-semibold text-cream">Safety Confirmation Latch</h3>
+            <p class="text-xs text-cream/65 leading-relaxed">
+              Physical interlock design for destructive operations. Requires disarming a safety barrier and typing a manual verification override token.
+            </p>
+          </div>
+          <button data-open-safety-latch data-safety-title="FORCE OVERRIDE CLUSTER ROUTING" data-safety-target="PROD-MESH-CLUSTER-01" class="btn-chamfer w-full bg-ruby/20 hover:bg-ruby hover:text-white text-ruby border border-ruby/40 py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+            <span>ARM OVERRIDE LATCH</span>
+            <span class="opacity-60 text-[10px]">⚠</span>
+          </button>
+        </div>
+
+        <!-- Card 3: Telemetry Drawer Trigger -->
+        <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3 flex flex-col justify-between group hover:border-cyan-400/40 transition">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="text-cyan-400 font-bold">03 // SLIDE-OVER DRAWER</span>
+              <span class="text-[9.5px] px-1.5 py-0.5 rounded bg-cyan-400/20 border border-cyan-400/40 text-cyan-400">RIGHT-RAIL</span>
+            </div>
+            <h3 class="text-sm font-semibold text-cream">Full-Height Telemetry Drawer</h3>
+            <p class="text-xs text-cream/65 leading-relaxed">
+              Slide-out technical diagnostics panel with real-time streaming event logs, memory allocations, and cluster quorum telemetry.
+            </p>
+          </div>
+          <button data-open-drawer class="btn-chamfer w-full bg-white/10 hover:bg-cyan-400 hover:text-near text-cream py-2 px-3 text-xs uppercase font-bold tracking-wider transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+            <span>SLIDE OPEN DRAWER</span>
+            <span class="opacity-50 text-[10px]">→</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
   <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-orange text-near px-4 py-2 rounded-lg font-mono text-xs font-bold shadow-2xl flex items-center gap-2 transition-all">
     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
     <span id="toastMsg">Copied snippet to clipboard!</span>
+  </div>
+
+  <!-- 1. Global Command Palette Modal (⌘K) -->
+  <div id="commandPaletteOverlay" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 sm:p-6 flex items-start justify-center pt-16 sm:pt-24 transition-all">
+    <div class="w-full max-w-xl bg-near border border-white/15 rounded-xl overflow-hidden shadow-2xl font-mono text-xs flex flex-col" style="clip-path: polygon(10px 0, calc(100% - 10px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px), 0 10px)">
+      <!-- Top Search Bar -->
+      <div class="flex items-center gap-2.5 px-4 py-3 border-b border-white/10 bg-white/[0.02]">
+        <svg class="w-4 h-4 text-orange shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input 
+          id="commandPaletteInput" 
+          type="text" 
+          placeholder="TYPE A COMMAND, ACTION, OR SECTION..." 
+          class="bg-transparent text-cream placeholder-cream/40 text-xs w-full focus:outline-none"
+          autocomplete="off"
+        />
+        <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[9.5px] text-cream/50 border border-white/10 shrink-0 select-none">ESC</kbd>
+      </div>
+
+      <!-- Command List Scrollable -->
+      <div id="commandPaletteList" class="max-h-80 overflow-y-auto p-2 space-y-0.5">
+        <!-- Rendered dynamically by modals.js -->
+      </div>
+
+      <!-- Footer Bar -->
+      <div class="px-4 py-2 border-t border-white/10 bg-black/40 flex items-center justify-between text-[10px] text-cream/50 select-none">
+        <span id="commandPaletteCount">14 COMMANDS AVAILABLE</span>
+        <div class="flex items-center gap-3">
+          <span><kbd class="px-1 rounded bg-white/10">↑</kbd> <kbd class="px-1 rounded bg-white/10">↓</kbd> NAVIGATE</span>
+          <span><kbd class="px-1 rounded bg-white/10">↵</kbd> EXECUTE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Two-Phase Safety Confirmation Latch Modal -->
+  <div id="safetyLatchOverlay" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-4 flex items-center justify-center transition-all">
+    <div class="w-full max-w-lg bg-near border-2 border-ruby/50 rounded-xl overflow-hidden shadow-2xl font-mono text-xs" style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)">
+      <!-- Hazard Header -->
+      <div class="hazard-stripe-danger px-4 py-2.5 border-b border-ruby/40 flex items-center justify-between">
+        <div class="flex items-center gap-2 text-ruby font-bold">
+          <span>⚠</span>
+          <span id="safetyLatchTitle" class="tracking-wider">DESTRUCTIVE ACTION INTERLOCK</span>
+        </div>
+        <span class="text-[9px] px-1.5 py-0.5 rounded bg-ruby text-white font-bold">LEVEL-3</span>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <div>
+          <span class="text-[10px] uppercase text-cream/40 block mb-0.5">TARGET SYSTEM IDENTIFIER</span>
+          <span id="safetyLatchTarget" class="text-sm font-bold text-cream">CLUSTER-IAD-PROD-01</span>
+        </div>
+
+        <!-- Phase 1: Mechanical Arming Switch -->
+        <div class="p-3 rounded bg-black/50 border border-white/10 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase text-amber-400 font-bold">PHASE 1 // ARM SAFETY INTERLOCK</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="safetyLatchArmSwitch" class="sr-only peer">
+              <div class="w-9 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber"></div>
+            </label>
+          </div>
+          <span class="text-[9.5px] text-cream/60 block leading-relaxed">
+            Switch must be toggled to release the physical circuit barrier before manual authorization override is unlocked.
+          </span>
+        </div>
+
+        <!-- Phase 2: Token Typing Authorization (Covered by barrier until armed) -->
+        <div class="relative p-3 rounded bg-black/50 border border-white/10 space-y-2">
+          <!-- Physical barrier overlay -->
+          <div id="safetyLatchBarrier" class="absolute inset-0 bg-black/80 backdrop-blur-[1px] flex items-center justify-center z-10 transition-opacity duration-200">
+            <span class="text-[10px] font-bold text-cream/40 uppercase tracking-widest flex items-center gap-1.5">
+              <span>🔒</span>
+              <span>CIRCUIT BARRIER ACTIVE (ARM PHASE 1 FIRST)</span>
+            </span>
+          </div>
+
+          <div class="flex justify-between items-center text-[10px]">
+            <span class="uppercase text-ruby font-bold">PHASE 2 // MANUAL TYPED CONFIRMATION</span>
+            <span class="text-cream/40">EXACT MATCH REQUIRED</span>
+          </div>
+          <p id="safetyLatchTokenPrompt" class="text-[10.5px] text-cream/70">
+            Type "CONFIRM OVERRIDE" below to verify manual override
+          </p>
+          <input 
+            type="text" 
+            id="safetyLatchTokenInput" 
+            class="w-full bg-black border border-white/20 focus:border-ruby text-cream font-mono text-xs px-3 py-1.5 rounded focus:outline-none"
+            placeholder="Type required token here"
+            disabled
+          />
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-white/10">
+          <button id="safetyLatchCancelBtn" class="px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 text-cream text-xs font-semibold transition cursor-pointer">
+            ABORT (ESC)
+          </button>
+          <button id="safetyLatchConfirmBtn" class="px-4 py-1.5 rounded bg-white/10 text-cream/40 text-xs font-bold transition cursor-not-allowed opacity-40 uppercase tracking-wider" disabled>
+            EXECUTE OVERRIDE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Slide-Out Full-Height Telemetry Drawer -->
+  <div id="telemetryDrawerOverlay" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm transition-all">
+    <div 
+      id="telemetryDrawerPanel" 
+      class="drawer-panel fixed top-0 right-0 bottom-0 w-full sm:w-[460px] bg-near border-l border-white/15 p-5 flex flex-col justify-between translate-x-full shadow-2xl font-mono text-xs"
+    >
+      <!-- Drawer Top Bar -->
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-cream font-bold text-sm tracking-wider">NODE TELEMETRY STREAM</span>
+        </div>
+        <button id="telemetryDrawerCloseBtn" class="p-1 rounded hover:bg-white/10 text-cream/60 hover:text-white transition cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div class="flex-1 overflow-y-auto my-4 space-y-4 pr-1">
+        <!-- Resource Meters -->
+        <div class="p-3 rounded bg-black/50 border border-white/10 space-y-2.5">
+          <span class="text-[10px] uppercase text-cream/50 block">HARDWARE ALLOCATIONS</span>
+          <div class="space-y-1.5 text-[10.5px]">
+            <div class="flex justify-between text-cream/70">
+              <span>CPU UTILIZATION:</span>
+              <span class="text-orange font-bold">48.2% (16 THREADS)</span>
+            </div>
+            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-orange rounded-full" style="width: 48.2%;"></div>
+            </div>
+          </div>
+          <div class="space-y-1.5 text-[10.5px]">
+            <div class="flex justify-between text-cream/70">
+              <span>ISOLATE MEMORY:</span>
+              <span class="text-emerald-400 font-bold">412.8 MB / 1024 MB</span>
+            </div>
+            <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div class="h-full bg-emerald-400 rounded-full" style="width: 40.3%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Streaming Event Logs -->
+        <div class="p-3 rounded bg-black/60 border border-white/10 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] uppercase text-cream/50">LIVE EVENT STREAM (GRPC)</span>
+            <span class="text-[9px] text-emerald-400 font-bold">● CONNECTED</span>
+          </div>
+          <div id="drawerLogContainer" class="h-64 overflow-y-auto space-y-1.5 p-2 bg-black/80 rounded border border-white/5">
+            <!-- Event stream logs populated by modals.js -->
+          </div>
+        </div>
+
+        <!-- Quorum Details -->
+        <div class="p-3 rounded bg-black/50 border border-white/10 space-y-1.5 text-[10.5px]">
+          <span class="text-[10px] uppercase text-cream/50 block mb-1">CONSENSUS STATE</span>
+          <div class="flex justify-between text-cream/70">
+            <span>EPOCH:</span>
+            <span class="text-cream font-bold">#84,921</span>
+          </div>
+          <div class="flex justify-between text-cream/70">
+            <span>SIGNATURE SCHEME:</span>
+            <span class="text-cream font-bold">Ed25519-STARK</span>
+          </div>
+          <div class="flex justify-between text-cream/70">
+            <span>QUORUM LATENCY:</span>
+            <span class="text-emerald-400 font-bold">0.38ms</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drawer Bottom -->
+      <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] text-cream/40">
+        <span>STATUS: ALL SENSORS NOMINAL</span>
+        <button class="px-2 py-1 rounded bg-white/5 hover:bg-orange hover:text-near text-cream transition" onclick="document.getElementById('telemetryDrawerCloseBtn')?.click()">CLOSE DRAWER</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -1033,8 +1298,13 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { initConfigurator } from './configurator.js';
     import { initTelemetryTable } from './table.js';
     import { initParameterRack } from './forms.js';
+    import { initIndustrialModals } from './modals.js';
 
     // Attach sound listeners
+    sfx.attachListeners();
+
+    // Initialize Industrial Modals, Command Palette & Telemetry Drawer
+    const industrialModals = initIndustrialModals({ sfx });
     sfx.attachListeners();
 
     // Initialize High-Density Telemetry Table

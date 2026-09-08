@@ -290,6 +290,53 @@ const paramRack = initParameterRack({
 
 ---
 
+## Specialized Industrial Modals & Global `⌘K` Command Palette
+
+High-assurance overlay systems engineered for precision control, mission-critical safety interlocks, and full-height live telemetry streaming ([`modals.js`](./modals.js) & [`components.html#modals`](./components.html#modals)).
+
+### 1. Architectural Highlights
+- **Global `⌘K` / `Ctrl+K` Command Palette**:
+  - Fuzzy-searchable action discovery covering section navigation, hardware safety triggers, telemetry diagnostics, audio toggling, and LLM prompt exports.
+  - Full keyboard accessibility: `↑` / `↓` arrow navigation, `↵ Enter` execution, `Esc` dismissal, and backdrop click trapping.
+  - Color-coded monospace category chips (`NAVIGATION`, `SAFETY`, `TELEMETRY`, `SYSTEM`).
+- **Two-Phase Safety Confirmation Latch**:
+  - Industrial circuit-breaker interlock designed for destructive operations.
+  - **Phase 1 (Mechanical Arming)**: Physical toggle switch disarms a frosted barrier overlay (`#safetyLatchBarrier`).
+  - **Phase 2 (Typed Token Authorization)**: Requires typing exact confirmation token (`CONFIRM OVERRIDE`) before the execute button unlocks.
+  - Styled with CSS diagonal warning hazard stripes (`.hazard-stripe` / `.hazard-stripe-danger`).
+- **Slide-Out Full-Height Telemetry Drawer (Right-Rail)**:
+  - Slide-over diagnostic console (`.drawer-panel`) with snappy transition curves (`cubic-bezier(0.23, 1, 0.32, 1)`).
+  - Real-time simulated gRPC event streaming log feed with auto-scrolling and buffer truncation.
+  - Live hardware allocation gauges (CPU utilization, isolate memory meters) and consensus quorum status.
+- **Procedural Haptics Integration**: Coupled with Web Audio API micro-haptics (`sfx.modalOpen()`, `sfx.modalClose()`, `sfx.click()`, `sfx.tick()`, `sfx.telemetry()`, `sfx.success()`).
+
+### 2. Usage & Controller Initialization
+```javascript
+import { initIndustrialModals } from './modals.js';
+import { sfx } from './audio.js';
+
+const industrialModals = initIndustrialModals({
+  sfx,
+  paletteOverlayId: 'commandPaletteOverlay',
+  paletteInputId: 'commandPaletteInput',
+  paletteListId: 'commandPaletteList',
+  paletteCountId: 'commandPaletteCount',
+  paletteTriggerSelector: '[data-open-palette]',
+  safetyLatchOverlayId: 'safetyLatchOverlay',
+  safetyLatchArmSwitchId: 'safetyLatchArmSwitch',
+  safetyLatchBarrierId: 'safetyLatchBarrier',
+  safetyLatchTokenInputId: 'safetyLatchTokenInput',
+  safetyLatchConfirmBtnId: 'safetyLatchConfirmBtn',
+  safetyLatchTriggerSelector: '[data-open-safety-latch]',
+  drawerOverlayId: 'telemetryDrawerOverlay',
+  drawerPanelId: 'telemetryDrawerPanel',
+  drawerLogContainerId: 'drawerLogContainer',
+  drawerTriggerSelector: '[data-open-drawer]'
+});
+```
+
+---
+
 ## Universal Prompt for LLMs
 
 To generate similar cards with Claude, ChatGPT, v0, or Cursor:

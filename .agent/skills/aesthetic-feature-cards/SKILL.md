@@ -367,3 +367,29 @@ Visualizes floor vs. burst ceilings with an inner highlighted track (`left: minP
 - Auto-uppercase and sanitize keys: `key.toUpperCase().replace(/[^A-Z0-9_]/g, '_')`.
 - Real-time serialization to `.env` (dotenv) and `config.yaml` specs.
 
+---
+
+## 12. Specialized Industrial Modals, Command Palette & Telemetry Drawers
+
+When designing mission-critical overlays, safety confirmation interlocks, or keyboard-first navigation:
+
+### 1. Global `⌘K` / `Ctrl+K` Fuzzy Command Palette
+- **Keyboard Trapping**: Intercept `(e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'` to toggle the palette.
+- **Index Cycling**: Navigate filtered results with `ArrowDown` and `ArrowUp` keys with wrap-around selection (`(idx + 1) % len`).
+- **Category Hierarchy**: Tag actions with industrial taxonomy badges (`NAVIGATION`, `SAFETY`, `TELEMETRY`, `SYSTEM`).
+- **Audio Feedback**: Play `sfx.modalOpen()` on reveal, `sfx.tick()` on arrow cycle, `sfx.click()` on execution, and `sfx.modalClose()` on escape.
+
+### 2. Two-Phase Safety Confirmation Latch
+- **Mechanical Hazard Styling**: Apply CSS diagonal stripe patterns (`.hazard-stripe` or `.hazard-stripe-danger`) on modal title bars.
+- **Circuit Barrier Protocol**:
+  - Phase 1: Physical toggle switch (`#safetyLatchArmSwitch`) disarms frosted circuit barrier (`opacity-0 pointer-events-none`).
+  - Phase 2: Input field remains disabled until Phase 1 is armed. Requires typing exact token string (e.g., `"CONFIRM OVERRIDE"`).
+  - Execute button unlocks only when both constraints are met.
+- **Safe Reset**: Automatically re-arm barrier, clear token input, and lock execution button whenever the modal closes.
+
+### 3. Slide-Out Full-Height Telemetry Drawer
+- **Drawer Animation**: Use hardware-accelerated transforms (`translate-x-full` -> `translate-x-0`) with Rams easing `cubic-bezier(0.23, 1, 0.32, 1)`.
+- **Live gRPC Log Stream**: Continuously append timestamped operational log entries with buffer clamping (e.g., max 20 lines) and auto-scroll to bottom.
+- **Hardware Telemetry Gauges**: Real-time progress bars for thread pool saturation, isolate heap allocations, and consensus quorum signatures.
+
+
