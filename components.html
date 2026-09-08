@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased scroll-smooth">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Kinetic Blueprint UI - Component Library & Theme Playground</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="./tokens.css" />
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:    '#2b2b29',
+          ink2:   '#33332f',
+          line:   '#3d3d39',
+          cream:  '#e9e2d3',
+          cream2: '#e2dac9',
+          orange: '#f4551d',
+          orange2:'#ea4f1a',
+          near:   '#16150f',
+        },
+        fontFamily: {
+          sans: ['"Inter Tight"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+</head>
+
+<body class="min-h-screen bg-blueprint text-cream font-sans selection:bg-orange selection:text-near">
+
+  <!-- HUD Header -->
+  <header class="fixed top-0 inset-x-0 z-50 h-14 border-b border-white/10 bg-ink/90 backdrop-blur-md px-4 sm:px-8 flex items-center justify-between font-mono text-xs">
+    <div class="flex items-center gap-3">
+      <a href="./index.html" class="flex items-center gap-2 text-cream hover:text-white transition">
+        <span class="text-orange text-sm">←</span>
+        <span class="font-bold tracking-wider">KINETIC // THEME SYSTEM</span>
+      </a>
+      <span class="hidden sm:inline-block px-2 py-0.5 rounded bg-white/5 text-[10px] text-cream/50 border border-white/10">v1.0.0</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="./index.html" class="hover:text-cream text-cream/70 transition">Landing Page</a>
+      <span class="text-white/20">|</span>
+      <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
+      <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
+    </div>
+  </header>
+
+  <main class="max-w-[1020px] mx-auto px-4 pt-28 pb-24 space-y-16">
+    
+    <!-- Hero / Intro -->
+    <section class="border-b border-white/10 pb-10">
+      <div class="flex items-center gap-2 text-[11px] font-mono text-cream/50 uppercase tracking-widest mb-2">
+        <span class="w-2 h-2 rounded-full bg-orange"></span>
+        <span>DESIGN SYSTEM SPECIFICATION // COMPONENT CATALOG</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-cream mb-4">
+        Industrial Blueprint UI Theme
+      </h1>
+      <p class="text-base text-cream/75 max-w-[65ch] leading-relaxed">
+        A reusable, copy-pasteable technical design system inspired by Linear, Bauhaus architecture, and developer-first tools. Built on 8-point chamfered polygons, blueprint coordinate grids, and precision monospace telemetry.
+      </p>
+    </section>
+
+    <!-- SECTION 1: BUTTONS -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">01 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Buttons & Action Triggers</h2>
+        </div>
+        <span class="text-xs text-cream/50">4 VARIANTS + SIZES</span>
+      </div>
+
+      <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-6">
+        <!-- Interactive Buttons Grid -->
+        <div class="flex flex-wrap items-center gap-4">
+          <!-- Primary -->
+          <button class="btn-primary" onclick="copySnippet('primary-btn')">
+            <span>Primary Action</span>
+            <span class="opacity-50 text-[10px]">↵</span>
+          </button>
+
+          <!-- Secondary -->
+          <button class="btn-secondary" onclick="copySnippet('secondary-btn')">
+            <span>Secondary Spec</span>
+            <span class="opacity-40 text-[10px]">⌘K</span>
+          </button>
+
+          <!-- Destructive -->
+          <button class="btn-danger" onclick="copySnippet('danger-btn')">
+            <span>Terminate Cluster</span>
+            <span class="opacity-50 text-[10px]">✕</span>
+          </button>
+
+          <!-- Icon Button -->
+          <button class="btn-secondary px-3" title="Icon trigger" onclick="copySnippet('icon-btn')">
+            <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+          </button>
+
+          <!-- Disabled -->
+          <button class="btn-secondary opacity-40 cursor-not-allowed pointer-events-none">
+            <span>Disabled State</span>
+          </button>
+        </div>
+
+        <div class="text-xs font-mono text-cream/50 flex items-center justify-between border-t border-white/5 pt-3">
+          <span>Click any button above to copy its HTML / Tailwind code</span>
+          <span class="text-orange font-medium">8-POINT POLYGON CLIP-PATH</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: FORM INPUTS & COMMAND BARS -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">02 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Form Inputs & Command Bars</h2>
+        </div>
+        <span class="text-xs text-cream/50">FOCUS RINGS + PREFIXES</span>
+      </div>
+
+      <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Basic Input -->
+          <div class="space-y-1.5 font-mono text-xs">
+            <label class="text-cream/70 block uppercase text-[10px] tracking-wider">PROJECT IDENTIFIER</label>
+            <input type="text" class="input-chamfer" placeholder="e.g. kinetic-cluster-01" value="kinetic-cluster-alpha" />
+          </div>
+
+          <!-- Input with Command Key Suffix -->
+          <div class="space-y-1.5 font-mono text-xs">
+            <label class="text-cream/70 block uppercase text-[10px] tracking-wider">COMMAND SEARCH</label>
+            <div class="relative">
+              <input type="text" class="input-chamfer pr-16" placeholder="Search telemetry, cards, specs..." />
+              <span class="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-white/10 text-[9px] text-cream/60 border border-white/15 pointer-events-none">
+                ⌘K
+              </span>
+            </div>
+          </div>
+
+          <!-- Protocol Prefix Input -->
+          <div class="space-y-1.5 font-mono text-xs">
+            <label class="text-cream/70 block uppercase text-[10px] tracking-wider">GATEWAY ENDPOINT</label>
+            <div class="flex items-center bg-near border border-white/15 chamfer-sm overflow-hidden focus-within:border-orange focus-within:ring-1 focus-within:ring-orange transition">
+              <span class="px-3 text-orange text-xs select-none">https://</span>
+              <input type="text" class="bg-transparent border-0 outline-none text-cream text-xs py-2 pr-3 flex-1 font-mono" value="api.kinetic.dev/v1/stream" />
+            </div>
+          </div>
+
+          <!-- Range Slider with Tick readout -->
+          <div class="space-y-1.5 font-mono text-xs">
+            <div class="flex justify-between items-center text-[10px] uppercase text-cream/70">
+              <span>LATENCY BUDGET</span>
+              <span id="sliderVal" class="text-orange font-bold">45ms</span>
+            </div>
+            <input id="demoSlider" type="range" min="5" max="100" value="45" class="w-full accent-orange cursor-pointer" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: BADGES & TELEMETRY TICKERS -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">03 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Badges, Status Beacons & Dotted Specs</h2>
+        </div>
+        <span class="text-xs text-cream/50">METRICS & STATUS</span>
+      </div>
+
+      <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-6">
+        <!-- Status Badges Strip -->
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="badge-tech">
+            <span class="beacon-dot online animate-pulse"></span>
+            CLUSTER ONLINE
+          </span>
+          <span class="badge-tech">
+            <span class="beacon-dot warning"></span>
+            THROTTLE 85%
+          </span>
+          <span class="badge-tech">
+            <span class="beacon-dot error"></span>
+            PII LEAK DETECTED
+          </span>
+          <span class="badge-tech text-orange border-orange/40">
+            [ REV-2.4.1 ]
+          </span>
+          <span class="badge-tech">
+            ZK-STARK VERIFIED
+          </span>
+        </div>
+
+        <!-- Dotted Leader Line Specs Table -->
+        <div class="p-4 rounded-lg bg-near/80 border border-white/10 font-mono text-xs space-y-2.5 max-w-lg">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-cream/50">CONSENSUS VERIFICATION</span>
+            <span class="leader-dots h-[4px] flex-1 opacity-40"></span>
+            <span class="text-cream font-semibold">100% BYTE-EXACT</span>
+          </div>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-cream/50">MEAN DISPATCH TIME</span>
+            <span class="leader-dots h-[4px] flex-1 opacity-40"></span>
+            <span class="text-emerald-400 font-semibold">0.38ms</span>
+          </div>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-cream/50">CRYPTOGRAPHIC SIGNATURE</span>
+            <span class="leader-dots h-[4px] flex-1 opacity-40"></span>
+            <span class="text-cream font-semibold">ED25519-P384</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: CALLOUT ALERTS -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">04 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Alert Banners & Callouts</h2>
+        </div>
+        <span class="text-xs text-cream/50">CHAMFERED NOTIFICATIONS</span>
+      </div>
+
+      <div class="space-y-3 font-mono text-xs">
+        <!-- Info -->
+        <div class="chamfer-sm p-4 bg-ink2/70 border border-white/15 flex items-start gap-3">
+          <span class="text-orange font-bold text-sm">ℹ</span>
+          <div>
+            <span class="font-semibold text-cream block uppercase text-[10px] tracking-wider mb-0.5">TELEMETRY SYNC</span>
+            <p class="text-cream/70 text-[11px] leading-relaxed">Agentic runtime is streaming verifiable state proofs every 500ms to local cache.</p>
+          </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="chamfer-sm p-4 bg-orange/10 border border-orange/40 flex items-start gap-3">
+          <span class="text-orange font-bold text-sm">⚠</span>
+          <div>
+            <span class="font-semibold text-orange block uppercase text-[10px] tracking-wider mb-0.5">GUARDRAIL INTERVENTION</span>
+            <p class="text-cream/80 text-[11px] leading-relaxed">Transaction amount exceeded $5,000 threshold. Secondary human-in-loop confirmation dispatched.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-orange text-near px-4 py-2 rounded-lg font-mono text-xs font-bold shadow-2xl flex items-center gap-2 transition-all">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+    <span id="toastMsg">Copied snippet to clipboard!</span>
+  </div>
+
+  <script>
+    const slider = document.getElementById('demoSlider');
+    const val = document.getElementById('sliderVal');
+    slider.addEventListener('input', () => {
+      val.textContent = `${slider.value}ms`;
+    });
+
+    const SNIPPETS = {
+      'primary-btn': `<button class="btn-primary">\n  <span>Primary Action</span>\n  <span class="opacity-50 text-[10px]">↵</span>\n</button>`,
+      'secondary-btn': `<button class="btn-secondary">\n  <span>Secondary Spec</span>\n  <span class="opacity-40 text-[10px]">⌘K</span>\n</button>`,
+      'danger-btn': `<button class="btn-danger">\n  <span>Terminate Cluster</span>\n  <span class="opacity-50 text-[10px]">✕</span>\n</button>`,
+      'icon-btn': `<button class="btn-secondary px-3">\n  <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n    <path d="M12 4v16m8-8H4"/>\n  </svg>\n</button>`
+    };
+
+    function copySnippet(key) {
+      const code = SNIPPETS[key];
+      if (!code) return;
+      navigator.clipboard?.writeText(code).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 2200);
+      });
+    }
+  </script>
+</body>
+</html>
