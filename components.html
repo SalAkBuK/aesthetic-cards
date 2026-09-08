@@ -124,9 +124,12 @@
       <button data-open-palette class="px-2 py-0.5 rounded bg-white/10 hover:bg-orange hover:text-near text-cream border border-white/15 transition flex items-center gap-1 cursor-pointer" title="Open Global Command Palette (⌘K / Ctrl+K)">
         <span class="text-orange font-bold">⌘K</span>
       </button>
-      <span class="text-white/20">|</span>
-      <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
-      <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
+      <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition hidden lg:inline">GitHub</a>
+      <a href="./tokens.css" download class="btn-secondary py-1 px-2.5 text-[10.5px]">tokens.css</a>
+      <button id="exportStarterBundleBtn" class="btn-primary py-1 px-3 text-[10.5px] flex items-center gap-1.5 cursor-pointer" title="Export Design System Starter Kit (Tokens + Tailwind Config + Manifest)">
+        <span>📦</span>
+        <span>STARTER KIT</span>
+      </button>
     </div>
   </header>
 
@@ -147,13 +150,19 @@
     </section>
 
     <!-- SECTION 1: BUTTONS -->
-    <section class="space-y-6">
+    <section class="space-y-6" id="buttons">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
         <div class="flex items-center gap-2">
           <span class="text-orange font-bold">01 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Buttons & Action Triggers</h2>
         </div>
-        <span class="text-xs text-cream/50">4 VARIANTS + SIZES</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="button" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintButton component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <span class="text-xs text-cream/50 hidden sm:inline">4 VARIANTS + SIZES</span>
+        </div>
       </div>
 
       <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-6">
@@ -196,13 +205,19 @@
     </section>
 
     <!-- SECTION 2: FORM INPUTS & COMMAND BARS -->
-    <section class="space-y-6">
+    <section class="space-y-6" id="inputs">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
         <div class="flex items-center gap-2">
           <span class="text-orange font-bold">02 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Form Inputs & Command Bars</h2>
         </div>
-        <span class="text-xs text-cream/50">FOCUS RINGS + PREFIXES</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="input" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintInput component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <span class="text-xs text-cream/50 hidden sm:inline">FOCUS RINGS + PREFIXES</span>
+        </div>
       </div>
 
       <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-5">
@@ -246,13 +261,19 @@
     </section>
 
     <!-- SECTION 3: BADGES & TELEMETRY TICKERS -->
-    <section class="space-y-6">
+    <section class="space-y-6" id="badges">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
         <div class="flex items-center gap-2">
           <span class="text-orange font-bold">03 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Badges, Status Beacons & Dotted Specs</h2>
         </div>
-        <span class="text-xs text-cream/50">METRICS & STATUS</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="badge" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintBadge component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <span class="text-xs text-cream/50 hidden sm:inline">METRICS & STATUS</span>
+        </div>
       </div>
 
       <div class="p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-6">
@@ -300,13 +321,19 @@
     </section>
 
     <!-- SECTION 4: CALLOUT ALERTS -->
-    <section class="space-y-6">
+    <section class="space-y-6" id="callouts">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
         <div class="flex items-center gap-2">
           <span class="text-orange font-bold">04 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Alert Banners & Callouts</h2>
         </div>
-        <span class="text-xs text-cream/50">CHAMFERED NOTIFICATIONS</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="callout" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintCallout component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <span class="text-xs text-cream/50 hidden sm:inline">CHAMFERED NOTIFICATIONS</span>
+        </div>
       </div>
 
       <div class="space-y-3 font-mono text-xs">
@@ -331,7 +358,7 @@
     </section>
 
     <!-- SECTION 5: AUDIO & MICRO-HAPTICS RACK -->
-    <section class="space-y-6">
+    <section class="space-y-6" id="oscilloscope">
       <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
         <div class="flex items-center gap-2">
           <span class="text-orange font-bold">05 //</span>
@@ -590,13 +617,19 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">07 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Interactive Blueprint Configurator</h2>
         </div>
-        <div class="flex items-center gap-2">
-          <span class="text-[10px] text-cream/50 uppercase font-mono">GLOBAL INJECTION:</span>
-          <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="cfgGlobalToggle" class="sr-only peer">
-            <div class="w-8 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange"></div>
-            <span class="ml-2 text-[10px] font-mono text-cream/70">APPLY TO PAGE</span>
-          </label>
+        <div class="flex items-center gap-3">
+          <button data-export-component="card" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintCard component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-cream/50 uppercase font-mono">GLOBAL INJECTION:</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="cfgGlobalToggle" class="sr-only peer">
+              <div class="w-8 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange"></div>
+              <span class="ml-2 text-[10px] font-mono text-cream/70">APPLY TO PAGE</span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -875,9 +908,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">08 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">High-Density Telemetry Data Table</h2>
         </div>
-        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>CLUSTER QUORUM: 6/6 NODES SYNCHRONIZED</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="table" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add TelemetryTable component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>CLUSTER QUORUM: 6/6 NODES</span>
+          </div>
         </div>
       </div>
 
@@ -1199,9 +1238,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">10 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Industrial Modals & Overlay Systems</h2>
         </div>
-        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>INTERLOCK & PALETTE ACTIVE</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="modal" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add SafetyConfirmationModal component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>INTERLOCK & PALETTE ACTIVE</span>
+          </div>
         </div>
       </div>
 
@@ -1276,9 +1321,15 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <span class="text-orange font-bold">11 //</span>
           <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Kinetic Data Visualizations & Telemetry Charts</h2>
         </div>
-        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>60 FPS KINETIC ENGINE ACTIVE</span>
+        <div class="flex items-center gap-3">
+          <button data-export-component="chart" class="px-2.5 py-1 rounded bg-orange/15 hover:bg-orange hover:text-near text-orange text-[10.5px] font-mono border border-orange/40 transition flex items-center gap-1.5 cursor-pointer select-none" title="Add BlueprintSparkline component to project">
+            <span class="font-bold">&lt;/&gt;</span>
+            <span>ADD TO PROJECT</span>
+          </button>
+          <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>60 FPS KINETIC ENGINE ACTIVE</span>
+          </div>
         </div>
       </div>
 
@@ -1852,6 +1903,89 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     </div>
   </div>
 
+  <!-- 4. Multi-Framework Component Exporter Modal (shadcn/ui style) -->
+  <div id="componentExportModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-4 sm:p-6 flex items-center justify-center transition-all">
+    <div class="w-full max-w-4xl bg-near border border-white/20 rounded-xl overflow-hidden shadow-2xl font-mono text-xs flex flex-col max-h-[90vh]" style="clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px)">
+      
+      <!-- Top Title Bar -->
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-white/10 bg-white/[0.03]">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="exportComponentSection" class="text-orange text-[10.5px] font-bold tracking-wider">01 // BUTTONS</span>
+              <span class="text-white/20">|</span>
+              <h3 id="exportComponentName" class="text-cream font-bold text-sm">BlueprintButton</h3>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] text-cream/40 hidden sm:inline">ESC TO CLOSE</span>
+          <button id="exportCloseBtn" class="p-1 rounded hover:bg-white/10 text-cream/60 hover:text-white transition cursor-pointer text-base leading-none">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Component Specs & Metadata Strip -->
+      <div class="px-5 py-3 border-b border-white/10 bg-black/30 flex flex-col md:flex-row md:items-center justify-between gap-3 text-[11px]">
+        <p id="exportComponentDesc" class="text-cream/70 leading-snug flex-1">Precision industrial action buttons with 8px corner chamfers.</p>
+        <div class="flex items-center gap-4 shrink-0 flex-wrap">
+          <div id="exportComponentDeps" class="flex items-center gap-1.5 text-[10.5px]"></div>
+          <div class="flex items-center gap-1 text-[10.5px]">
+            <span class="text-cream/50">TOKENS:</span>
+            <div id="exportComponentTokens" class="flex items-center gap-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Framework Tabs & Code Preview -->
+      <div class="p-5 flex-1 overflow-hidden flex flex-col space-y-3">
+        <!-- Tabs -->
+        <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-2.5 flex-wrap">
+          <div class="flex items-center gap-1.5 p-1 rounded-lg bg-black/50 border border-white/10">
+            <button data-framework="react" class="export-framework-tab px-3 py-1 rounded text-xs font-mono transition bg-orange text-near font-bold cursor-pointer">
+              React (TSX)
+            </button>
+            <button data-framework="vue" class="export-framework-tab px-3 py-1 rounded text-xs font-mono transition hover:bg-white/10 text-cream/60 cursor-pointer">
+              Vue 3 (SFC)
+            </button>
+            <button data-framework="svelte" class="export-framework-tab px-3 py-1 rounded text-xs font-mono transition hover:bg-white/10 text-cream/60 cursor-pointer">
+              Svelte 5
+            </button>
+            <button data-framework="html" class="export-framework-tab px-3 py-1 rounded text-xs font-mono transition hover:bg-white/10 text-cream/60 cursor-pointer">
+              HTML + Tailwind
+            </button>
+          </div>
+
+          <div class="text-[10.5px] text-cream/40 flex items-center gap-2">
+            <span>● 1-CLICK COPY / DOWNLOAD READY</span>
+          </div>
+        </div>
+
+        <!-- Code Block Container with Scrollbar -->
+        <div class="relative flex-1 overflow-hidden rounded-lg border border-white/10 bg-black/80">
+          <pre class="h-full max-h-[360px] overflow-auto p-4 font-mono text-[11px] text-cream/90 selection:bg-orange selection:text-near leading-relaxed whitespace-pre"><code id="exportComponentCode"></code></pre>
+        </div>
+      </div>
+
+      <!-- Footer Action Bar -->
+      <div class="px-5 py-3 border-t border-white/10 bg-black/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <span class="text-[11px] text-cream/50">Production-ready template. Drop directly into Next.js, Vite, Nuxt, or SvelteKit.</span>
+        <div class="flex items-center gap-2.5 shrink-0 justify-end">
+          <button id="exportDownloadBtn" class="px-4 py-1.5 rounded bg-white/10 hover:bg-white/20 text-cream font-mono text-xs font-semibold border border-white/15 transition cursor-pointer flex items-center gap-1.5">
+            DOWNLOAD FILE
+          </button>
+          <button id="exportCopyBtn" class="btn-primary py-1.5 px-4 text-xs font-mono flex items-center gap-1.5 cursor-pointer">
+            <span>📋</span>
+            <span>COPY CODE</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <script type="module">
     import { sfx } from './audio.js';
     import { ICONS, ICON_META, getReactSnippet } from './icons.js';
@@ -1863,6 +1997,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { initKineticCharts } from './charts.js';
     import { initBlueprintPipeline } from './pipeline.js';
     import { initThemeEngine, THEMES } from './theme.js';
+    import { initComponentExporter } from './exporter.js';
 
     // Attach sound listeners
     sfx.attachListeners();
@@ -1872,6 +2007,10 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
 
     // Initialize Industrial Modals, Command Palette & Telemetry Drawer
     const industrialModals = initIndustrialModals({ sfx, themeEngine });
+
+    // Initialize Multi-Framework Component Exporter Engine (Option 5)
+    const componentExporter = initComponentExporter({ sfx });
+    window.componentExporter = componentExporter;
 
     // Initialize Kinetic Data Visualizations & Telemetry Charts (Section 11)
     const kineticCharts = initKineticCharts({ sfx });

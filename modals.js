@@ -37,7 +37,18 @@ export const COMMANDS = [
   // Presets
   { id: 'pre-ent', category: 'PRESETS', label: 'Apply Preset: 01 Production Enterprise', shortcut: 'P 1', action: () => document.querySelector('[data-param-preset="enterprise"]')?.click() },
   { id: 'pre-edge', category: 'PRESETS', label: 'Apply Preset: 02 Low-Latency Edge', shortcut: 'P 2', action: () => document.querySelector('[data-param-preset="edge"]')?.click() },
-  { id: 'pre-sand', category: 'PRESETS', label: 'Apply Preset: 03 Debug / Sandbox', shortcut: 'P 3', action: () => document.querySelector('[data-param-preset="sandbox"]')?.click() }
+  { id: 'pre-sand', category: 'PRESETS', label: 'Apply Preset: 03 Debug / Sandbox', shortcut: 'P 3', action: () => document.querySelector('[data-param-preset="sandbox"]')?.click() },
+
+  // Component Exporters (shadcn/ui style)
+  { id: 'exp-starter', category: 'EXPORTS', label: 'Export // Complete Starter Kit (Tokens + Config + Manifest)', shortcut: 'X S', action: () => document.getElementById('exportStarterBundleBtn')?.click() },
+  { id: 'exp-button', category: 'EXPORTS', label: 'Export // Component: BlueprintButton', shortcut: 'X B', action: () => window.componentExporter?.open('button') },
+  { id: 'exp-card', category: 'EXPORTS', label: 'Export // Component: BlueprintCard', shortcut: 'X C', action: () => window.componentExporter?.open('card') },
+  { id: 'exp-table', category: 'EXPORTS', label: 'Export // Component: TelemetryTable', shortcut: 'X T', action: () => window.componentExporter?.open('table') },
+  { id: 'exp-input', category: 'EXPORTS', label: 'Export // Component: BlueprintInput', shortcut: 'X I', action: () => window.componentExporter?.open('input') },
+  { id: 'exp-modal', category: 'EXPORTS', label: 'Export // Component: SafetyConfirmationModal', shortcut: 'X M', action: () => window.componentExporter?.open('modal') },
+  { id: 'exp-badge', category: 'EXPORTS', label: 'Export // Component: BlueprintBadge', shortcut: 'X G', action: () => window.componentExporter?.open('badge') },
+  { id: 'exp-callout', category: 'EXPORTS', label: 'Export // Component: BlueprintCallout', shortcut: 'X L', action: () => window.componentExporter?.open('callout') },
+  { id: 'exp-chart', category: 'EXPORTS', label: 'Export // Component: BlueprintSparkline', shortcut: 'X P', action: () => window.componentExporter?.open('chart') }
 ];
 
 export class CommandPalette {
