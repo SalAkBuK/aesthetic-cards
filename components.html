@@ -552,13 +552,37 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
         Real-time design token laboratory. Tweak corner chamfer radii, coordinate grid densities, stroke weights, and accent palettes. Changes immediately render on the live specimen card and output production-ready CSS, Tailwind, or JSON tokens.
       </p>
 
-      <!-- Preset Quick-Load Bar -->
-      <div class="flex items-center gap-2 flex-wrap font-mono text-xs p-2.5 rounded-lg bg-ink2/50 border border-white/10">
-        <span class="text-[10px] uppercase text-cream/50 tracking-wider">LOAD PRESET:</span>
-        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-orange text-near font-bold transition text-[10.5px]" data-preset="industrial">01 INDUSTRIAL BLUEPRINT</button>
-        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="teenage">02 TEENAGE OP-1</button>
-        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="cyberpunk">03 CYBERPUNK TERMINAL</button>
-        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="architectural">04 ARCHITECTURAL (LIGHT)</button>
+      <!-- Preset Quick-Load Bar & Custom Preset Manager (Phase 3) -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 font-mono text-xs p-2.5 rounded-lg bg-ink2/50 border border-white/10">
+        <div class="flex items-center gap-1.5 flex-wrap">
+          <span class="text-[10px] uppercase text-cream/50 tracking-wider">PRESETS:</span>
+          <button class="cfg-preset-pill px-2.5 py-1 rounded bg-orange text-near font-bold transition text-[10.5px] cursor-pointer" data-preset="industrial">01 INDUSTRIAL</button>
+          <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px] cursor-pointer" data-preset="teenage">02 TEENAGE OP-1</button>
+          <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px] cursor-pointer" data-preset="cyberpunk">03 CYBERPUNK</button>
+          <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px] cursor-pointer" data-preset="architectural">04 ARCHITECTURAL</button>
+          
+          <!-- Dynamic User Saved Presets Container -->
+          <div id="cfgCustomPresetsRack" class="flex items-center gap-1.5 flex-wrap"></div>
+        </div>
+
+        <!-- Inline Save Preset Form -->
+        <div class="flex items-center gap-1.5 shrink-0">
+          <input
+            type="text"
+            id="cfgPresetNameInput"
+            placeholder="Custom preset..."
+            maxlength="20"
+            class="bg-black/60 border border-white/15 px-2 py-1 rounded text-[10px] text-cream placeholder-cream/30 focus:border-orange focus:outline-none w-28 sm:w-32 font-mono"
+          />
+          <button
+            id="cfgSavePresetBtn"
+            class="px-2.5 py-1 rounded bg-white/10 hover:bg-orange hover:text-near text-cream font-bold text-[10px] uppercase transition cursor-pointer flex items-center gap-1"
+            title="Save current tokens to browser local storage"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+            <span>SAVE</span>
+          </button>
+        </div>
       </div>
 
       <!-- Studio Grid: Controls on Left, Specimen & Code on Right -->
@@ -767,10 +791,20 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
                 <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="react">REACT / JSX</button>
               </div>
 
-              <button id="cfgCopyBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-                <span>COPY CODE</span>
-              </button>
+              <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                <button id="cfgRandomizeBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-2.5 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1 transition cursor-pointer" title="Intelligently randomize blueprint spec">
+                  <span>🎲</span>
+                  <span>RANDOMIZE</span>
+                </button>
+                <button id="cfgShareSpecBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-2.5 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1 transition cursor-pointer" title="Copy shareable URL link with current spec">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  <span>SHARE</span>
+                </button>
+                <button id="cfgCopyBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer" title="Copy generated code snippet to clipboard">
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                  <span>COPY CODE</span>
+                </button>
+              </div>
             </div>
 
             <!-- Code Output Block -->

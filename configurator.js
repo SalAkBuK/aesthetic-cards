@@ -96,6 +96,24 @@ export const SILHOUETTES = {
   }
 };
 
+export const SPEC_ROULETTE = {
+  silhouettes: ['symmetric', 'top-only', 'diagonal', 'notch'],
+  accents: [
+    { color: '#f4551d', hover: '#ea4f1a', name: 'Kinetic Orange' },
+    { color: '#f59e0b', hover: '#d97706', name: 'Synth Amber' },
+    { color: '#10b981', hover: '#059669', name: 'Radar Emerald' },
+    { color: '#06b6d4', hover: '#0891b2', name: 'Quantum Cyan' },
+    { color: '#8b5cf6', hover: '#7c3aed', name: 'Hydraulic Violet' },
+    { color: '#ef4444', hover: '#dc2626', name: 'Alarm Ruby' },
+    { color: '#39ff14', hover: '#32e012', name: 'Cyber Lime' },
+    { color: '#38bdf8', hover: '#0284c7', name: 'Cobalt Pulse' }
+  ],
+  chamfers: [6, 8, 10, 12, 14, 16, 18],
+  gridSizes: [48, 64, 72, 84, 96],
+  strokeWidths: [1.0, 1.35, 1.75],
+  bracketSizes: [9, 11, 13, 15]
+};
+
 export function getPolygon(c, silhouette = 'symmetric') {
   switch (silhouette) {
     case 'top-only':
@@ -448,6 +466,7 @@ export class BlueprintConfigurator {
     this.activeGlyph = 'cluster';
     this.activeState = 'default';
     this.autoCycleTimer = null;
+    this.toastTimeout = null;
     this.sfx = options.sfx || (typeof window !== 'undefined' ? window.sfx : null);
 
     this.specimenEl = document.getElementById(options.specimenId || 'configSpecimen');
@@ -458,7 +477,215 @@ export class BlueprintConfigurator {
     this.silhouetteLabelEl = document.getElementById('cfgSilhouetteLabel');
 
     this.initControls();
+
+    // Check if deep link spec hash was provided in URL
+    const loadedHash = this.loadFromHash();
+    if (loadedHash) {
+      this.syncControls();
+    }
+
+    this.renderCustomPresets();
     this.update();
+  }
+
+  showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    if (toast && toastMsg) {
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      if (this.toastTimeout) clearTimeout(this.toastTimeout);
+      this.toastTimeout = setTimeout(() => toast.classList.add('hidden'), 2600);
+    }
+  }
+
+  getCustomPresets() {
+    try {
+      const raw = localStorage.getItem('blueprint_studio_custom_presets');
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      console.warn('Unable to read presets from localStorage:', e);
+      return [];
+    }
+  }
+
+  saveCustomPresets(presets) {
+    try {
+      localStorage.setItem('blueprint_studio_custom_presets', JSON.stringify(presets));
+    } catch (e) {
+      console.warn('Unable to write presets to localStorage:', e);
+    }
+  }
+
+  saveCustomPreset(name) {
+    const cleanName = (name || '').trim();
+    if (!cleanName) {
+      this.showToast('Please enter a preset name');
+      return;
+    }
+    const presets = this.getCustomPresets();
+    const newPreset = {
+      id: 'custom-' + Date.now(),
+      name: cleanName,
+      tokens: { ...this.tokens },
+      specimen: this.activeSpecimen,
+      glyph: this.activeGlyph
+    };
+    presets.push(newPreset);
+    this.saveCustomPresets(presets);
+    this.renderCustomPresets();
+    if (this.sfx) this.sfx.success();
+    this.showToast(`Saved preset: "${cleanName}"`);
+  }
+
+  deleteCustomPreset(id) {
+    let presets = this.getCustomPresets();
+    presets = presets.filter(p => p.id !== id);
+    this.saveCustomPresets(presets);
+    this.renderCustomPresets();
+    if (this.sfx) this.sfx.tick();
+    this.showToast('Custom preset removed');
+  }
+
+  loadCustomPreset(id) {
+    const presets = this.getCustomPresets();
+    const preset = presets.find(p => p.id === id);
+    if (!preset) return;
+
+    this.tokens = { ...preset.tokens };
+    if (preset.specimen) this.activeSpecimen = preset.specimen;
+    if (preset.glyph) this.activeGlyph = preset.glyph;
+
+    // Reset factory preset pill highlights
+    document.querySelectorAll('.cfg-preset-pill').forEach(p => {
+      p.classList.remove('bg-orange', 'text-near', 'font-bold');
+      p.classList.add('bg-white/5', 'text-cream/70');
+    });
+
+    this.syncControls();
+    this.update();
+    if (this.sfx) this.sfx.click();
+    this.showToast(`Loaded preset: "${preset.name}"`);
+  }
+
+  renderCustomPresets() {
+    const rack = document.getElementById('cfgCustomPresetsRack');
+    if (!rack) return;
+    rack.innerHTML = '';
+    const presets = this.getCustomPresets();
+
+    presets.forEach(p => {
+      const chip = document.createElement('div');
+      chip.className = 'inline-flex items-center rounded bg-white/5 hover:bg-white/10 border border-white/10 text-cream/80 text-[10px] pl-2 pr-1 py-0.5 transition group';
+      
+      const loadBtn = document.createElement('button');
+      loadBtn.className = 'cfg-custom-preset-btn font-mono font-medium hover:text-orange cursor-pointer tracking-wider truncate max-w-[100px]';
+      loadBtn.textContent = p.name.toUpperCase();
+      loadBtn.title = `Load custom preset: ${p.name}`;
+      loadBtn.addEventListener('click', () => this.loadCustomPreset(p.id));
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'cfg-delete-preset-btn ml-1.5 text-cream/40 hover:text-red-400 cursor-pointer font-bold px-1 transition text-xs leading-none';
+      delBtn.textContent = '×';
+      delBtn.title = `Delete preset ${p.name}`;
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.deleteCustomPreset(p.id);
+      });
+
+      chip.appendChild(loadBtn);
+      chip.appendChild(delBtn);
+      rack.appendChild(chip);
+    });
+  }
+
+  getSpecHash() {
+    const acc = encodeURIComponent(this.tokens.accent);
+    const sil = this.tokens.silhouette || 'symmetric';
+    return `#spec=c:${this.tokens.chamfer};sil:${sil};acc:${acc};grd:${this.tokens.gridSize};str:${this.tokens.strokeWidth};brk:${this.tokens.bracketSize};spc:${this.activeSpecimen};gly:${this.activeGlyph}`;
+  }
+
+  loadFromHash() {
+    if (typeof window === 'undefined' || !window.location.hash) return false;
+    const hash = window.location.hash;
+    const match = hash.match(/#spec=(.+)$/);
+    if (!match) return false;
+
+    try {
+      const pairs = match[1].split(';');
+      const params = {};
+      for (const pair of pairs) {
+        const [k, v] = pair.split(':');
+        if (k && v) params[k] = v;
+      }
+
+      if (params.c) this.tokens.chamfer = parseInt(params.c, 10);
+      if (params.sil && SILHOUETTES[params.sil]) this.tokens.silhouette = params.sil;
+      if (params.acc) {
+        const color = decodeURIComponent(params.acc);
+        this.tokens.accent = color.startsWith('#') ? color : `#${color}`;
+        this.tokens.accentHover = this.tokens.accent;
+      }
+      if (params.grd) this.tokens.gridSize = parseInt(params.grd, 10);
+      if (params.str) this.tokens.strokeWidth = parseFloat(params.str);
+      if (params.brk) this.tokens.bracketSize = parseInt(params.brk, 10);
+      if (params.spc) this.activeSpecimen = params.spc;
+      if (params.gly && ICONS[params.gly]) this.activeGlyph = params.gly;
+
+      return true;
+    } catch (e) {
+      console.warn('Unable to hydrate spec from URL hash:', e);
+      return false;
+    }
+  }
+
+  copyShareLink() {
+    const hash = this.getSpecHash();
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', hash);
+      const fullUrl = window.location.href;
+      navigator.clipboard?.writeText(fullUrl).then(() => {
+        if (this.sfx) this.sfx.success();
+        this.showToast('Shareable spec link copied to clipboard!');
+      }).catch(() => {
+        this.showToast('Error copying link to clipboard');
+      });
+    }
+  }
+
+  randomizeSpec() {
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+    const chosenSilhouette = pick(SPEC_ROULETTE.silhouettes);
+    const chosenAccent = pick(SPEC_ROULETTE.accents);
+    const chosenChamfer = pick(SPEC_ROULETTE.chamfers);
+    const chosenGrid = pick(SPEC_ROULETTE.gridSizes);
+    const chosenStroke = pick(SPEC_ROULETTE.strokeWidths);
+    const chosenBracket = pick(SPEC_ROULETTE.bracketSizes);
+    
+    // Pick from all available icons in ICONS
+    const iconKeys = Object.keys(ICONS);
+    const chosenGlyph = pick(iconKeys);
+
+    this.tokens.silhouette = chosenSilhouette;
+    this.tokens.accent = chosenAccent.color;
+    this.tokens.accentHover = chosenAccent.hover;
+    this.tokens.chamfer = chosenChamfer;
+    this.tokens.gridSize = chosenGrid;
+    this.tokens.strokeWidth = chosenStroke;
+    this.tokens.bracketSize = chosenBracket;
+    this.activeGlyph = chosenGlyph;
+
+    // Reset factory preset pill highlights
+    document.querySelectorAll('.cfg-preset-pill').forEach(p => {
+      p.classList.remove('bg-orange', 'text-near', 'font-bold');
+      p.classList.add('bg-white/5', 'text-cream/70');
+    });
+
+    this.syncControls();
+    this.update();
+    if (this.sfx) this.sfx.click();
+
+    this.showToast(`🎲 Generated: ${chosenAccent.name} // ${chosenSilhouette.toUpperCase()}`);
   }
 
   setToken(key, value) {
@@ -571,6 +798,7 @@ export class BlueprintConfigurator {
       this.syncControls();
       this.update();
       if (this.sfx) this.sfx.click();
+      this.showToast(`Loaded Preset: ${PRESETS[presetId].name}`);
     }
   }
 
@@ -892,6 +1120,24 @@ export class BlueprintConfigurator {
 
     const glyphSelect = document.getElementById('cfgGlyphSelect');
     if (glyphSelect) glyphSelect.value = this.activeGlyph;
+    if (this.glyphCategoryEl) {
+      const meta = ICON_META[this.activeGlyph];
+      if (meta && meta.category) {
+        this.glyphCategoryEl.textContent = meta.category.toUpperCase();
+      }
+    }
+
+    // Sync Specimen Tabs
+    const specimenTabs = document.querySelectorAll('.cfg-specimen-tab');
+    specimenTabs.forEach(tab => {
+      if (tab.dataset.specimen === this.activeSpecimen) {
+        tab.classList.add('bg-orange', 'text-near', 'font-bold');
+        tab.classList.remove('hover:bg-white/10', 'text-cream/70');
+      } else {
+        tab.classList.remove('bg-orange', 'text-near', 'font-bold');
+        tab.classList.add('hover:bg-white/10', 'text-cream/70');
+      }
+    });
 
     // Sync Silhouette Buttons
     const silBtns = document.querySelectorAll('.cfg-silhouette-btn');
@@ -1098,19 +1344,52 @@ export class BlueprintConfigurator {
       if (this.sfx) this.sfx.click();
     });
 
+    // Save Custom Preset button & Enter key
+    const savePresetBtn = document.getElementById('cfgSavePresetBtn');
+    const presetNameInput = document.getElementById('cfgPresetNameInput');
+
+    const handleSavePreset = () => {
+      const name = presetNameInput?.value?.trim();
+      if (name) {
+        this.saveCustomPreset(name);
+        if (presetNameInput) presetNameInput.value = '';
+      } else {
+        this.showToast('Please enter a preset name');
+      }
+    };
+
+    savePresetBtn?.addEventListener('click', handleSavePreset);
+    presetNameInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleSavePreset();
+    });
+
+    // Randomize Spec button
+    const randomizeBtn = document.getElementById('cfgRandomizeBtn');
+    randomizeBtn?.addEventListener('click', () => {
+      this.randomizeSpec();
+    });
+
+    // Share Spec button
+    const shareSpecBtn = document.getElementById('cfgShareSpecBtn');
+    shareSpecBtn?.addEventListener('click', () => {
+      this.copyShareLink();
+    });
+
+    // Listen for external URL hash changes (deep linking navigation)
+    window.addEventListener('hashchange', () => {
+      if (this.loadFromHash()) {
+        this.syncControls();
+        this.update();
+      }
+    });
+
     // Copy export code button
     const copyBtn = document.getElementById('cfgCopyBtn');
     copyBtn?.addEventListener('click', () => {
       if (this.codeOutputEl) {
         navigator.clipboard?.writeText(this.codeOutputEl.textContent).then(() => {
           if (this.sfx) this.sfx.success();
-          const toast = document.getElementById('toast');
-          const toastMsg = document.getElementById('toastMsg');
-          if (toast && toastMsg) {
-            toastMsg.textContent = `Copied ${this.activeExportTab.toUpperCase()} configuration to clipboard!`;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 2200);
-          }
+          this.showToast(`Copied ${this.activeExportTab.toUpperCase()} configuration!`);
         });
       }
     });
