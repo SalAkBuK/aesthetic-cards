@@ -10,6 +10,10 @@
 
 Built from first principles on **8-point chamfered polygon silhouettes**, **blueprint coordinate grid canvases**, **hardware monospace typography**, **procedural Web Audio API micro-haptics**, and **zero-dependency Tailwind CSS design tokens**.
 
+<p align="center">
+  <img src="./docs/screenshots/01-hero-radar.png" width="100%" alt="Kinetic UI - Aerospace Telemetry & Mission Control Design System" />
+</p>
+
 ---
 
 ## Key Capabilities
@@ -45,6 +49,59 @@ Built from first principles on **8-point chamfered polygon silhouettes**, **blue
 | 13 | **BlueprintSparkline** | `chart` | Canvas & SVG live streaming sparkline graph | `.tsx`, `.vue`, `.svelte`, `.html` |
 | 14 | **TachometerGauge** | `gauge` | Precision 270° radial tachometer dial gauge with arc fill | `.tsx`, `.vue`, `.svelte`, `.html` |
 | 15 | **BlueprintNode** | `pipeline` | Flow graph circuit node with patch cable connection sockets | `.tsx`, `.vue`, `.svelte`, `.html` |
+
+---
+
+## Visual Previews & System Gallery
+
+### 1. Chamfered Feature Cards Grid
+Handcrafted 8-point polygon silhouettes, blueprint coordinate grid background, and orchestrated initial-load SVG line-art vector drawings.
+
+<p align="center">
+  <img src="./docs/screenshots/02-feature-cards.png" width="100%" alt="Kinetic UI - Chamfered Feature Cards Grid" />
+</p>
+
+### 2. Multi-Framework Component Exporter (shadcn/ui style)
+1-click copy-pasteable component modal with tabs for **React (TSX)**, **Vue 3 (SFC)**, **Svelte 5**, and **HTML5 + Tailwind CSS**, plus individual and full-kit ZIP downloads.
+
+<p align="center">
+  <img src="./docs/screenshots/06-code-exporter.png" width="100%" alt="Kinetic UI - Multi-Framework Component Exporter" />
+</p>
+
+### 3. Component Catalog & Precision Controls
+Monospace form inputs, precision action buttons, steppers, status badges with radar LEDs, and tactical callouts.
+
+<p align="center">
+  <img src="./docs/screenshots/03-components-catalog.png" width="100%" alt="Kinetic UI - Component Catalog" />
+</p>
+
+### 4. Real-Time Audio Oscilloscope & Micro-Haptics
+Zero-asset procedural Web Audio API synthesizer featuring a live persistence canvas oscilloscope, frequency generator, and mechanical relay haptic triggers.
+
+<p align="center">
+  <img src="./docs/screenshots/04-oscilloscope.png" width="100%" alt="Kinetic UI - Real-Time Audio Oscilloscope" />
+</p>
+
+### 5. High-Density Telemetry Data Table
+Multi-column sorting, instant query filtering, inline canvas sparklines, chamfered checkboxes, and batch CSV export.
+
+<p align="center">
+  <img src="./docs/screenshots/05-telemetry-table.png" width="100%" alt="Kinetic UI - High-Density Telemetry Data Table" />
+</p>
+
+### 6. Blueprint Node Flow Graph & Circuit Pipeline
+Interactive visual canvas with movable circuit nodes, dynamic Bézier splines, socket connectors, and continuous packet propagation.
+
+<p align="center">
+  <img src="./docs/screenshots/07-pipeline-graph.png" width="100%" alt="Kinetic UI - Node Flow Graph & Circuit Pipeline" />
+</p>
+
+### 7. Global Industrial Command Palette (`⌘K`)
+Keyboard-driven modal discoverability with 46 actions, section jumps, color space switches, and direct component export shortcuts.
+
+<p align="center">
+  <img src="./docs/screenshots/08-command-palette.png" width="100%" alt="Kinetic UI - Global Command Palette" />
+</p>
 
 ---
 
