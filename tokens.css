@@ -661,4 +661,93 @@
   transition: background-color 0.12s ease, opacity 0.12s ease;
 }
 
+/* --------------------------------------------------------------------------
+   Section 12: Blueprint Node Flow Graph & Circuit Pipeline
+   -------------------------------------------------------------------------- */
+.pipeline-viewport {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(18, 17, 14, 0.96);
+  background-image: 
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 0),
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 20px 20px, 80px 80px, 80px 80px;
+}
+
+.pipeline-node {
+  position: absolute;
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  z-index: 20;
+}
+
+.pipeline-node:active,
+.pipeline-node.dragging {
+  cursor: grabbing;
+  z-index: 30;
+  box-shadow: 0 0 24px -2px rgba(244, 85, 29, 0.4);
+}
+
+.node-socket {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: #1e1d19;
+  cursor: crosshair;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  z-index: 25;
+}
+
+.node-socket:hover {
+  transform: scale(1.35);
+  border-color: var(--orange);
+  background-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange);
+}
+
+.node-socket.snap-active {
+  transform: scale(1.5);
+  border-color: #10b981;
+  background-color: #10b981;
+  box-shadow: 0 0 14px #10b981;
+  animation: pulse 0.6s infinite alternate;
+}
+
+.cable-path {
+  fill: none;
+  stroke-width: 2.25px;
+  stroke-linecap: round;
+  cursor: pointer;
+  transition: stroke-width 0.15s ease, opacity 0.15s ease;
+}
+
+.cable-path:hover {
+  stroke-width: 4px;
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.cable-rubberband {
+  fill: none;
+  stroke-width: 2px;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+  animation: rubberband-dash 0.6s linear infinite;
+}
+
+@keyframes rubberband-dash {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+
+.pulse-particle {
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
 

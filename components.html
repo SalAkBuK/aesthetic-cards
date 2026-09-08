@@ -69,7 +69,9 @@
       <span class="text-white/20">|</span>
       <a href="#modals" class="hover:text-cream text-cream/70 transition">Modals</a>
       <span class="text-white/20">|</span>
-      <a href="#visualizations" class="hover:text-orange text-cream/70 transition">Charts</a>
+      <a href="#visualizations" class="hover:text-cream text-cream/70 transition">Charts</a>
+      <span class="text-white/20">|</span>
+      <a href="#pipeline" class="hover:text-orange text-cream/70 transition">Pipeline</a>
       <span class="text-white/20">|</span>
       <button data-open-palette class="px-2 py-0.5 rounded bg-white/10 hover:bg-orange hover:text-near text-cream border border-white/15 transition flex items-center gap-1 cursor-pointer" title="Open Global Command Palette (⌘K / Ctrl+K)">
         <span class="text-orange font-bold">⌘K</span>
@@ -1494,6 +1496,102 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 12: INTERACTIVE BLUEPRINT NODE FLOW GRAPH & CIRCUIT PIPELINE -->
+    <section class="space-y-6" id="pipeline">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">12 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Blueprint Node Flow Graph & Circuit Pipeline</h2>
+        </div>
+        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>TOPOLOGY ENGINE READY</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Mission-critical visual node architecture inspired by industrial circuit diagrams and Unreal Engine Blueprint graphs. Drag nodes across the blueprint coordinate grid, patch sockets with dynamic cubic Bézier cables, and route kinetic telemetry pulse packets across asynchronous worker isolates.
+      </p>
+
+      <!-- Main Pipeline Interactive Panel -->
+      <div id="pipelineContainer" class="p-4 sm:p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-4 font-mono select-none">
+        
+        <!-- Top Operational Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10 text-xs">
+          
+          <!-- Left Action Buttons -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="pipelineAddNodeBtn" class="btn-chamfer bg-orange/20 hover:bg-orange hover:text-near text-orange border border-orange/40 px-3 py-1.5 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <span>+ ADD NODE</span>
+            </button>
+            <button id="pipelineAutoLayoutBtn" class="btn-chamfer bg-white/10 hover:bg-white/20 text-cream px-3 py-1.5 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <span>AUTO-LAYOUT</span>
+            </button>
+            <button id="pipelinePulseBurstBtn" class="btn-chamfer bg-cyan-400/20 hover:bg-cyan-400 hover:text-near text-cyan-400 border border-cyan-400/40 px-3 py-1.5 text-[11px] font-bold transition flex items-center gap-1.5 cursor-pointer" title="Trigger High-Velocity Energy Surge Across All Cables">
+              <span>⚡ PULSE BURST</span>
+            </button>
+            <button id="pipelineResetBtn" class="btn-chamfer bg-white/5 hover:bg-white/10 text-cream/60 px-3 py-1.5 text-[11px] transition flex items-center gap-1 cursor-pointer">
+              <span>↺ RESET</span>
+            </button>
+          </div>
+
+          <!-- Right Telemetry Readouts -->
+          <div class="flex flex-wrap items-center gap-3 text-[10.5px]">
+            <div class="flex items-center gap-1.5">
+              <span class="text-cream/50">NODES:</span>
+              <span id="pipelineNodeCount" class="text-orange font-bold">5 NODES</span>
+            </div>
+            <span class="text-white/20">|</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-cream/50">WIRES:</span>
+              <span id="pipelineCableCount" class="text-cream font-bold">5 WIRES</span>
+            </div>
+            <span class="text-white/20">|</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-cream/50">BUS:</span>
+              <span id="pipelineBusRate" class="text-cyan-400 font-bold">48.2 MB/s</span>
+            </div>
+            <span class="text-white/20">|</span>
+            <span id="pipelineQuorumStatus" class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">TOPOLOGY STABLE</span>
+          </div>
+
+        </div>
+
+        <!-- Node Graph Viewport Canvas Area -->
+        <div class="pipeline-viewport relative w-full h-[540px] sm:h-[600px] rounded-lg border border-white/15 overflow-hidden">
+          
+          <!-- Tactical Corner Brackets -->
+          <span class="bracket tl border-t-2 border-l-2 border-white/40 z-30"></span>
+          <span class="bracket tr border-t-2 border-r-2 border-white/40 z-30"></span>
+          <span class="bracket bl border-b-2 border-l-2 border-white/40 z-30"></span>
+          <span class="bracket br border-b-2 border-r-2 border-white/40 z-30"></span>
+
+          <!-- Dynamic SVG Wiring & Pulse Particle Layer -->
+          <svg id="pipelineSvgOverlay" class="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-visible">
+            <g id="pipelineCablesLayer" class="pointer-events-auto"></g>
+            <g id="pipelinePulsesLayer" class="pointer-events-none"></g>
+            <path id="pipelineRubberband" class="cable-rubberband hidden" stroke="#f4551d" />
+          </svg>
+
+          <!-- Watermark instruction badge -->
+          <div class="absolute bottom-2.5 left-3 text-[9.5px] font-mono text-cream/40 pointer-events-none z-0 flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-orange"></span>
+            <span>BLUEPRINT CIRCUIT ENGINE // DRAG NODES • DRAG SOCKETS TO WIRE • CLICK CABLE TO UNPLUG</span>
+          </div>
+
+          <!-- Nodes injected dynamically by BlueprintPipelineEngine -->
+
+        </div>
+
+        <!-- Bottom Status Line -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between text-[10px] text-cream/50 pt-2 border-t border-white/5 gap-1">
+          <span>DYNAMIC CUBIC BÉZIER SPLINES WITH CONTINUOUS ENERGY PACKET PROPAGATION</span>
+          <span class="text-cream/40 font-mono">DAG // CLUSTER-BUS-04</span>
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -1693,6 +1791,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { initParameterRack } from './forms.js';
     import { initIndustrialModals } from './modals.js';
     import { initKineticCharts } from './charts.js';
+    import { initBlueprintPipeline } from './pipeline.js';
 
     // Attach sound listeners
     sfx.attachListeners();
@@ -1702,6 +1801,9 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
 
     // Initialize Kinetic Data Visualizations & Telemetry Charts (Section 11)
     const kineticCharts = initKineticCharts({ sfx });
+
+    // Initialize Blueprint Node Flow Graph & Circuit Pipeline (Section 12)
+    const blueprintPipeline = initBlueprintPipeline({ sfx });
     sfx.attachListeners();
 
     // Initialize High-Density Telemetry Table
