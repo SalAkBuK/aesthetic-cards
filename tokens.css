@@ -82,7 +82,7 @@
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-  background-size: 84px 84px;
+  background-size: var(--grid-size, 84px) var(--grid-size, 84px);
   background-position: center top;
 }
 

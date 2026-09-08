@@ -693,7 +693,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <!-- Live Interactive Specimen Stage -->
           <div class="p-6 rounded-xl bg-ink/90 border border-white/12 relative overflow-hidden flex flex-col items-center justify-center min-h-[340px] shadow-2xl">
             <!-- Subtle preview grid background -->
-            <div class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none"></div>
+            <div id="configStageGrid" class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none transition-[background-size] duration-150"></div>
 
             <!-- The Live Specimen Container (Populated dynamically by configurator.js) -->
             <div id="configSpecimen" class="relative z-10 w-full max-w-[360px] transition-all duration-300 shadow-xl">

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * High-Density Telemetry Data Table Engine
  * Manages sorting, filtering, row expansion, inline canvas sparklines,
  * batch selections, and CSV/JSON export with procedural micro-haptics.
@@ -379,8 +379,8 @@ export class TelemetryTable {
           <!-- Node ID & Name -->
           <td class="py-3 px-3 font-mono">
             <div class="flex items-center gap-2">
-              <span class="font-semibold text-cream group-hover:text-white text-[12px]">${node.id}</span>
-              <span class="text-[9px] px-1 py-0.2 rounded bg-white/5 text-cream/50 border border-white/10 hidden sm:inline-block">${node.name}</span>
+              <span class="font-semibold text-cream group-hover:text-white text-[12px] whitespace-nowrap shrink-0">${node.id}</span>
+              <span class="text-[9px] px-1 py-0.2 rounded bg-white/5 text-cream/50 border border-white/10 hidden sm:inline-block whitespace-nowrap">${node.name}</span>
             </div>
             <span class="text-[10px] text-cream/40 block font-mono">${node.region}</span>
           </td>

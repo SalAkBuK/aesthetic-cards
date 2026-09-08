@@ -454,6 +454,7 @@ export class BlueprintConfigurator {
     root.style.setProperty('--c', `${this.tokens.chamfer}px`);
     root.style.setProperty('--orange', this.tokens.accent);
     root.style.setProperty('--orange-hover', this.tokens.accentHover);
+    root.style.setProperty('--grid-size', `${this.tokens.gridSize}px`);
   }
 
   resetDocument() {
@@ -461,6 +462,7 @@ export class BlueprintConfigurator {
     root.style.removeProperty('--c');
     root.style.removeProperty('--orange');
     root.style.removeProperty('--orange-hover');
+    root.style.removeProperty('--grid-size');
   }
 
   renderActiveSpecimen() {
@@ -494,7 +496,13 @@ export class BlueprintConfigurator {
       this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
       this.specimenEl.style.color = this.tokens.textColor;
       this.specimenEl.innerHTML = `
-        <div class="p-5 border border-white/15 space-y-3 font-mono text-xs relative">
+        <div class="p-5 border border-white/15 space-y-3 font-mono text-xs relative group">
+          <!-- Corner Crop Brackets (Scale with Bracket Size Slider) -->
+          <span class="bracket tl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket tr" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket bl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+
           <!-- Top Header -->
           <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
             <div class="flex items-center gap-2">
@@ -509,8 +517,8 @@ export class BlueprintConfigurator {
           <!-- Value & Big Icon Viewport -->
           <div class="flex items-center justify-between py-1">
             <div>
-              <span class="text-[10px] text-cream/50 uppercase block">P99 DISPATCH LATENCY</span>
-              <div class="text-3xl font-bold tracking-tight text-cream mt-0.5">
+              <span class="text-[10px] opacity-60 uppercase block">P99 DISPATCH LATENCY</span>
+              <div class="text-3xl font-bold tracking-tight mt-0.5">
                 0.38 <span style="color: ${this.tokens.accent}" class="text-sm font-semibold">ms</span>
               </div>
             </div>
@@ -521,7 +529,7 @@ export class BlueprintConfigurator {
 
           <!-- Mini Inline Sparkline Graph -->
           <div class="space-y-1 pt-1">
-            <div class="flex justify-between text-[9.5px] text-cream/50">
+            <div class="flex justify-between text-[9.5px] opacity-60">
               <span>LATENCY TREND (LAST 60 SEC)</span>
               <span style="color: ${this.tokens.accent}">STABLE (σ = 0.02ms)</span>
             </div>
@@ -537,7 +545,7 @@ export class BlueprintConfigurator {
           </div>
 
           <!-- Bottom Metadata Strip -->
-          <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[9.5px] text-cream/50">
+          <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[9.5px] opacity-60">
             <span>CONSENSUS: ED25519-STARK</span>
             <span class="text-emerald-400 font-bold">● 6/6 QUORUM</span>
           </div>
@@ -550,8 +558,8 @@ export class BlueprintConfigurator {
       this.specimenEl.innerHTML = `
         <div class="p-5 border border-white/15 space-y-4 font-mono text-xs">
           <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
-            <span class="font-bold text-cream uppercase tracking-wider">HARDWARE CONTROLS // ${(glyphMeta.title || this.activeGlyph).toUpperCase()}</span>
-            <span class="text-[9.5px] text-cream/40">CHAMFER: ${this.tokens.chamfer}px</span>
+            <span class="font-bold uppercase tracking-wider">HARDWARE CONTROLS // ${(glyphMeta.title || this.activeGlyph).toUpperCase()}</span>
+            <span class="text-[9.5px] opacity-50">CHAMFER: ${this.tokens.chamfer}px</span>
           </div>
 
           <!-- Buttons Stack -->
@@ -575,11 +583,11 @@ export class BlueprintConfigurator {
 
           <!-- Precision Stepper Strip -->
           <div class="flex items-center justify-between p-2.5 rounded bg-black/40 border border-white/10">
-            <span class="text-[10px] text-cream/60 uppercase">WORKER THREADS:</span>
+            <span class="text-[10px] opacity-60 uppercase">WORKER THREADS:</span>
             <div class="flex items-center gap-2">
-              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 text-cream font-bold transition flex items-center justify-center cursor-pointer">−</button>
-              <span class="font-bold text-sm text-cream px-2" style="color: ${this.tokens.accent}">08</span>
-              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 text-cream font-bold transition flex items-center justify-center cursor-pointer">+</button>
+              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 font-bold transition flex items-center justify-center cursor-pointer">−</button>
+              <span class="font-bold text-sm px-2" style="color: ${this.tokens.accent}">08</span>
+              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 font-bold transition flex items-center justify-center cursor-pointer">+</button>
             </div>
           </div>
         </div>
@@ -591,13 +599,13 @@ export class BlueprintConfigurator {
       this.specimenEl.innerHTML = `
         <div class="p-4 sm:p-5 border border-white/15 space-y-3 font-mono text-xs">
           <!-- Top Row Header -->
-          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10px] text-cream/50">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10px] opacity-60">
             <div class="flex items-center gap-1.5">
               <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: ${this.tokens.accent}"></span>
-              <span class="font-bold tracking-wider uppercase text-cream/80">HIGH-DENSITY ROW SPECIMEN</span>
+              <span class="font-bold tracking-wider uppercase opacity-90">HIGH-DENSITY ROW SPECIMEN</span>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-[9px] px-1.5 py-0.5 rounded border border-white/10 text-cream/60 uppercase">6/6 QUORUM</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded border border-white/10 opacity-70 uppercase">6/6 QUORUM</span>
               <span class="text-emerald-400 font-bold">● ACTIVE</span>
             </div>
           </div>
@@ -609,30 +617,30 @@ export class BlueprintConfigurator {
               <input type="checkbox" checked class="checkbox-chamfer shrink-0 cursor-pointer" style="accent-color: ${this.tokens.accent}" title="Select node" />
               <div class="flex items-center gap-1.5 shrink-0">
                 <span class="w-2 h-2 rounded-full animate-pulse shrink-0" style="background-color: ${this.tokens.accent}"></span>
-                <span class="font-bold text-cream tracking-tight whitespace-nowrap text-xs">node-iad-01</span>
+                <span class="font-bold tracking-tight whitespace-nowrap text-xs">node-iad-01</span>
               </div>
             </div>
 
             <!-- Active Technical Glyph Badge (Always visible and reactive) -->
             <div class="flex items-center gap-1.5 px-2 py-1 rounded bg-white/5 border border-white/10 shrink-0" style="color: ${this.tokens.accent}">
               ${getGlyphSvg(16, 'shrink-0')}
-              <span class="text-[10px] text-cream/80 uppercase font-mono tracking-wider whitespace-nowrap">${glyphMeta.title}</span>
+              <span class="text-[10px] opacity-80 uppercase font-mono tracking-wider whitespace-nowrap">${glyphMeta.title}</span>
             </div>
 
             <!-- Telemetry & Action: Latency, Online Badge, and Chamfered DRAIN Button -->
             <div class="flex items-center gap-3 shrink-0 text-[11px]">
-              <span class="text-cream/90 font-mono font-semibold whitespace-nowrap">0.39ms</span>
+              <span class="font-mono font-semibold whitespace-nowrap opacity-90">0.39ms</span>
               <span class="px-2 py-0.5 rounded text-[9.5px] uppercase font-bold tracking-wider whitespace-nowrap" style="background-color: ${this.tokens.accent}25; color: ${this.tokens.accent}; border: 1px solid ${this.tokens.accent}50">
                 ONLINE
               </span>
-              <button class="px-2.5 py-1 text-[10px] font-bold uppercase rounded bg-white/10 hover:bg-white/20 text-cream transition cursor-pointer shrink-0 whitespace-nowrap" style="clip-path: ${btnPolygon}">
+              <button class="px-2.5 py-1 text-[10px] font-bold uppercase rounded bg-white/10 hover:bg-white/20 transition cursor-pointer shrink-0 whitespace-nowrap" style="clip-path: ${btnPolygon}">
                 DRAIN
               </button>
             </div>
           </div>
 
           <!-- Row Metadata Footer -->
-          <div class="flex items-center justify-between text-[9.5px] text-cream/40 pt-1 border-t border-white/5">
+          <div class="flex items-center justify-between text-[9.5px] opacity-50 pt-1 border-t border-white/5">
             <span class="font-mono">SIG: 0x88ab...3c12</span>
             <span class="font-mono">MEM: 412 MB</span>
             <span class="text-orange/80 font-mono">CHAMFER: ${this.tokens.chamfer}px</span>
@@ -694,7 +702,14 @@ export class BlueprintConfigurator {
     // 2. Render active specimen into stage
     this.renderActiveSpecimen();
 
-    // 3. Update Code Output block
+    // 3. Update preview stage grid background size dynamically
+    const stageGrid = document.getElementById('configStageGrid');
+    if (stageGrid) {
+      stageGrid.style.setProperty('--grid-size', `${this.tokens.gridSize}px`);
+      stageGrid.style.backgroundSize = `${this.tokens.gridSize}px ${this.tokens.gridSize}px`;
+    }
+
+    // 4. Update Code Output block
     if (this.codeOutputEl) {
       if (this.activeExportTab === 'css') {
         this.codeOutputEl.textContent = exportCSS(this.tokens);
@@ -707,7 +722,7 @@ export class BlueprintConfigurator {
       }
     }
 
-    // 4. Update Document if global apply is ON
+    // 5. Update Document if global apply is ON
     if (this.applyGlobally) {
       this.applyToDocument();
     }
@@ -734,6 +749,31 @@ export class BlueprintConfigurator {
 
     const glyphSelect = document.getElementById('cfgGlyphSelect');
     if (glyphSelect) glyphSelect.value = this.activeGlyph;
+
+    // Sync Stroke Weight Buttons active highlight
+    const strokeBtns = document.querySelectorAll('.cfg-stroke-btn');
+    strokeBtns.forEach(btn => {
+      const s = parseFloat(btn.dataset.stroke);
+      if (Math.abs(s - this.tokens.strokeWidth) < 0.05) {
+        btn.classList.add('bg-orange', 'text-near', 'font-bold');
+        btn.classList.remove('hover:bg-white/10', 'text-cream/70');
+      } else {
+        btn.classList.remove('bg-orange', 'text-near', 'font-bold');
+        btn.classList.add('hover:bg-white/10', 'text-cream/70');
+      }
+    });
+
+    // Sync Accent Color Swatches active selection ring
+    const swatches = document.querySelectorAll('.cfg-color-swatch');
+    swatches.forEach(swatch => {
+      if (swatch.dataset.color.toLowerCase() === this.tokens.accent.toLowerCase()) {
+        swatch.classList.add('border-2', 'border-white/90', 'scale-110');
+        swatch.classList.remove('border-white/20');
+      } else {
+        swatch.classList.remove('border-2', 'border-white/90', 'scale-110');
+        swatch.classList.add('border', 'border-white/20');
+      }
+    });
   }
 
   initControls() {
@@ -799,6 +839,7 @@ export class BlueprintConfigurator {
         this.setToken('accentHover', hover);
         const picker = document.getElementById('cfgColorPicker');
         if (picker) picker.value = color;
+        this.syncControls();
         if (this.sfx) this.sfx.click();
       });
     });
@@ -808,6 +849,7 @@ export class BlueprintConfigurator {
     colorPicker?.addEventListener('input', (e) => {
       this.setToken('accent', e.target.value);
       this.setToken('accentHover', e.target.value);
+      this.syncControls();
     });
 
     // Stroke width buttons
