@@ -93,24 +93,39 @@ function run({ animate, inView, stagger }) {
 
   if (reduced.matches) {
     // Reduced motion keeps opacity, drops all movement.
+    animate('#hud', { opacity: [0, 1] }, { duration: 0.25 });
+    animate('.hero-reveal', { opacity: [0, 1] }, { duration: 0.3 });
     animate(label, { opacity: [0, 1] }, { duration: 0.25 });
     animate(cards, { opacity: [0, 1] }, { duration: 0.3, delay: stagger(0.05) });
     return;
   }
 
   /* --- Entrance ---------------------------------------------------- */
-  // Observed per card, not on the wrapper: stacked on mobile the wrapper is
-  // taller than the viewport and a threshold on it would never resolve.
+  // 1. HUD Entrance
+  animate(
+    '#hud',
+    { opacity: [0, 1], transform: ['translateY(-10px)', 'translateY(0px)'] },
+    { duration: 0.45, ease: EASE_OUT },
+  );
+
+  // 2. Hero Elements Cascade
+  animate(
+    '.hero-reveal',
+    { opacity: [0, 1], transform: ['translateY(14px)', 'translateY(0px)'] },
+    { duration: 0.55, ease: EASE_OUT, delay: stagger(0.09, { startDelay: 0.1 }) },
+  );
+
+  // 3. Features Section Label
   animate(
     label,
     { opacity: [0, 1], transform: ['translateY(6px)', 'translateY(0px)'] },
-    { duration: 0.4, ease: EASE_OUT },
+    { duration: 0.4, ease: EASE_OUT, delay: 0.45 },
   );
 
   cards.forEach((card, i) => {
     // Cards revealed together on desktop keep a cascade; stacked on mobile each
     // one is already separated in time by the scroll itself.
-    const lead = window.innerWidth >= 640 ? i * 0.07 : 0;
+    const lead = window.innerWidth >= 640 ? (i % 3) * 0.07 : 0;
 
     inView(
       card,
@@ -199,4 +214,28 @@ function run({ animate, inView, stagger }) {
     shell.addEventListener('pointercancel', release);
     shell.addEventListener('pointerleave', release);
   });
+
+  /* --- CLI Copy Button --- */
+  const copyCliBtn = document.getElementById('copyCliBtn');
+  if (copyCliBtn) {
+    copyCliBtn.addEventListener('click', () => {
+      const text = document.getElementById('curlSnippet')?.textContent?.trim() || 'curl -fsSL https://get.kinetic.dev | sh';
+      navigator.clipboard?.writeText(text).then(() => {
+        copyCliBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>`;
+        setTimeout(() => {
+          copyCliBtn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>`;
+        }, 1800);
+      });
+    });
+  }
+
+  /* --- Simulated Latency Ticker --- */
+  const latencyEl = document.getElementById('hudLatency');
+  if (latencyEl) {
+    setInterval(() => {
+      const ping = Math.floor(9 + Math.random() * 6);
+      latencyEl.textContent = `${ping}ms`;
+    }, 3800);
+  }
 }
+
