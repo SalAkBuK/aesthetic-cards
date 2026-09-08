@@ -69,15 +69,55 @@ export const PRESETS = {
   }
 };
 
-export function getPolygon(c) {
-  return `polygon(${c}px 0, calc(100% - ${c}px) 0, 100% ${c}px, 100% calc(100% - ${c}px), calc(100% - ${c}px) 100%, ${c}px 100%, 0 calc(100% - ${c}px), 0 ${c}px)`;
+export const SILHOUETTES = {
+  symmetric: {
+    id: 'symmetric',
+    name: '8-Point Symmetric Chamfer',
+    label: 'SYMMETRIC (8-PT)',
+    description: 'Uniform chamfer on all 4 corners'
+  },
+  'top-only': {
+    id: 'top-only',
+    name: 'Top-Only Chamfer',
+    label: 'TOP-ONLY (TAB)',
+    description: 'Top corners beveled, bottom corners square'
+  },
+  diagonal: {
+    id: 'diagonal',
+    name: 'Diagonal Chamfer',
+    label: 'DIAGONAL OPPOSING',
+    description: 'Top-left and bottom-right chamfered'
+  },
+  notch: {
+    id: 'notch',
+    name: 'Inward Stepped Notch',
+    label: 'INWARD NOTCH',
+    description: '12-point microchip stepped perimeter notch'
+  }
+};
+
+export function getPolygon(c, silhouette = 'symmetric') {
+  switch (silhouette) {
+    case 'top-only':
+      return `polygon(${c}px 0, calc(100% - ${c}px) 0, 100% ${c}px, 100% 100%, 0 100%, 0 ${c}px)`;
+    case 'diagonal':
+      return `polygon(${c}px 0, 100% 0, 100% calc(100% - ${c}px), calc(100% - ${c}px) 100%, 0 100%, 0 ${c}px)`;
+    case 'notch':
+      return `polygon(0 ${c}px, ${c}px ${c}px, ${c}px 0, calc(100% - ${c}px) 0, calc(100% - ${c}px) ${c}px, 100% ${c}px, 100% calc(100% - ${c}px), calc(100% - ${c}px) calc(100% - ${c}px), calc(100% - ${c}px) 100%, ${c}px 100%, ${c}px calc(100% - ${c}px), 0 calc(100% - ${c}px))`;
+    case 'symmetric':
+    default:
+      return `polygon(${c}px 0, calc(100% - ${c}px) 0, 100% ${c}px, 100% calc(100% - ${c}px), calc(100% - ${c}px) 100%, ${c}px 100%, 0 calc(100% - ${c}px), 0 ${c}px)`;
+  }
 }
 
 export function exportCSS(tokens) {
-  const polygon = getPolygon(tokens.chamfer);
+  const sil = tokens.silhouette || 'symmetric';
+  const polygon = getPolygon(tokens.chamfer, sil);
+  const silName = SILHOUETTES[sil]?.name || 'Chamfer';
   return `/* Kinetic Blueprint Tokens */
 :root {
   --c: ${tokens.chamfer}px;
+  --silhouette: ${sil};
   --accent: ${tokens.accent};
   --accent-hover: ${tokens.accentHover};
   --surface: ${tokens.surface};
@@ -90,7 +130,7 @@ export function exportCSS(tokens) {
   --bracket-size: ${tokens.bracketSize}px;
 }
 
-/* 8-Point Chamfer Cut Corners */
+/* ${silName} Silhouette */
 .chamfer {
   --c: ${tokens.chamfer}px;
   clip-path: ${polygon};
@@ -107,6 +147,8 @@ export function exportCSS(tokens) {
 }
 
 export function exportTailwind(tokens) {
+  const sil = tokens.silhouette || 'symmetric';
+  const polygon = getPolygon(tokens.chamfer, sil);
   return `// tailwind.config.js
 module.exports = {
   theme: {
@@ -122,7 +164,7 @@ module.exports = {
         }
       },
       clipPath: {
-        chamfer: '${getPolygon(tokens.chamfer)}',
+        'blueprint-${sil}': '${polygon}',
       }
     }
   }
@@ -134,6 +176,7 @@ export function exportJSON(tokens) {
     $schema: 'https://design-tokens.github.io/community-group/format/',
     name: tokens.name || 'Kinetic Blueprint Custom Theme',
     tokens: {
+      silhouette: { $value: tokens.silhouette || 'symmetric', $type: 'string' },
       chamfer: { $value: `${tokens.chamfer}px`, $type: 'dimension' },
       accent: { $value: tokens.accent, $type: 'color' },
       surface: { $value: tokens.surface, $type: 'color' },
@@ -147,9 +190,10 @@ export function exportJSON(tokens) {
 }
 
 export function exportReact(tokens, activeSpecimen, activeGlyph) {
-  const polygon = getPolygon(tokens.chamfer);
-  const btnPolygon = getPolygon(Math.min(8, tokens.chamfer));
-  const innerPolygon = getPolygon(Math.max(4, tokens.chamfer - 4));
+  const sil = tokens.silhouette || 'symmetric';
+  const polygon = getPolygon(tokens.chamfer, sil);
+  const btnPolygon = getPolygon(Math.min(8, tokens.chamfer), sil);
+  const innerPolygon = getPolygon(Math.max(4, tokens.chamfer - 4), sil);
   const glyphMeta = ICON_META[activeGlyph] || { title: activeGlyph };
   const pascalGlyph = activeGlyph
     .split('-')
@@ -343,8 +387,8 @@ export function BlueprintCard() {
     >
       <span className="bracket tl" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
       <span className="bracket tr" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
-      <span className="bracket bl" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
-      <span className="bracket br" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+      ${sil !== 'top-only' ? `<span className="bracket bl" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+      <span className="bracket br" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />` : ''}
 
       <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10 text-[10px]">
         <div className="flex items-center gap-1.5">
@@ -394,17 +438,24 @@ export function BlueprintCard() {
 
 export class BlueprintConfigurator {
   constructor(options = {}) {
-    this.tokens = { ...PRESETS.industrial };
+    this.tokens = {
+      silhouette: 'symmetric',
+      ...PRESETS.industrial
+    };
     this.applyGlobally = false;
     this.activeExportTab = 'css';
     this.activeSpecimen = 'card';
     this.activeGlyph = 'cluster';
+    this.activeState = 'default';
+    this.autoCycleTimer = null;
     this.sfx = options.sfx || (typeof window !== 'undefined' ? window.sfx : null);
 
     this.specimenEl = document.getElementById(options.specimenId || 'configSpecimen');
     this.codeOutputEl = document.getElementById(options.codeOutputId || 'configCodeOutput');
     this.polygonReadoutEl = document.getElementById(options.polygonReadoutId || 'configPolygonReadout');
     this.glyphCategoryEl = document.getElementById('cfgGlyphCategory');
+    this.scanlineEl = document.getElementById('configScanline');
+    this.silhouetteLabelEl = document.getElementById('cfgSilhouetteLabel');
 
     this.initControls();
     this.update();
@@ -431,9 +482,92 @@ export class BlueprintConfigurator {
     this.update();
   }
 
+  setSilhouette(silhouetteId) {
+    if (!SILHOUETTES[silhouetteId]) return;
+    this.tokens.silhouette = silhouetteId;
+    if (this.silhouetteLabelEl) {
+      this.silhouetteLabelEl.textContent = SILHOUETTES[silhouetteId].label;
+    }
+    this.syncControls();
+    this.update();
+    if (this.sfx) this.sfx.click();
+  }
+
+  setState(stateId) {
+    this.activeState = stateId;
+    this.applySimulatedState();
+    this.syncControls();
+    if (this.sfx) this.sfx.tick();
+  }
+
+  applySimulatedState() {
+    if (!this.specimenEl) return;
+
+    this.specimenEl.classList.remove('specimen-sim-hover', 'specimen-sim-armed', 'specimen-sim-scan');
+
+    if (this.scanlineEl) {
+      if (this.activeState === 'scan') {
+        this.scanlineEl.classList.remove('hidden');
+        this.scanlineEl.classList.add('blueprint-scanline-active');
+        this.scanlineEl.style.setProperty('--orange', this.tokens.accent);
+      } else {
+        this.scanlineEl.classList.add('hidden');
+        this.scanlineEl.classList.remove('blueprint-scanline-active');
+      }
+    }
+
+    if (this.activeState === 'hover') {
+      this.specimenEl.classList.add('specimen-sim-hover');
+    } else if (this.activeState === 'armed') {
+      this.specimenEl.classList.add('specimen-sim-armed');
+    } else if (this.activeState === 'scan') {
+      this.specimenEl.classList.add('specimen-sim-scan');
+    }
+  }
+
+  toggleAutoCycle() {
+    if (this.autoCycleTimer) {
+      clearInterval(this.autoCycleTimer);
+      this.autoCycleTimer = null;
+      this.updateAutoCycleUI(false);
+      if (this.sfx) this.sfx.click();
+    } else {
+      const states = ['default', 'hover', 'armed', 'scan'];
+      this.updateAutoCycleUI(true);
+      if (this.sfx) this.sfx.success();
+      this.autoCycleTimer = setInterval(() => {
+        const currentIndex = states.indexOf(this.activeState);
+        const nextState = states[(currentIndex + 1) % states.length];
+        this.setState(nextState);
+      }, 2000);
+    }
+  }
+
+  updateAutoCycleUI(isActive) {
+    const btn = document.getElementById('cfgAutoCycleBtn');
+    const dot = document.getElementById('cfgAutoCycleDot');
+    const text = document.getElementById('cfgAutoCycleText');
+    if (!btn || !dot) return;
+
+    if (isActive) {
+      btn.classList.add('bg-orange/20', 'border-orange', 'text-orange');
+      btn.classList.remove('bg-white/5', 'text-cream/70');
+      dot.classList.add('bg-orange', 'animate-ping');
+      dot.classList.remove('bg-cream/40');
+      if (text) text.textContent = 'STOP';
+    } else {
+      btn.classList.remove('bg-orange/20', 'border-orange', 'text-orange');
+      btn.classList.add('bg-white/5', 'text-cream/70');
+      dot.classList.remove('bg-orange', 'animate-ping');
+      dot.classList.add('bg-cream/40');
+      if (text) text.textContent = 'CYCLE';
+    }
+  }
+
   loadPreset(presetId) {
     if (PRESETS[presetId]) {
-      this.tokens = { ...PRESETS[presetId] };
+      const currentSilhouette = this.tokens.silhouette || 'symmetric';
+      this.tokens = { ...PRESETS[presetId], silhouette: currentSilhouette };
       this.syncControls();
       this.update();
       if (this.sfx) this.sfx.click();
@@ -477,9 +611,10 @@ export class BlueprintConfigurator {
       this.specimenEl.className = "relative z-10 w-full max-w-[360px] transition-all duration-300 shadow-xl";
     }
 
-    const polygon = getPolygon(this.tokens.chamfer);
-    const btnPolygon = getPolygon(Math.min(8, this.tokens.chamfer));
-    const innerPolygon = getPolygon(Math.max(4, this.tokens.chamfer - 4));
+    const sil = this.tokens.silhouette || 'symmetric';
+    const polygon = getPolygon(this.tokens.chamfer, sil);
+    const btnPolygon = getPolygon(Math.min(8, this.tokens.chamfer), sil);
+    const innerPolygon = getPolygon(Math.max(4, this.tokens.chamfer - 4), sil);
     const glyphMeta = ICON_META[this.activeGlyph] || { title: this.activeGlyph, category: 'ICON' };
     
     // Scale glyph with dynamic stroke and strict pixel dimensions
@@ -500,8 +635,9 @@ export class BlueprintConfigurator {
           <!-- Corner Crop Brackets (Scale with Bracket Size Slider) -->
           <span class="bracket tl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
           <span class="bracket tr" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          ${sil !== 'top-only' ? `
           <span class="bracket bl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
-          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>` : ''}
 
           <!-- Top Header -->
           <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
@@ -546,7 +682,7 @@ export class BlueprintConfigurator {
 
           <!-- Bottom Metadata Strip -->
           <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[9.5px] opacity-60">
-            <span>CONSENSUS: ED25519-STARK</span>
+            <span>SILHOUETTE: ${sil.toUpperCase()}</span>
             <span class="text-emerald-400 font-bold">● 6/6 QUORUM</span>
           </div>
         </div>
@@ -559,7 +695,7 @@ export class BlueprintConfigurator {
         <div class="p-5 border border-white/15 space-y-4 font-mono text-xs">
           <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
             <span class="font-bold uppercase tracking-wider">HARDWARE CONTROLS // ${(glyphMeta.title || this.activeGlyph).toUpperCase()}</span>
-            <span class="text-[9.5px] opacity-50">CHAMFER: ${this.tokens.chamfer}px</span>
+            <span class="text-[9.5px] opacity-50 uppercase font-mono">${sil}</span>
           </div>
 
           <!-- Buttons Stack -->
@@ -643,7 +779,7 @@ export class BlueprintConfigurator {
           <div class="flex items-center justify-between text-[9.5px] opacity-50 pt-1 border-t border-white/5">
             <span class="font-mono">SIG: 0x88ab...3c12</span>
             <span class="font-mono">MEM: 412 MB</span>
-            <span class="text-orange/80 font-mono">CHAMFER: ${this.tokens.chamfer}px</span>
+            <span class="text-orange/80 font-mono uppercase">SILHOUETTE: ${sil} (${this.tokens.chamfer}px)</span>
           </div>
         </div>
       `;
@@ -657,8 +793,9 @@ export class BlueprintConfigurator {
           <!-- Corner Brackets -->
           <span class="bracket tl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
           <span class="bracket tr" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          ${sil !== 'top-only' ? `
           <span class="bracket bl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
-          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>` : ''}
 
           <!-- Specimen Header -->
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10 text-[10px]">
@@ -691,12 +828,18 @@ export class BlueprintConfigurator {
         </div>
       `;
     }
+
+    // Re-apply active simulation state
+    this.applySimulatedState();
   }
 
   update() {
     // 1. Update polygon equation readout
     if (this.polygonReadoutEl) {
-      this.polygonReadoutEl.textContent = `clip-path: polygon(${this.tokens.chamfer}px 0, calc(100% - ${this.tokens.chamfer}px) 0...)`;
+      const sil = this.tokens.silhouette || 'symmetric';
+      const poly = getPolygon(this.tokens.chamfer, sil);
+      this.polygonReadoutEl.textContent = `clip-path: ${poly.length > 50 ? poly.slice(0, 50) + '...' : poly}`;
+      this.polygonReadoutEl.title = `clip-path: ${poly}`;
     }
 
     // 2. Render active specimen into stage
@@ -750,6 +893,34 @@ export class BlueprintConfigurator {
     const glyphSelect = document.getElementById('cfgGlyphSelect');
     if (glyphSelect) glyphSelect.value = this.activeGlyph;
 
+    // Sync Silhouette Buttons
+    const silBtns = document.querySelectorAll('.cfg-silhouette-btn');
+    silBtns.forEach(btn => {
+      if (btn.dataset.silhouette === (this.tokens.silhouette || 'symmetric')) {
+        btn.classList.add('border-orange', 'bg-orange/15', 'text-orange', 'font-bold');
+        btn.classList.remove('border-white/15', 'bg-black/40', 'text-cream/70');
+      } else {
+        btn.classList.remove('border-orange', 'bg-orange/15', 'text-orange', 'font-bold');
+        btn.classList.add('border-white/15', 'bg-black/40', 'text-cream/70');
+      }
+    });
+
+    if (this.silhouetteLabelEl && SILHOUETTES[this.tokens.silhouette || 'symmetric']) {
+      this.silhouetteLabelEl.textContent = SILHOUETTES[this.tokens.silhouette || 'symmetric'].label;
+    }
+
+    // Sync State Simulator Buttons
+    const stateBtns = document.querySelectorAll('.cfg-state-btn');
+    stateBtns.forEach(btn => {
+      if (btn.dataset.state === this.activeState) {
+        btn.classList.add('bg-orange', 'text-near', 'font-bold');
+        btn.classList.remove('hover:bg-white/10', 'text-cream/70');
+      } else {
+        btn.classList.remove('bg-orange', 'text-near', 'font-bold');
+        btn.classList.add('hover:bg-white/10', 'text-cream/70');
+      }
+    });
+
     // Sync Stroke Weight Buttons active highlight
     const strokeBtns = document.querySelectorAll('.cfg-stroke-btn');
     strokeBtns.forEach(btn => {
@@ -790,6 +961,33 @@ export class BlueprintConfigurator {
         this.setSpecimen(tab.dataset.specimen);
         if (this.sfx) this.sfx.click();
       });
+    });
+
+    // Silhouette buttons
+    const silBtns = document.querySelectorAll('.cfg-silhouette-btn');
+    silBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.setSilhouette(btn.dataset.silhouette);
+      });
+    });
+
+    // State simulator buttons
+    const stateBtns = document.querySelectorAll('.cfg-state-btn');
+    stateBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (this.autoCycleTimer) {
+          clearInterval(this.autoCycleTimer);
+          this.autoCycleTimer = null;
+          this.updateAutoCycleUI(false);
+        }
+        this.setState(btn.dataset.state);
+      });
+    });
+
+    // Auto-cycle toggle button
+    const autoCycleBtn = document.getElementById('cfgAutoCycleBtn');
+    autoCycleBtn?.addEventListener('click', () => {
+      this.toggleAutoCycle();
     });
 
     // Glyph selector dropdown

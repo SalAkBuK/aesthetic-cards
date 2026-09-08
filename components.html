@@ -579,6 +579,40 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
             </div>
           </div>
 
+          <!-- Silhouette Geometry Selector (Phase 2) -->
+          <div class="space-y-1.5 pt-1 border-t border-white/10">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">SILHOUETTE GEOMETRY</span>
+              <span id="cfgSilhouetteLabel" class="text-orange text-[10px] font-mono uppercase">SYMMETRIC (8-PT)</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[9.5px]">
+              <button class="cfg-silhouette-btn p-1.5 rounded border border-orange bg-orange/15 text-orange font-bold flex flex-col items-center gap-1 transition cursor-pointer" data-silhouette="symmetric" title="8-Point Symmetric Chamfer (All Corners)">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 2H19L22 5V19L19 22H5L2 19V5L5 2Z" />
+                </svg>
+                <span>8-PT SYM</span>
+              </button>
+              <button class="cfg-silhouette-btn p-1.5 rounded border border-white/15 bg-black/40 hover:bg-white/10 text-cream/70 flex flex-col items-center gap-1 transition cursor-pointer" data-silhouette="top-only" title="Top-Only Chamfer (Ticket / Tab)">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 2H19L22 5V22H2V5L5 2Z" />
+                </svg>
+                <span>TOP-ONLY</span>
+              </button>
+              <button class="cfg-silhouette-btn p-1.5 rounded border border-white/15 bg-black/40 hover:bg-white/10 text-cream/70 flex flex-col items-center gap-1 transition cursor-pointer" data-silhouette="diagonal" title="Diagonal Opposing Chamfer">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M5 2H22V19L19 22H2V5L5 2Z" />
+                </svg>
+                <span>DIAGONAL</span>
+              </button>
+              <button class="cfg-silhouette-btn p-1.5 rounded border border-white/15 bg-black/40 hover:bg-white/10 text-cream/70 flex flex-col items-center gap-1 transition cursor-pointer" data-silhouette="notch" title="Stepped Inward Beveled Notch">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M2 6H6V2H18V6H22V18H18V22H6V18H2V6Z" />
+                </svg>
+                <span>NOTCH</span>
+              </button>
+            </div>
+          </div>
+
           <!-- 2. Palette Color Swatches -->
           <div class="space-y-2">
             <div class="flex justify-between items-center text-[11px]">
@@ -679,14 +713,32 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
         <!-- Right Panel: Live Specimen Sandbox & Code Output (7 cols) -->
         <div class="lg:col-span-7 space-y-4">
           
-          <!-- Specimen Switcher Tabs Bar -->
-          <div class="flex items-center justify-between p-2.5 rounded-xl bg-ink2/50 border border-white/10 font-mono text-xs">
-            <span class="text-[10px] uppercase text-cream/50 tracking-wider">SPECIMEN VIEW:</span>
-            <div class="flex items-center gap-1 bg-black/50 p-0.5 rounded text-[10px]">
-              <button class="cfg-specimen-tab px-2.5 py-1 rounded bg-orange text-near font-bold transition cursor-pointer" data-specimen="card">FEATURE CARD</button>
-              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="metric">METRIC TILE</button>
-              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="buttons">BUTTON RACK</button>
-              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="table_row">TABLE ROW</button>
+          <!-- Specimen Switcher & Interactive State Simulator Toolbar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-2.5 rounded-xl bg-ink2/50 border border-white/10 font-mono text-xs">
+            <!-- Specimen Views -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-[10px] uppercase text-cream/50 tracking-wider">VIEW:</span>
+              <div class="flex items-center gap-1 bg-black/50 p-0.5 rounded text-[10px]">
+                <button class="cfg-specimen-tab px-2 py-1 rounded bg-orange text-near font-bold transition cursor-pointer" data-specimen="card">CARD</button>
+                <button class="cfg-specimen-tab px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="metric">METRIC</button>
+                <button class="cfg-specimen-tab px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="buttons">BUTTONS</button>
+                <button class="cfg-specimen-tab px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="table_row">ROW</button>
+              </div>
+            </div>
+
+            <!-- State Simulator Controller -->
+            <div class="flex items-center gap-1.5 flex-wrap justify-end">
+              <span class="text-[10px] uppercase text-cream/50 tracking-wider">SIMULATE:</span>
+              <div class="flex items-center gap-1 bg-black/50 p-0.5 rounded text-[10px]">
+                <button class="cfg-state-btn px-2 py-1 rounded bg-orange text-near font-bold transition cursor-pointer" data-state="default" title="Static Resting State">DEFAULT</button>
+                <button class="cfg-state-btn px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-state="hover" title="Hover Lift & Glow State">HOVER</button>
+                <button class="cfg-state-btn px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-state="armed" title="Pressed / Active State">ARMED</button>
+                <button class="cfg-state-btn px-2 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-state="scan" title="Diagnostic Radar Sweep">SCAN</button>
+              </div>
+              <button id="cfgAutoCycleBtn" class="flex items-center gap-1.5 px-2 py-1 rounded bg-white/5 hover:bg-white/15 text-cream/70 hover:text-orange text-[10px] border border-white/10 transition cursor-pointer" title="Auto-cycle states every 2 seconds">
+                <span class="w-1.5 h-1.5 rounded-full bg-cream/40" id="cfgAutoCycleDot"></span>
+                <span id="cfgAutoCycleText">CYCLE</span>
+              </button>
             </div>
           </div>
 
@@ -694,6 +746,9 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
           <div class="p-6 rounded-xl bg-ink/90 border border-white/12 relative overflow-hidden flex flex-col items-center justify-center min-h-[340px] shadow-2xl">
             <!-- Subtle preview grid background -->
             <div id="configStageGrid" class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none transition-[background-size] duration-150"></div>
+
+            <!-- Diagnostic Scanline Laser Sweep (Phase 2) -->
+            <div id="configScanline" class="pointer-events-none absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-orange to-transparent shadow-[0_0_16px_var(--orange)] hidden z-20"></div>
 
             <!-- The Live Specimen Container (Populated dynamically by configurator.js) -->
             <div id="configSpecimen" class="relative z-10 w-full max-w-[360px] transition-all duration-300 shadow-xl">

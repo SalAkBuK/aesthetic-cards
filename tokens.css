@@ -578,3 +578,47 @@
 .command-item.is-selected {
   border-left: 2px solid var(--orange);
 }
+
+/* --------------------------------------------------------------------------
+   Blueprint Studio State Simulator & Diagnostic Scanline
+   -------------------------------------------------------------------------- */
+@keyframes blueprint-scanline-sweep {
+  0% {
+    top: -4px;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.95;
+  }
+  100% {
+    top: calc(100% + 4px);
+    opacity: 0;
+  }
+}
+
+.blueprint-scanline-active {
+  animation: blueprint-scanline-sweep 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.specimen-sim-hover {
+  transform: translateY(-6px) scale(1.01) !important;
+  box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.7), 0 0 24px -2px rgba(244, 85, 29, 0.25) !important;
+}
+.specimen-sim-hover .bracket {
+  transform: scale(1.35) !important;
+  color: var(--orange) !important;
+}
+
+.specimen-sim-armed {
+  transform: translateY(0px) scale(0.982) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), inset 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  filter: brightness(0.94);
+}
+
+.specimen-sim-scan {
+  box-shadow: 0 0 28px -4px rgba(244, 85, 29, 0.35) !important;
+}
+
