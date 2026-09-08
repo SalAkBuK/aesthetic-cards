@@ -634,43 +634,43 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
             <select id="cfgGlyphSelect" class="w-full bg-black/60 border border-white/20 text-cream text-xs px-2.5 py-1.5 rounded font-mono focus:border-orange focus:outline-none cursor-pointer">
               <optgroup label="COMPUTE & TELEMETRY">
                 <option value="cluster" selected>01 // Cluster Topology</option>
-                <option value="shard">02 // Database Shard</option>
-                <option value="pipeline">03 // Stream Pipeline</option>
-                <option value="qubit">04 // Qubit Superposition</option>
+                <option value="shard">02 // Vector Shard</option>
+                <option value="pipeline">03 // Queue Pipeline</option>
+                <option value="qubit">04 // Quantum Qubit</option>
                 <option value="latency">05 // Latency Waveform</option>
-                <option value="cpu">06 // Hardware Die / CPU</option>
-                <option value="neural">07 // Neural Node Matrix</option>
-                <option value="database">08 // Immutable Ledger</option>
+                <option value="cpu">06 // Silicon CPU</option>
+                <option value="neural">07 // Neural Graph Matrix</option>
+                <option value="database">08 // Columnar DB Ledger</option>
               </optgroup>
-              <optgroup label="INDUSTRIAL CONTROLS">
-                <option value="rotary">09 // Rotary Encoder</option>
+              <optgroup label="INDUSTRIAL HARDWARE">
+                <option value="rotary">09 // Rotary Knob Encoder</option>
                 <option value="toggle">10 // Safety Toggle Switch</option>
                 <option value="oscilloscope">11 // Oscilloscope CRT</option>
-                <option value="relay">12 // Mechanical Relay</option>
-                <option value="potentiometer">13 // Precision Trim Pot</option>
-                <option value="slider">14 // Linear Fader Slider</option>
-                <option value="fuse">15 // Thermal Breaker Fuse</option>
-                <option value="solenoid">16 // Actuator Solenoid</option>
+                <option value="relay">12 // Contact Relay Coil</option>
+                <option value="slider">13 // Linear Fader Slider</option>
+                <option value="meter">14 // Analog Meter Gauge</option>
+                <option value="fuse">15 // Cartridge Breaker Fuse</option>
+                <option value="crystal">16 // Quartz Crystal Clock</option>
               </optgroup>
-              <optgroup label="CRYPTOGRAPHY & CONSENSUS">
-                <option value="stark">17 // ZK-STARK Verifier</option>
-                <option value="merkle">18 // Merkle Tree Root</option>
-                <option value="quarantine">19 // Quarantine Enclave</option>
-                <option value="entropy">20 // Entropy Generator</option>
-                <option value="enclave">21 // Hardware Enclave</option>
-                <option value="circuit">22 // Logic Circuit Gates</option>
-                <option value="signature">23 // Ed25519 Signature</option>
-                <option value="guardrail">24 // Runtime Guardrail</option>
+              <optgroup label="SECURITY & PROOFS">
+                <option value="shield-zk">17 // ZK-STARK Shield</option>
+                <option value="key-crypto">18 // Asymmetric Crypto Key</option>
+                <option value="audit">19 // Merkle Audit Block</option>
+                <option value="reticle">20 // Biometric Reticle</option>
+                <option value="vault">21 // Airlock Vault Enclave</option>
+                <option value="fingerprint">22 // Fingerprint Vector</option>
+                <option value="badge-check">23 // Verified Signature Seal</option>
+                <option value="hazard">24 // Hazard Safeguard Alert</option>
               </optgroup>
-              <optgroup label="SYSTEMS & NETWORK">
-                <option value="gateway">25 // Anycast Gateway</option>
-                <option value="mesh">26 // P2P Mesh Fabric</option>
-                <option value="telemetry">27 // Radio Telemetry Beam</option>
-                <option value="heartbeat">28 // Cluster Heartbeat</option>
-                <option value="packet">29 // Encrypted Packet</option>
-                <option value="satellite">30 // Orbital Uplink</option>
-                <option value="transceiver">31 // Optical Transceiver</option>
-                <option value="subsea">32 // Subsea Fiber Trunk</option>
+              <optgroup label="INTERFACE & NAVIGATION">
+                <option value="crosshair">25 // HUD Crosshair Reticle</option>
+                <option value="terminal">26 // CLI Terminal Console</option>
+                <option value="brackets">27 // Crop Framing Brackets</option>
+                <option value="split-flap">28 // Split-Flap Display Unit</option>
+                <option value="chevron-chamfer">29 // Chamfer Direction Chevron</option>
+                <option value="search-reticle">30 // Search Scanner Reticle</option>
+                <option value="copy-blueprint">31 // Blueprint Duplicate Snippet</option>
+                <option value="sound-wave">32 // Audio Transducer Wave</option>
               </optgroup>
             </select>
           </div>
@@ -696,7 +696,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
             <div class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none"></div>
 
             <!-- The Live Specimen Container (Populated dynamically by configurator.js) -->
-            <div id="configSpecimen" class="relative z-10 w-full max-w-[360px] transition-all shadow-xl">
+            <div id="configSpecimen" class="relative z-10 w-full max-w-[360px] transition-all duration-300 shadow-xl">
               <!-- Dynamically rendered -->
             </div>
           </div>
