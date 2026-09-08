@@ -1,6 +1,7 @@
 import { animate, inView, stagger } from 'motion';
 import { sfx } from './audio.js';
 import { initHeroRadar } from './radar.js';
+import { initOscilloscope } from './oscilloscope.js';
 
 // Motion.dev — https://motion.dev
 // Animation choices follow the design-engineering rules:
@@ -628,5 +629,86 @@ print("Proof Valid:", verification.is_valid)`,
 // Initialize audio listeners
 sfx.attachListeners();
 
-// Initialize 3D Hero Radar
-initHeroRadar('heroRadarCanvas', { sfx });
+// Initialize 3D Hero Radar & Acoustic Oscilloscope
+const heroRadar = initHeroRadar('heroRadarCanvas', { sfx, modeBtnId: null, pingBtnId: null });
+const heroOsc = initOscilloscope('heroOscCanvas', {
+  sfx,
+  mode: 'OSC',
+  tint: 'amber',
+  onMetrics: (m) => {
+    if (activeSensor === 'osc') {
+      if (azEl) azEl.textContent = m.peakFreq > 20 ? `f: ${m.peakFreq} Hz` : 'f: -- Hz';
+      if (elEl) elEl.textContent = `Vpp: ${(m.peakV * 2.8).toFixed(2)}V`;
+    }
+  }
+});
+
+const tabRadar = document.getElementById('sensorTabRadar');
+const tabOsc = document.getElementById('sensorTabOsc');
+const canvasRadar = document.getElementById('heroRadarCanvas');
+const canvasOsc = document.getElementById('heroOscCanvas');
+const modeBtn = document.getElementById('radarModeBtn');
+const pingBtn = document.getElementById('radarPingBtn');
+const azEl = document.getElementById('radarAzimuth');
+const elEl = document.getElementById('radarElevation');
+
+let activeSensor = 'radar';
+const oscModes = ['OSC', 'FFT', 'WATERFALL'];
+let oscModeIdx = 0;
+
+tabRadar?.addEventListener('click', () => {
+  sfx.click();
+  activeSensor = 'radar';
+  canvasRadar?.classList.remove('hidden');
+  canvasOsc?.classList.add('hidden');
+  tabRadar.classList.add('bg-orange', 'text-near', 'font-bold');
+  tabRadar.classList.remove('hover:bg-white/10', 'text-cream/70');
+  tabOsc?.classList.remove('bg-orange', 'text-near', 'font-bold');
+  tabOsc?.classList.add('hover:bg-white/10', 'text-cream/70');
+  if (modeBtn && heroRadar) {
+    modeBtn.textContent = `MODE: ${heroRadar.modes[heroRadar.currentModeIdx]}`;
+  }
+  if (pingBtn) pingBtn.textContent = 'PING ↵';
+});
+
+tabOsc?.addEventListener('click', () => {
+  sfx.click();
+  activeSensor = 'osc';
+  canvasRadar?.classList.add('hidden');
+  canvasOsc?.classList.remove('hidden');
+  heroOsc?.resize();
+  tabOsc.classList.add('bg-orange', 'text-near', 'font-bold');
+  tabOsc.classList.remove('hover:bg-white/10', 'text-cream/70');
+  tabRadar?.classList.remove('bg-orange', 'text-near', 'font-bold');
+  tabRadar?.classList.add('hover:bg-white/10', 'text-cream/70');
+  if (modeBtn) {
+    modeBtn.textContent = `MODE: ${oscModes[oscModeIdx]}`;
+  }
+  if (pingBtn) pingBtn.textContent = 'BURST ↵';
+  if (azEl) azEl.textContent = 'CH1: 1.0V';
+  if (elEl) elEl.textContent = 'TIME: 1.0ms';
+});
+
+modeBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  sfx.click();
+  if (activeSensor === 'radar' && heroRadar) {
+    heroRadar.cycleMode();
+    modeBtn.textContent = `MODE: ${heroRadar.modes[heroRadar.currentModeIdx]}`;
+  } else if (activeSensor === 'osc' && heroOsc) {
+    oscModeIdx = (oscModeIdx + 1) % oscModes.length;
+    const nextMode = oscModes[oscModeIdx];
+    heroOsc.setMode(nextMode);
+    modeBtn.textContent = `MODE: ${nextMode}`;
+    sfx.tick();
+  }
+});
+
+pingBtn?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (activeSensor === 'radar' && heroRadar) {
+    heroRadar.triggerPing();
+  } else {
+    sfx.telemetry();
+  }
+});

@@ -191,5 +191,44 @@ const el = Math.round(smoothPitch * (180 / Math.PI));
 ```
 Coupled to HUD readout elements and procedural audio triggers (`sfx.click()`, `sfx.telemetry()`).
 
+---
+
+## 8. Audio Oscilloscope & Spectrogram Specifications
+
+When adding acoustic telemetry, audio diagnostics, or laboratory monitors:
+
+### Web Audio AnalyserNode Integration
+- Route master audio through an `AnalyserNode` before destination:
+  ```javascript
+  this.analyser = this.ctx.createAnalyser();
+  this.analyser.fftSize = 1024;
+  this.analyser.smoothingTimeConstant = 0.82;
+  this.masterGain.connect(this.analyser);
+  this.analyser.connect(this.ctx.destination);
+  ```
+
+### CRT Hardware Graticule Construction
+- **Grid Subdivisions**: 10 columns × 8 rows using sub-pixel dotted lines (`strokeDasharray: [1, 4]`).
+- **Center Axes**: Solid lines with 5 tick marks per division on the central horizontal and vertical crosshairs.
+- **CRT Persistence**: Retain vector trail persistence by filling canvas with low-opacity dark color (`rgba(25, 24, 21, 0.26)`) each frame.
+
+### Auto-Trigger Zero-Crossing Stabilization
+- Prevent periodic waveform jitter by scanning the time-domain buffer for the first positive zero-crossing:
+  ```javascript
+  let startIndex = 0;
+  for (let i = 0; i < 512; i++) {
+    if (timeData[i] < 128 && timeData[i + 1] >= 128) {
+      startIndex = i;
+      break;
+    }
+  }
+  ```
+
+### Logarithmic Spectrum Analysis
+- Map frequency bins logarithmically across 48–64 bars:
+  $$\text{bin} = \min\left(N-1, \left\lfloor \left(\frac{i}{\text{bars}-1}\right)^{2.2} \times (N-1) \right\rfloor\right)$$
+- Implement gravity peak-hold caps that drop with downward acceleration (`peakHold[i] -= peakDecay[i]`).
+
+
 
 

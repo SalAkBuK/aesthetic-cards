@@ -281,18 +281,19 @@
 
             <!-- Monitor Header -->
             <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/10 font-mono text-[10px]">
-              <div class="flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="font-semibold tracking-wider text-cream/90 uppercase">TELEMETRY // 3D ARRAY</span>
+              <div class="flex items-center gap-1 bg-black/40 p-0.5 rounded">
+                <button id="sensorTabRadar" class="px-2 py-0.5 rounded bg-orange text-near font-bold transition">RADAR 3D</button>
+                <button id="sensorTabOsc" class="px-2 py-0.5 rounded hover:bg-white/10 text-cream/70 transition">ACOUSTIC OSC</button>
               </div>
-              <button id="radarModeBtn" class="badge-tech text-[9px] hover:border-orange/50 transition cursor-pointer" title="Click to cycle 3D mode">
+              <button id="radarModeBtn" class="badge-tech text-[9px] hover:border-orange/50 transition cursor-pointer" title="Click to cycle sensor mode">
                 MODE: GIMBAL
               </button>
             </div>
 
-            <!-- 3D Canvas Viewport -->
+            <!-- Sensor Canvas Viewport -->
             <div class="relative w-full h-[250px] bg-ink/90 border border-white/10 rounded overflow-hidden flex items-center justify-center cursor-crosshair">
               <canvas id="heroRadarCanvas" class="w-full h-full block"></canvas>
+              <canvas id="heroOscCanvas" class="w-full h-full hidden"></canvas>
               <div class="absolute bottom-2 left-2 text-[9px] font-mono text-cream/50 pointer-events-none flex items-center gap-2 bg-ink/75 px-1.5 py-0.5 rounded border border-white/5 backdrop-blur-xs">
                 <span id="radarAzimuth">AZ: 0.0°</span>
                 <span class="text-white/20">|</span>

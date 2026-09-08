@@ -7,8 +7,14 @@ export class MicroHapticsEngine {
   constructor() {
     this.ctx = null;
     this.masterGain = null;
+    this.analyser = null;
     this.enabled = localStorage.getItem('aesthetic_sfx') !== 'false'; // default ON
     this.lastTickTime = 0;
+    this.carrierOsc = null;
+    this.carrierGain = null;
+    this.carrierPlaying = false;
+    this.carrierFreq = 440;
+    this.carrierType = 'sine';
     this.initAudioContext();
   }
 
@@ -20,7 +26,16 @@ export class MicroHapticsEngine {
     this.ctx = new AudioContextClass();
     this.masterGain = this.ctx.createGain();
     this.masterGain.gain.setValueAtTime(this.enabled ? 0.28 : 0, this.ctx.currentTime);
-    this.masterGain.connect(this.ctx.destination);
+
+    // Setup real-time AnalyserNode for oscilloscope & spectrogram
+    this.analyser = this.ctx.createAnalyser();
+    this.analyser.fftSize = 1024;
+    this.analyser.smoothingTimeConstant = 0.82;
+    this.analyser.minDecibels = -90;
+    this.analyser.maxDecibels = -10;
+
+    this.masterGain.connect(this.analyser);
+    this.analyser.connect(this.ctx.destination);
 
     // Auto-resume audio context on first user interaction
     const unlock = () => {
@@ -251,6 +266,160 @@ export class MicroHapticsEngine {
       osc.start(start);
       osc.stop(start + 0.028);
     });
+  }
+
+  // --- Analyser & Diagnostics API ---
+
+  getByteTimeDomainData(array) {
+    if (this.analyser) {
+      this.analyser.getByteTimeDomainData(array);
+    } else {
+      array.fill(128);
+    }
+  }
+
+  getByteFrequencyData(array) {
+    if (this.analyser) {
+      this.analyser.getByteFrequencyData(array);
+    } else {
+      array.fill(0);
+    }
+  }
+
+  getSignalMetrics() {
+    if (!this.analyser) return { rms: 0, peakV: 0, peakFreq: 0 };
+    const buffer = new Uint8Array(this.analyser.fftSize);
+    this.analyser.getByteTimeDomainData(buffer);
+
+    let sumSquares = 0;
+    let peakDev = 0;
+    for (let i = 0; i < buffer.length; i++) {
+      const val = (buffer[i] - 128) / 128;
+      sumSquares += val * val;
+      const abs = Math.abs(val);
+      if (abs > peakDev) peakDev = abs;
+    }
+    const rms = Math.sqrt(sumSquares / buffer.length);
+
+    // Dominant peak frequency calculation
+    const freqData = new Uint8Array(this.analyser.frequencyBinCount);
+    this.analyser.getByteFrequencyData(freqData);
+    let maxVal = 0;
+    let maxIndex = 0;
+    for (let i = 1; i < freqData.length; i++) {
+      if (freqData[i] > maxVal) {
+        maxVal = freqData[i];
+        maxIndex = i;
+      }
+    }
+    const nyquist = (this.ctx?.sampleRate || 44100) / 2;
+    const peakFreq = maxVal > 15 ? Math.round(maxIndex * (nyquist / freqData.length)) : 0;
+
+    return {
+      rms: Math.round(rms * 1000) / 1000,
+      peakV: Math.round(peakDev * 100) / 100,
+      peakFreq
+    };
+  }
+
+  // --- Signal Generator Test Bench ---
+
+  startCarrier(freq = 440, type = 'sine') {
+    this.ensureContext();
+    if (!this.ctx) return;
+    if (this.carrierPlaying) {
+      this.stopCarrier();
+    }
+    this.carrierFreq = freq;
+    this.carrierType = type;
+
+    const t = this.ctx.currentTime;
+    this.carrierOsc = this.ctx.createOscillator();
+    this.carrierGain = this.ctx.createGain();
+
+    this.carrierOsc.type = type;
+    this.carrierOsc.frequency.setValueAtTime(freq, t);
+
+    // Soft anti-click envelope ramp (25ms)
+    this.carrierGain.gain.setValueAtTime(0.001, t);
+    this.carrierGain.gain.linearRampToValueAtTime(0.18, t + 0.025);
+
+    this.carrierOsc.connect(this.carrierGain);
+    this.carrierGain.connect(this.masterGain);
+
+    this.carrierOsc.start(t);
+    this.carrierPlaying = true;
+  }
+
+  setCarrierFrequency(freq) {
+    this.carrierFreq = freq;
+    if (this.carrierOsc && this.ctx && this.carrierPlaying) {
+      this.carrierOsc.frequency.cancelScheduledValues(this.ctx.currentTime);
+      this.carrierOsc.frequency.setTargetAtTime(freq, this.ctx.currentTime, 0.015);
+    }
+  }
+
+  setCarrierType(type) {
+    this.carrierType = type;
+    if (this.carrierOsc && this.carrierPlaying) {
+      this.carrierOsc.type = type;
+    }
+  }
+
+  stopCarrier() {
+    if (!this.carrierPlaying || !this.carrierOsc || !this.carrierGain || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    this.carrierGain.gain.cancelScheduledValues(t);
+    this.carrierGain.gain.linearRampToValueAtTime(0.001, t + 0.035);
+    const osc = this.carrierOsc;
+    setTimeout(() => {
+      try { osc.stop(); osc.disconnect(); } catch (_) {}
+    }, 45);
+    this.carrierPlaying = false;
+    this.carrierOsc = null;
+    this.carrierGain = null;
+  }
+
+  playChirp(startFreq = 120, endFreq = 2400, duration = 0.35) {
+    this.ensureContext();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(startFreq, t);
+    osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration);
+
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.18, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(t);
+    osc.stop(t + duration + 0.01);
+  }
+
+  playTone(freq = 440, type = 'sine', duration = 0.25) {
+    this.ensureContext();
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t);
+
+    gain.gain.setValueAtTime(0.2, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+
+    osc.connect(gain);
+    gain.connect(this.masterGain);
+
+    osc.start(t);
+    osc.stop(t + duration + 0.01);
   }
 
   // Attach generic UI listeners to document

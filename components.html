@@ -274,8 +274,90 @@
       </div>
 
       <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
-        Sub-millisecond procedural synthesizer powered entirely by browser Web Audio API. Zero asset downloads, zero network latency. Click each transducer below to preview sound profiles or inspect wave shapes.
+        Sub-millisecond procedural synthesizer powered entirely by browser Web Audio API. Zero asset downloads, zero network latency. Click each transducer below to preview sound profiles or inspect wave shapes on the real-time oscilloscope.
       </p>
+
+      <!-- Interactive Laboratory Oscilloscope & Signal Generator -->
+      <div class="chamfer-card p-4 sm:p-5 bg-ink2/60 border border-white/12 relative shadow-2xl space-y-4">
+        <!-- Corner brackets -->
+        <span class="bracket tl" style="color: rgba(255,255,255,0.3)"></span>
+        <span class="bracket tr" style="color: rgba(255,255,255,0.3)"></span>
+        <span class="bracket bl" style="color: rgba(255,255,255,0.3)"></span>
+        <span class="bracket br" style="color: rgba(255,255,255,0.3)"></span>
+
+        <!-- Oscilloscope Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10 font-mono text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-bold tracking-wider text-cream uppercase text-[11px]">INSTRUMENTATION // REAL-TIME ACOUSTIC OSCILLOSCOPE</span>
+            <span class="hidden md:inline-block text-white/20">|</span>
+            <span id="oscTriggerBadge" class="hidden md:inline-block text-[10px] text-emerald-400 font-semibold">TRIG: AUTO LOCK</span>
+          </div>
+
+          <!-- Mode & Phosphor Controls -->
+          <div class="flex items-center gap-2">
+            <!-- Display Mode Tabs -->
+            <div class="flex items-center gap-1 bg-black/50 p-1 rounded font-mono text-[10px]">
+              <button id="oscModeWave" class="osc-mode-btn px-2.5 py-0.5 rounded bg-orange text-near font-bold transition">OSC</button>
+              <button id="oscModeFft" class="osc-mode-btn px-2.5 py-0.5 rounded hover:bg-white/10 text-cream/70 transition">FFT</button>
+              <button id="oscModeWf" class="osc-mode-btn px-2.5 py-0.5 rounded hover:bg-white/10 text-cream/70 transition">WATERFALL</button>
+            </div>
+
+            <!-- Phosphor Tint Selector -->
+            <div class="flex items-center gap-1 bg-black/50 p-1 rounded font-mono text-[10px]">
+              <button id="oscTintAmber" class="osc-tint-btn px-2 py-0.5 rounded bg-orange/20 border border-orange/40 text-orange font-bold transition" title="Amber Phosphor">AMBER</button>
+              <button id="oscTintGreen" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Green CRT Phosphor">GREEN</button>
+              <button id="oscTintCream" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Vector Cream Phosphor">CREAM</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas CRT Screen Area -->
+        <div class="relative w-full h-[220px] sm:h-[260px] bg-[#16150f] border border-white/15 rounded overflow-hidden flex items-center justify-center">
+          <canvas id="componentsOscilloscope" class="w-full h-full block"></canvas>
+
+          <!-- On-screen CRT Telemetry Overlay -->
+          <div class="absolute top-2 left-3 text-[10px] font-mono text-cream/70 pointer-events-none flex items-center gap-3 bg-black/60 px-2 py-0.5 rounded border border-white/10 backdrop-blur-xs">
+            <span>CH1: <strong id="oscScaleReadout" class="text-orange">1.0V/DIV</strong></span>
+            <span class="text-white/20">|</span>
+            <span>TIME: <strong class="text-cream">1.0ms/DIV</strong></span>
+            <span class="text-white/20">|</span>
+            <span id="oscFreqReadout">f: -- Hz</span>
+          </div>
+
+          <div class="absolute top-2 right-3 text-[10px] font-mono text-cream/70 pointer-events-none flex items-center gap-2 bg-black/60 px-2 py-0.5 rounded border border-white/10 backdrop-blur-xs">
+            <span>Vpp: <strong id="oscVppReadout" class="text-emerald-400">0.00V</strong></span>
+          </div>
+        </div>
+
+        <!-- Signal Generator Bench Controls -->
+        <div class="p-3 bg-near/80 rounded-lg border border-white/10 font-mono text-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <!-- Waveform & Tone Trigger -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[10px] text-cream/50 uppercase tracking-wider">GENERATOR:</span>
+            <div class="flex items-center gap-1 bg-black/40 p-0.5 rounded text-[10px]">
+              <button data-wave="sine" class="sig-wave-btn px-2 py-0.5 rounded bg-white/20 text-white font-bold">SINE</button>
+              <button data-wave="square" class="sig-wave-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60">SQUARE</button>
+              <button data-wave="sawtooth" class="sig-wave-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60">SAW</button>
+              <button data-wave="chirp" class="sig-wave-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60">CHIRP</button>
+            </div>
+
+            <button id="sigCarrierBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream font-semibold px-3 py-1 text-[10px] uppercase tracking-wider transition">
+              <span>CARRIER: OFF</span>
+            </button>
+            <button id="sigBurstBtn" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-3 py-1 text-[10px] uppercase tracking-wider transition">
+              <span>TEST BURST ↵</span>
+            </button>
+          </div>
+
+          <!-- Frequency Slider Tuning -->
+          <div class="flex items-center gap-3 w-full md:w-auto">
+            <span class="text-[10px] text-cream/50 uppercase tracking-wider shrink-0">FREQ:</span>
+            <input id="sigFreqSlider" type="range" min="40" max="2400" value="440" step="10" class="w-32 sm:w-44 accent-orange cursor-pointer" />
+            <span id="sigFreqVal" class="text-orange font-bold text-[11px] w-14 shrink-0 text-right">440 Hz</span>
+          </div>
+        </div>
+      </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- 01: Rotary Detent Tick -->
@@ -445,9 +527,141 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
   <script type="module">
     import { sfx } from './audio.js';
     import { ICONS, ICON_META, getReactSnippet } from './icons.js';
+    import { initOscilloscope } from './oscilloscope.js';
 
     // Attach sound listeners
     sfx.attachListeners();
+
+    // Initialize Oscilloscope
+    const oscTriggerBadge = document.getElementById('oscTriggerBadge');
+    const oscFreqReadout = document.getElementById('oscFreqReadout');
+    const oscVppReadout = document.getElementById('oscVppReadout');
+
+    const oscilloscope = initOscilloscope('componentsOscilloscope', {
+      sfx,
+      mode: 'OSC',
+      tint: 'amber',
+      onMetrics: (m) => {
+        if (oscVppReadout) oscVppReadout.textContent = `${(m.peakV * 2.8).toFixed(2)}V`;
+        if (oscFreqReadout) {
+          oscFreqReadout.textContent = m.peakFreq > 20 ? `f: ${m.peakFreq} Hz` : 'f: -- Hz';
+        }
+        if (oscTriggerBadge) {
+          if (m.triggered) {
+            oscTriggerBadge.textContent = 'TRIG: LOCK';
+            oscTriggerBadge.className = 'hidden md:inline-block text-[10px] text-emerald-400 font-semibold';
+          } else {
+            oscTriggerBadge.textContent = 'TRIG: READY';
+            oscTriggerBadge.className = 'hidden md:inline-block text-[10px] text-cream/40 font-semibold';
+          }
+        }
+      }
+    });
+
+    // Wire Oscilloscope Mode buttons
+    const modeBtns = {
+      OSC: document.getElementById('oscModeWave'),
+      FFT: document.getElementById('oscModeFft'),
+      WATERFALL: document.getElementById('oscModeWf')
+    };
+    Object.entries(modeBtns).forEach(([mode, btn]) => {
+      btn?.addEventListener('click', () => {
+        sfx.click();
+        oscilloscope?.setMode(mode);
+        Object.values(modeBtns).forEach(b => {
+          b?.classList.remove('bg-orange', 'text-near', 'font-bold');
+          b?.classList.add('hover:bg-white/10', 'text-cream/70');
+        });
+        btn.classList.add('bg-orange', 'text-near', 'font-bold');
+        btn.classList.remove('hover:bg-white/10', 'text-cream/70');
+      });
+    });
+
+    // Wire Oscilloscope Phosphor Tint buttons
+    const tintBtns = {
+      amber: document.getElementById('oscTintAmber'),
+      green: document.getElementById('oscTintGreen'),
+      cream: document.getElementById('oscTintCream')
+    };
+    Object.entries(tintBtns).forEach(([tint, btn]) => {
+      btn?.addEventListener('click', () => {
+        sfx.click();
+        oscilloscope?.setTint(tint);
+        Object.values(tintBtns).forEach(b => {
+          b?.classList.remove('bg-orange/20', 'border-orange/40', 'text-orange', 'font-bold');
+          b?.classList.add('hover:bg-white/10', 'text-cream/60');
+        });
+        btn.classList.add('bg-orange/20', 'border-orange/40', 'text-orange', 'font-bold');
+        btn.classList.remove('hover:bg-white/10', 'text-cream/60');
+      });
+    });
+
+    // Wire Signal Generator
+    let currentWaveform = 'sine';
+    const waveBtns = document.querySelectorAll('.sig-wave-btn');
+    const carrierBtn = document.getElementById('sigCarrierBtn');
+    const freqSlider = document.getElementById('sigFreqSlider');
+    const freqVal = document.getElementById('sigFreqVal');
+
+    waveBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sfx.tick();
+        currentWaveform = btn.dataset.wave;
+        waveBtns.forEach(b => {
+          b.classList.remove('bg-white/20', 'text-white', 'font-bold');
+          b.classList.add('hover:bg-white/10', 'text-cream/60');
+        });
+        btn.classList.add('bg-white/20', 'text-white', 'font-bold');
+        btn.classList.remove('hover:bg-white/10', 'text-cream/60');
+        if (sfx.carrierPlaying) {
+          if (currentWaveform === 'chirp') {
+            sfx.stopCarrier();
+            sfx.playChirp();
+            carrierBtn.innerHTML = '<span>CARRIER: OFF</span>';
+            carrierBtn.classList.remove('bg-emerald-500/20', 'text-emerald-400');
+          } else {
+            sfx.setCarrierType(currentWaveform);
+          }
+        }
+      });
+    });
+
+    carrierBtn?.addEventListener('click', () => {
+      sfx.click();
+      if (sfx.carrierPlaying) {
+        sfx.stopCarrier();
+        carrierBtn.innerHTML = '<span>CARRIER: OFF</span>';
+        carrierBtn.classList.remove('bg-emerald-500/20', 'text-emerald-400');
+      } else {
+        const freq = parseFloat(freqSlider?.value || 440);
+        if (currentWaveform === 'chirp') {
+          sfx.playChirp();
+        } else {
+          sfx.startCarrier(freq, currentWaveform);
+          carrierBtn.innerHTML = '<span>CARRIER: ACTIVE</span>';
+          carrierBtn.classList.add('bg-emerald-500/20', 'text-emerald-400');
+        }
+      }
+    });
+
+    const burstBtn = document.getElementById('sigBurstBtn');
+    burstBtn?.addEventListener('click', () => {
+      sfx.click();
+      const freq = parseFloat(freqSlider?.value || 440);
+      if (currentWaveform === 'chirp') {
+        sfx.playChirp(80, 2800, 0.4);
+      } else {
+        sfx.playTone(freq, currentWaveform, 0.3);
+      }
+    });
+
+    freqSlider?.addEventListener('input', () => {
+      const val = freqSlider.value;
+      if (freqVal) freqVal.textContent = `${val} Hz`;
+      if (sfx.carrierPlaying) {
+        sfx.setCarrierFrequency(parseFloat(val));
+      }
+    });
 
     // Sound test cards
     document.querySelectorAll('.sound-test-card').forEach(card => {
