@@ -833,7 +833,7 @@ const heroRadar = initHeroRadar('heroRadarCanvas', { sfx, modeBtnId: null, pingB
 const heroOsc = initOscilloscope('heroOscCanvas', {
   sfx,
   mode: 'OSC',
-  tint: 'amber',
+  tint: 'theme',
   onMetrics: (m) => {
     if (activeSensor === 'osc') {
       if (azEl) azEl.textContent = m.peakFreq > 20 ? `f: ${m.peakFreq} Hz` : 'f: -- Hz';

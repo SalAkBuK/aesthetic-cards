@@ -14,22 +14,37 @@ export class AudioOscilloscope {
 
     // Configuration & Display Options
     this.mode = options.mode || 'OSC'; // 'OSC', 'FFT', 'WATERFALL'
-    this.tint = options.tint || 'amber'; // 'amber', 'green', 'cream'
+    this.tint = options.tint || 'theme'; // 'theme', 'green', 'white' (aliases: 'amber', 'cream')
     this.voltsDiv = options.voltsDiv || 1.0;
     this.timeDiv = options.timeDiv || 1.0;
+    this.themeRgb = [244, 85, 29];
 
     // Palette Configurations
+    const defaultThemePalette = {
+      primary: 'rgb(244, 85, 29)',
+      primaryGlow: 'rgba(244, 85, 29, 0.4)',
+      trace: 'rgba(244, 85, 29, 0.95)',
+      grid: 'rgba(255, 255, 255, 0.07)',
+      gridCenter: 'rgba(244, 85, 29, 0.25)',
+      peak: 'rgb(255, 175, 120)',
+      fill: 'rgba(244, 85, 29, 0.12)',
+      bgFade: 'rgba(25, 24, 21, 0.26)'
+    };
+
+    const whitePalette = {
+      primary: 'rgb(233, 226, 211)',
+      primaryGlow: 'rgba(233, 226, 211, 0.3)',
+      trace: 'rgba(233, 226, 211, 0.95)',
+      grid: 'rgba(255, 255, 255, 0.07)',
+      gridCenter: 'rgba(233, 226, 211, 0.22)',
+      peak: 'rgb(255, 255, 255)',
+      fill: 'rgba(233, 226, 211, 0.1)',
+      bgFade: 'rgba(27, 27, 25, 0.26)'
+    };
+
     this.palettes = {
-      amber: {
-        primary: 'rgb(244, 85, 29)',
-        primaryGlow: 'rgba(244, 85, 29, 0.4)',
-        trace: 'rgba(244, 85, 29, 0.95)',
-        grid: 'rgba(255, 255, 255, 0.07)',
-        gridCenter: 'rgba(244, 85, 29, 0.25)',
-        peak: 'rgb(255, 175, 120)',
-        fill: 'rgba(244, 85, 29, 0.12)',
-        bgFade: 'rgba(25, 24, 21, 0.26)'
-      },
+      theme: defaultThemePalette,
+      amber: defaultThemePalette, // backwards compatibility alias
       green: {
         primary: 'rgb(57, 255, 20)',
         primaryGlow: 'rgba(57, 255, 20, 0.35)',
@@ -40,16 +55,8 @@ export class AudioOscilloscope {
         fill: 'rgba(57, 255, 20, 0.12)',
         bgFade: 'rgba(18, 26, 18, 0.26)'
       },
-      cream: {
-        primary: 'rgb(233, 226, 211)',
-        primaryGlow: 'rgba(233, 226, 211, 0.3)',
-        trace: 'rgba(233, 226, 211, 0.95)',
-        grid: 'rgba(255, 255, 255, 0.07)',
-        gridCenter: 'rgba(233, 226, 211, 0.22)',
-        peak: 'rgb(255, 255, 255)',
-        fill: 'rgba(233, 226, 211, 0.1)',
-        bgFade: 'rgba(27, 27, 25, 0.26)'
-      }
+      white: whitePalette,
+      cream: whitePalette // backwards compatibility alias
     };
 
     // Buffer allocations
@@ -96,7 +103,8 @@ export class AudioOscilloscope {
     const rgb = style.getPropertyValue('--orange-rgb').trim() || '244 85 29';
     const parts = rgb.split(' ').map(n => parseInt(n, 10) || 0);
     const [r, g, b] = [parts[0] ?? 244, parts[1] ?? 85, parts[2] ?? 29];
-    this.palettes.amber = {
+    this.themeRgb = [r, g, b];
+    const themePal = {
       primary: `rgb(${r}, ${g}, ${b})`,
       primaryGlow: `rgba(${r}, ${g}, ${b}, 0.4)`,
       trace: `rgba(${r}, ${g}, ${b}, 0.95)`,
@@ -104,8 +112,10 @@ export class AudioOscilloscope {
       gridCenter: `rgba(${r}, ${g}, ${b}, 0.25)`,
       peak: `rgb(${Math.min(255, r + 40)}, ${Math.min(255, g + 40)}, ${Math.min(255, b + 40)})`,
       fill: `rgba(${r}, ${g}, ${b}, 0.12)`,
-      bgFade: 'rgba(25, 24, 21, 0.26)'
+      bgFade: `rgba(${Math.max(10, Math.floor(r * 0.1))}, ${Math.max(10, Math.floor(g * 0.1))}, ${Math.max(10, Math.floor(b * 0.1))}, 0.26)`
     };
+    this.palettes.theme = themePal;
+    this.palettes.amber = themePal;
   }
 
   setMode(mode) {
@@ -119,8 +129,9 @@ export class AudioOscilloscope {
   }
 
   setTint(tint) {
-    if (this.palettes[tint]) {
-      this.tint = tint;
+    const normalized = tint === 'amber' ? 'theme' : tint === 'cream' ? 'white' : tint;
+    if (this.palettes[normalized]) {
+      this.tint = normalized;
     }
   }
 
@@ -347,8 +358,9 @@ export class AudioOscilloscope {
     const data = imgData.data;
     const bins = this.freqData.length;
 
-    const isAmber = this.tint === 'amber';
+    const isTheme = this.tint === 'theme' || this.tint === 'amber';
     const isGreen = this.tint === 'green';
+    const [tr, tg, tb] = this.themeRgb || [244, 85, 29];
 
     for (let x = 0; x < w; x++) {
       const t = x / w;
@@ -359,18 +371,19 @@ export class AudioOscilloscope {
       const idx2 = (w + x) * 4;
 
       let r = 0, g = 0, b = 0;
-      if (isAmber) {
-        r = Math.min(255, Math.floor(val * 244 + val * val * 40));
-        g = Math.min(255, Math.floor(val * 85 + val * val * 80));
-        b = Math.min(255, Math.floor(val * 29 + val * val * 50));
+      if (isTheme) {
+        r = Math.min(255, Math.floor(val * tr + val * val * 35));
+        g = Math.min(255, Math.floor(val * tg + val * val * 35));
+        b = Math.min(255, Math.floor(val * tb + val * val * 35));
       } else if (isGreen) {
         r = Math.min(255, Math.floor(val * 57 + val * val * 100));
         g = Math.min(255, Math.floor(val * 255));
         b = Math.min(255, Math.floor(val * 20 + val * val * 80));
       } else {
-        r = Math.min(255, Math.floor(val * 233));
-        g = Math.min(255, Math.floor(val * 226));
-        b = Math.min(255, Math.floor(val * 211));
+        // Monochrome White / Cream Phosphor
+        r = Math.min(255, Math.floor(val * 240));
+        g = Math.min(255, Math.floor(val * 235));
+        b = Math.min(255, Math.floor(val * 225));
       }
 
       data[idx1] = r; data[idx1 + 1] = g; data[idx1 + 2] = b; data[idx1 + 3] = Math.floor(val * 240);
@@ -393,7 +406,7 @@ export class AudioOscilloscope {
       return;
     }
 
-    const p = this.palettes[this.tint] || this.palettes.amber;
+    const p = this.palettes[this.tint] || this.palettes.theme || this.palettes.amber;
 
     if (this.sfx) {
       this.sfx.getByteTimeDomainData(this.timeData);

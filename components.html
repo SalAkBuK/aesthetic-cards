@@ -421,9 +421,9 @@
 
             <!-- Phosphor Tint Selector -->
             <div class="flex items-center gap-1 bg-black/50 p-1 rounded font-mono text-[10px]">
-              <button id="oscTintAmber" class="osc-tint-btn px-2 py-0.5 rounded bg-orange/20 border border-orange/40 text-orange font-bold transition" title="Amber Phosphor">AMBER</button>
-              <button id="oscTintGreen" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Green CRT Phosphor">GREEN</button>
-              <button id="oscTintCream" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Vector Cream Phosphor">CREAM</button>
+              <button id="oscTintTheme" class="osc-tint-btn px-2 py-0.5 rounded bg-orange/20 border border-orange/40 text-orange font-bold transition" title="Follow Active System Theme">THEME</button>
+              <button id="oscTintGreen" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Green CRT Phosphor (P1)">GREEN</button>
+              <button id="oscTintWhite" class="osc-tint-btn px-2 py-0.5 rounded hover:bg-white/10 text-cream/60 transition" title="Monochrome White Phosphor (P4)">WHITE</button>
             </div>
           </div>
         </div>
@@ -2132,7 +2132,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     const oscilloscope = initOscilloscope('componentsOscilloscope', {
       sfx,
       mode: 'OSC',
-      tint: 'amber',
+      tint: 'theme',
       onMetrics: (m) => {
         if (oscVppReadout) oscVppReadout.textContent = `${(m.peakV * 2.8).toFixed(2)}V`;
         if (oscFreqReadout) {
@@ -2171,9 +2171,9 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
 
     // Wire Oscilloscope Phosphor Tint buttons
     const tintBtns = {
-      amber: document.getElementById('oscTintAmber'),
+      theme: document.getElementById('oscTintTheme') || document.getElementById('oscTintAmber'),
       green: document.getElementById('oscTintGreen'),
-      cream: document.getElementById('oscTintCream')
+      white: document.getElementById('oscTintWhite') || document.getElementById('oscTintCream')
     };
     Object.entries(tintBtns).forEach(([tint, btn]) => {
       btn?.addEventListener('click', () => {
