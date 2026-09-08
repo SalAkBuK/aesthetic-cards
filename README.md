@@ -200,11 +200,21 @@ $$\text{bin}(i) = \min\left(N-1, \left\lfloor \left(\frac{i}{\text{bars}-1}\righ
 
 ---
 
-## Blueprint Configurator & Design Token System
+## Blueprint Studio 2.0 & Design Token Workbench
 
-The Design System includes a real-time token configurator engine ([`configurator.js`](./configurator.js)) accessible in [`components.html#configurator`](./components.html#configurator).
+The Design System includes an interactive multi-component workbench engine ([`configurator.js`](./configurator.js)) accessible in [`components.html#configurator`](./components.html#configurator).
 
-### 1. Mathematical Chamfer Calculation
+### 1. Multi-Component Specimen Switcher
+Rather than previewing tokens on a single static card, Studio 2.0 dynamically updates 4 authentic component archetypes:
+- **`FEATURE CARD`**: Classic dual-block Blueprint Feature Card with 1:1 square media well, 13px crop brackets, and seam diamond.
+- **`METRIC TILE`**: High-density telemetry tile with large latency readout, live status beacon, and inline sparkline graph.
+- **`BUTTON RACK`**: Precision hardware control stack featuring Primary chamfered CTA, Secondary outline button, Danger button, and precision stepper `+`/`-`.
+- **`TABLE ROW`**: High-density infrastructure grid row with chamfered checkbox, status pill, node hash, and action button.
+
+### 2. 30+ Technical Glyph Integration
+Directly coupled to the [`icons.js`](./icons.js) library, allowing real-time selection of 32 industrial glyphs (`cluster`, `shard`, `pipeline`, `qubit`, `latency`, `cpu`, `rotary`, `stark`, `mesh`, `oscilloscope`, etc.) with customizable stroke weights (`1.0px`–`2.2px`) and accent colors.
+
+### 3. Mathematical Chamfer Calculation
 Corner cut radius is parameterized via `--c` and resolved dynamically as an 8-point polygon:
 ```css
 clip-path: polygon(
@@ -215,14 +225,21 @@ clip-path: polygon(
 );
 ```
 
-### 2. Available Token Parameters
+### 4. Available Token Parameters
 - **Chamfer Radius (`--c`)**: Scalable from `4px` (micro-chip) to `24px` (heavy hardware chassis). Default: `13px`.
 - **Accent Palette**: 6 high-contrast swatches plus custom hex color picker.
 - **Surface Modes**: Dark Ink (`#2b2b29`), Midnight Navy (`#0d1117`), Graphite Obsidian (`#181a18`), and Architectural Bone (`#f4efe6`).
 - **Blueprint Grid**: Cell spacing (`40px`–`128px`) and opacity (`0.01`–`0.15`).
 - **Vector Stroke Weight**: `1.0px` (Fine), `1.35px` (Standard Rams), `1.75px` (Bold), `2.2px` (Heavy).
 
-### 3. Preset Profiles
+### 5. Multi-Format Code Generation
+Exports production-ready code in 4 developer formats:
+- **`CSS VARIABLES`**: `:root` declarations, `.chamfer` clip-path classes, and blueprint grid rules.
+- **`TAILWIND CONFIG`**: `theme.extend.colors` and `clipPath` definitions.
+- **`DTCG JSON`**: Design Tokens Community Group specification compliant JSON.
+- **`REACT / JSX`**: Standalone TypeScript React component for the active specimen with tokens pre-baked.
+
+### 6. Preset Profiles
 - **`01 INDUSTRIAL BLUEPRINT`**: Dieter Rams / Linear dark aesthetic.
 - **`02 TEENAGE ENGINEERING OP-1`**: Slate well `#181a18`, phosphor green `#39ff14` accent.
 - **`03 CYBERPUNK TERMINAL`**: Deep obsidian `#0d1117`, sharp 6px chamfer, cyan `#06b6d4` accent.

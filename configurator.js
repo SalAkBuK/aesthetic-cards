@@ -1,8 +1,10 @@
-﻿/**
- * Blueprint Design System Token Configurator Engine
+/**
+ * Blueprint Design System Token Configurator Engine 2.0
  * Generates dynamic 8-point chamfer polygon clip-paths, live CSS variable bindings,
- * and multi-format design token export (CSS, Tailwind, DTCG JSON).
+ * multi-component specimen workbench, and multi-format design token export (CSS, Tailwind, DTCG JSON, React/JSX).
  */
+
+import { ICONS, ICON_META, renderIcon } from './icons.js';
 
 export const PRESETS = {
   industrial: {
@@ -144,16 +146,236 @@ export function exportJSON(tokens) {
   }, null, 2);
 }
 
+export function exportReact(tokens, activeSpecimen, activeGlyph) {
+  const polygon = getPolygon(tokens.chamfer);
+  const btnPolygon = getPolygon(Math.min(8, tokens.chamfer));
+  const innerPolygon = getPolygon(Math.max(4, tokens.chamfer - 4));
+  const glyphMeta = ICON_META[activeGlyph] || { title: activeGlyph };
+
+  if (activeSpecimen === 'metric') {
+    return `// TelemetryTile.tsx — Blueprint Telemetry Specimen
+import React from 'react';
+
+export function TelemetryTile() {
+  return (
+    <div
+      className="p-5 border border-white/15 transition-all font-mono text-xs shadow-xl"
+      style={{
+        clipPath: '${polygon}',
+        backgroundColor: '${tokens.surfaceCard}',
+        color: '${tokens.textColor}'
+      }}
+    >
+      <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '${tokens.accent}' }} />
+          <span className="font-bold uppercase tracking-wider">TELEMETRY // ${activeGlyph.toUpperCase()}</span>
+        </div>
+        <span
+          className="text-[9px] px-1.5 py-0.5 rounded border uppercase font-mono"
+          style={{ borderColor: '${tokens.accent}60', color: '${tokens.accent}' }}
+        >
+          LIVE STREAM
+        </span>
+      </div>
+
+      <div className="flex items-baseline justify-between mb-2">
+        <div>
+          <span className="text-[9.5px] opacity-50 block uppercase">P99 LATENCY</span>
+          <div className="text-2xl font-bold tracking-tight">
+            0.38 <span style={{ color: '${tokens.accent}' }} className="text-xs">ms</span>
+          </div>
+        </div>
+        <div className="text-right">
+          <span className="text-[9.5px] opacity-50 block uppercase">THROUGHPUT</span>
+          <span className="text-sm font-semibold">124k OPS/S</span>
+        </div>
+      </div>
+
+      <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9.5px] opacity-60">
+        <span>ZK-STARK // VERIFIED</span>
+        <span>QUORUM: 6/6 NODES</span>
+      </div>
+    </div>
+  );
+}`;
+  } else if (activeSpecimen === 'buttons') {
+    return `// BlueprintButtonRack.tsx — Hardware Button & Stepper Primitives
+import React from 'react';
+
+export function BlueprintButtonRack() {
+  return (
+    <div
+      className="p-5 border border-white/15 space-y-4 font-mono text-xs shadow-xl"
+      style={{
+        clipPath: '${polygon}',
+        backgroundColor: '${tokens.surfaceCard}',
+        color: '${tokens.textColor}'
+      }}
+    >
+      <div className="text-[10px] uppercase tracking-wider pb-2 border-b border-white/10 opacity-60">
+        HARDWARE CONTROLS // BUTTON SPECIMEN
+      </div>
+
+      <div className="space-y-2">
+        <button
+          className="w-full py-2.5 px-4 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer"
+          style={{
+            backgroundColor: '${tokens.accent}',
+            color: '#16150f',
+            clipPath: '${btnPolygon}'
+          }}
+        >
+          <span>DEPLOY COMPONENT</span>
+          <span className="opacity-60 text-[10px]">↵</span>
+        </button>
+
+        <button
+          className="w-full py-2 px-4 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border transition cursor-pointer"
+          style={{
+            borderColor: '${tokens.accent}80',
+            color: '${tokens.accent}',
+            clipPath: '${btnPolygon}'
+          }}
+        >
+          <span>INSPECT TRACE LOGS</span>
+          <span className="opacity-60 text-[10px]">⌘K</span>
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between p-2 rounded bg-black/40 border border-white/10">
+        <span className="text-[10px] opacity-60">WORKER THREADS:</span>
+        <div className="flex items-center gap-2">
+          <button className="w-6 h-6 rounded bg-white/10 text-cream font-bold cursor-pointer">−</button>
+          <span className="font-bold text-sm px-2" style={{ color: '${tokens.accent}' }}>08</span>
+          <button className="w-6 h-6 rounded bg-white/10 text-cream font-bold cursor-pointer">+</button>
+        </div>
+      </div>
+    </div>
+  );
+}`;
+  } else if (activeSpecimen === 'table_row') {
+    return `// TelemetryRow.tsx — High-Density Table Row Specimen
+import React from 'react';
+
+export function TelemetryRow() {
+  return (
+    <div
+      className="p-3.5 border border-white/15 flex items-center justify-between font-mono text-xs shadow-xl"
+      style={{
+        clipPath: '${polygon}',
+        backgroundColor: '${tokens.surfaceCard}',
+        color: '${tokens.textColor}'
+      }}
+    >
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          defaultChecked
+          className="w-3.5 h-3.5"
+          style={{ accentColor: '${tokens.accent}' }}
+        />
+        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '${tokens.accent}' }} />
+        <span className="font-bold">node-iad-01</span>
+      </div>
+
+      <div className="flex items-center gap-4 text-[11px]">
+        <span className="opacity-70">0.39ms</span>
+        <span
+          className="px-2 py-0.5 rounded text-[9.5px] uppercase font-bold"
+          style={{ backgroundColor: '${tokens.accent}25', color: '${tokens.accent}' }}
+        >
+          ONLINE
+        </span>
+        <button
+          className="px-2.5 py-1 text-[10px] font-bold uppercase rounded bg-white/10 hover:bg-white/20 transition cursor-pointer"
+          style={{ clipPath: '${btnPolygon}' }}
+        >
+          DRAIN
+        </button>
+      </div>
+    </div>
+  );
+}`;
+  } else {
+    // Feature Card
+    return `// BlueprintCard.tsx — High-End Blueprint Feature Card
+import React from 'react';
+
+export function BlueprintCard() {
+  return (
+    <div
+      className="p-5 border border-white/15 transition-all font-mono text-xs relative group shadow-xl"
+      style={{
+        clipPath: '${polygon}',
+        backgroundColor: '${tokens.surfaceCard}',
+        color: '${tokens.textColor}'
+      }}
+    >
+      <span className="bracket tl" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+      <span className="bracket tr" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+      <span className="bracket bl" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+      <span className="bracket br" style={{ width: '${tokens.bracketSize}px', height: '${tokens.bracketSize}px' }} />
+
+      <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/10 text-[10px]">
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: '${tokens.accent}' }} />
+          <span className="font-bold uppercase tracking-wider">SPECIMEN // 001</span>
+        </div>
+        <span
+          className="text-[9px] px-1.5 py-0.5 rounded border uppercase font-mono font-bold"
+          style={{ borderColor: '${tokens.accent}60', color: '${tokens.accent}' }}
+        >
+          ${glyphMeta.title.toUpperCase()}
+        </span>
+      </div>
+
+      <div
+        className="w-full h-32 p-3 flex items-center justify-center relative mb-4 border border-white/10"
+        style={{
+          clipPath: '${innerPolygon}',
+          backgroundColor: '${tokens.surfaceWell}'
+        }}
+      >
+        <div style={{ color: '${tokens.accent}' }}>
+          {/* ${glyphMeta.title} Vector Icon */}
+        </div>
+      </div>
+
+      <p className="text-[11.5px] leading-relaxed opacity-80 mb-3">
+        Polygonal chamfer silhouettes with dynamic coordinate clipping and balanced stroke weight.
+      </p>
+
+      <button
+        className="w-full py-2 px-3 font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition cursor-pointer"
+        style={{
+          backgroundColor: '${tokens.accent}',
+          color: '#16150f',
+          clipPath: '${btnPolygon}'
+        }}
+      >
+        <span>DEPLOY BLUEPRINT</span>
+        <span className="opacity-60 text-[9px]">↵</span>
+      </button>
+    </div>
+  );
+}`;
+  }
+}
+
 export class BlueprintConfigurator {
   constructor(options = {}) {
     this.tokens = { ...PRESETS.industrial };
     this.applyGlobally = false;
     this.activeExportTab = 'css';
+    this.activeSpecimen = 'card';
+    this.activeGlyph = 'cluster';
     this.sfx = options.sfx || (typeof window !== 'undefined' ? window.sfx : null);
 
     this.specimenEl = document.getElementById(options.specimenId || 'configSpecimen');
     this.codeOutputEl = document.getElementById(options.codeOutputId || 'configCodeOutput');
     this.polygonReadoutEl = document.getElementById(options.polygonReadoutId || 'configPolygonReadout');
+    this.glyphCategoryEl = document.getElementById('cfgGlyphCategory');
 
     this.initControls();
     this.update();
@@ -161,6 +383,22 @@ export class BlueprintConfigurator {
 
   setToken(key, value) {
     this.tokens[key] = value;
+    this.update();
+  }
+
+  setSpecimen(specimenId) {
+    this.activeSpecimen = specimenId;
+    this.update();
+  }
+
+  setGlyph(glyphId) {
+    this.activeGlyph = glyphId;
+    if (this.glyphCategoryEl) {
+      const meta = ICON_META[glyphId];
+      if (meta && meta.category) {
+        this.glyphCategoryEl.textContent = meta.category;
+      }
+    }
     this.update();
   }
 
@@ -196,58 +434,211 @@ export class BlueprintConfigurator {
     root.style.removeProperty('--orange-hover');
   }
 
-  update() {
-    const polygon = getPolygon(this.tokens.chamfer);
+  renderActiveSpecimen() {
+    if (!this.specimenEl) return;
 
+    const polygon = getPolygon(this.tokens.chamfer);
+    const btnPolygon = getPolygon(Math.min(8, this.tokens.chamfer));
+    const innerPolygon = getPolygon(Math.max(4, this.tokens.chamfer - 4));
+    const glyphMeta = ICON_META[this.activeGlyph] || { title: this.activeGlyph, category: 'ICON' };
+    
+    // Scale glyph with dynamic stroke
+    let glyphRaw = ICONS[this.activeGlyph] || ICONS['cluster'];
+    glyphRaw = glyphRaw.replace(/stroke-width="[^"]*"/g, `stroke-width="${this.tokens.strokeWidth}"`);
+
+    if (this.activeSpecimen === 'metric') {
+      this.specimenEl.style.clipPath = polygon;
+      this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
+      this.specimenEl.style.color = this.tokens.textColor;
+      this.specimenEl.innerHTML = `
+        <div class="p-5 border border-white/15 space-y-3 font-mono text-xs relative">
+          <!-- Top Header -->
+          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full animate-pulse" style="background-color: ${this.tokens.accent}"></span>
+              <span class="font-bold tracking-wider uppercase">TELEMETRY // ${this.activeGlyph.toUpperCase()}</span>
+            </div>
+            <span class="text-[9.5px] px-1.5 py-0.5 rounded border uppercase font-bold" style="border-color: ${this.tokens.accent}60; color: ${this.tokens.accent}">
+              NOMINAL
+            </span>
+          </div>
+
+          <!-- Value & Big Icon Viewport -->
+          <div class="flex items-center justify-between py-1">
+            <div>
+              <span class="text-[10px] text-cream/50 uppercase block">P99 DISPATCH LATENCY</span>
+              <div class="text-3xl font-bold tracking-tight text-cream mt-0.5">
+                0.38 <span style="color: ${this.tokens.accent}" class="text-sm font-semibold">ms</span>
+              </div>
+            </div>
+            <div class="w-12 h-12 rounded-lg bg-black/40 border border-white/10 flex items-center justify-center" style="color: ${this.tokens.accent}">
+              ${glyphRaw.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="30" height="30"')}
+            </div>
+          </div>
+
+          <!-- Mini Inline Sparkline Graph -->
+          <div class="space-y-1 pt-1">
+            <div class="flex justify-between text-[9.5px] text-cream/50">
+              <span>LATENCY TREND (LAST 60 SEC)</span>
+              <span style="color: ${this.tokens.accent}">STABLE (σ = 0.02ms)</span>
+            </div>
+            <div class="w-full h-8 bg-black/50 rounded border border-white/5 flex items-end p-1 gap-1">
+              <div class="flex-1 bg-white/15 rounded-t" style="height: 45%;"></div>
+              <div class="flex-1 bg-white/15 rounded-t" style="height: 52%;"></div>
+              <div class="flex-1 bg-white/15 rounded-t" style="height: 48%;"></div>
+              <div class="flex-1 bg-white/20 rounded-t" style="height: 60%;"></div>
+              <div class="flex-1 bg-white/25 rounded-t" style="height: 42%;"></div>
+              <div class="flex-1 bg-white/30 rounded-t" style="height: 50%;"></div>
+              <div class="flex-1 rounded-t" style="height: 38%; background-color: ${this.tokens.accent}"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Metadata Strip -->
+          <div class="pt-2 border-t border-white/10 flex items-center justify-between text-[9.5px] text-cream/50">
+            <span>CONSENSUS: ED25519-STARK</span>
+            <span class="text-emerald-400 font-bold">● 6/6 QUORUM</span>
+          </div>
+        </div>
+      `;
+    } else if (this.activeSpecimen === 'buttons') {
+      this.specimenEl.style.clipPath = polygon;
+      this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
+      this.specimenEl.style.color = this.tokens.textColor;
+      this.specimenEl.innerHTML = `
+        <div class="p-5 border border-white/15 space-y-4 font-mono text-xs">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10.5px]">
+            <span class="font-bold text-cream uppercase tracking-wider">HARDWARE CONTROLS // RACK</span>
+            <span class="text-[9.5px] text-cream/40">CHAMFER: ${this.tokens.chamfer}px</span>
+          </div>
+
+          <!-- Buttons Stack -->
+          <div class="space-y-2.5">
+            <button class="w-full py-2.5 px-4 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition cursor-pointer shadow-lg" style="background-color: ${this.tokens.accent}; color: #16150f; clip-path: ${btnPolygon}">
+              <span style="display:inline-block">${glyphRaw.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="16" height="16"')}</span>
+              <span>DEPLOY BLUEPRINT WORKFLOW</span>
+              <span class="opacity-60 text-[10px]">↵</span>
+            </button>
+
+            <button class="w-full py-2 px-4 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border transition cursor-pointer hover:bg-white/5" style="border-color: ${this.tokens.accent}80; color: ${this.tokens.accent}; clip-path: ${btnPolygon}">
+              <span>INSPECT TRACE LOGS</span>
+              <span class="opacity-60 text-[10px]">⌘K</span>
+            </button>
+
+            <button class="w-full py-2 px-4 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20 transition cursor-pointer" style="clip-path: ${btnPolygon}">
+              <span>TERMINATE RUNTIME ISOLATE</span>
+              <span class="opacity-60 text-[10px]">✕</span>
+            </button>
+          </div>
+
+          <!-- Precision Stepper Strip -->
+          <div class="flex items-center justify-between p-2.5 rounded bg-black/40 border border-white/10">
+            <span class="text-[10px] text-cream/60 uppercase">WORKER THREADS:</span>
+            <div class="flex items-center gap-2">
+              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 text-cream font-bold transition flex items-center justify-center cursor-pointer">−</button>
+              <span class="font-bold text-sm text-cream px-2" style="color: ${this.tokens.accent}">08</span>
+              <button class="w-6 h-6 rounded bg-white/10 hover:bg-white/20 text-cream font-bold transition flex items-center justify-center cursor-pointer">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (this.activeSpecimen === 'table_row') {
+      this.specimenEl.style.clipPath = polygon;
+      this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
+      this.specimenEl.style.color = this.tokens.textColor;
+      this.specimenEl.innerHTML = `
+        <div class="p-4 border border-white/15 space-y-3 font-mono text-xs">
+          <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[10px] text-cream/50">
+            <span>HIGH-DENSITY TABLE ROW SPECIMEN</span>
+            <span>NODE QUORUM ACTIVE</span>
+          </div>
+
+          <div class="p-2.5 rounded bg-black/50 border border-white/10 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <input type="checkbox" checked class="checkbox-chamfer" style="accent-color: ${this.tokens.accent}" />
+              <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full animate-pulse" style="background-color: ${this.tokens.accent}"></span>
+                <span class="font-bold text-cream">node-iad-01</span>
+              </div>
+            </div>
+
+            <div class="hidden sm:flex items-center gap-1" style="color: ${this.tokens.accent}">
+              ${glyphRaw.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="16" height="16"')}
+              <span class="text-[10px] text-cream/60 uppercase">${this.activeGlyph}</span>
+            </div>
+
+            <div class="flex items-center gap-3 text-[11px]">
+              <span class="text-cream/80">0.39ms</span>
+              <span class="px-2 py-0.5 rounded text-[9.5px] uppercase font-bold" style="background-color: ${this.tokens.accent}20; color: ${this.tokens.accent}; border: 1px solid ${this.tokens.accent}40">
+                ONLINE
+              </span>
+              <button class="px-2.5 py-1 text-[10px] font-bold uppercase rounded bg-white/10 hover:bg-white/20 text-cream transition cursor-pointer" style="clip-path: ${btnPolygon}">
+                DRAIN
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[9.5px] text-cream/40 pt-1">
+            <span>SIGNATURE: 0x88ab...3c12</span>
+            <span>MEMORY: 412 MB</span>
+          </div>
+        </div>
+      `;
+    } else {
+      // Default: Feature Card
+      this.specimenEl.style.clipPath = polygon;
+      this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
+      this.specimenEl.style.color = this.tokens.textColor;
+      this.specimenEl.innerHTML = `
+        <div class="p-5 border border-white/15 transition-all shadow-xl group relative">
+          <!-- Corner Brackets -->
+          <span class="bracket tl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket tr" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket bl" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+          <span class="bracket br" style="color: rgba(255,255,255,0.4); width: ${this.tokens.bracketSize}px; height: ${this.tokens.bracketSize}px"></span>
+
+          <!-- Specimen Header -->
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10 font-mono text-[10px]">
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background-color: ${this.tokens.accent}"></span>
+              <span class="font-bold uppercase tracking-wider">LIVE SPECIMEN // 001</span>
+            </div>
+            <span class="specimen-badge text-[9px] px-1.5 py-0.5 rounded border uppercase font-mono font-bold" style="border-color: ${this.tokens.accent}80; color: ${this.tokens.accent}">
+              ${glyphMeta.title.toUpperCase()}
+            </span>
+          </div>
+
+          <!-- Specimen Media Viewport -->
+          <div class="specimen-media w-full h-32 p-3 flex items-center justify-center relative mb-4 border border-white/10" style="clip-path: ${innerPolygon}; background-color: ${this.tokens.surfaceWell}">
+            <div style="color: ${this.tokens.accent}">
+              ${glyphRaw.replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="64" height="64"')}
+            </div>
+          </div>
+
+          <!-- Specimen Body & Button -->
+          <div class="space-y-3 font-mono">
+            <p class="text-[11.5px] leading-relaxed opacity-80">
+              Polygonal chamfer silhouettes with dynamic coordinate clipping and balanced stroke weight.
+            </p>
+            <button class="specimen-btn w-full py-2 px-3 font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition cursor-pointer" style="background-color: ${this.tokens.accent}; color: #16150f; clip-path: ${btnPolygon}">
+              <span>DEPLOY BLUEPRINT</span>
+              <span class="opacity-60 text-[9px]">↵</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  update() {
     // 1. Update polygon equation readout
     if (this.polygonReadoutEl) {
       this.polygonReadoutEl.textContent = `clip-path: polygon(${this.tokens.chamfer}px 0, calc(100% - ${this.tokens.chamfer}px) 0...)`;
     }
 
-    // 2. Update Specimen Sandbox Card
-    if (this.specimenEl) {
-      this.specimenEl.style.setProperty('--c', `${this.tokens.chamfer}px`);
-      this.specimenEl.style.setProperty('--accent', this.tokens.accent);
-      this.specimenEl.style.clipPath = polygon;
-      this.specimenEl.style.backgroundColor = this.tokens.surfaceCard;
-      this.specimenEl.style.color = this.tokens.textColor;
+    // 2. Render active specimen into stage
+    this.renderActiveSpecimen();
 
-      // Update inner media well and brackets
-      const media = this.specimenEl.querySelector('.specimen-media');
-      if (media) {
-        media.style.clipPath = getPolygon(Math.max(4, this.tokens.chamfer - 4));
-        media.style.backgroundColor = this.tokens.surfaceWell;
-      }
-
-      // Update corner brackets size
-      const brackets = this.specimenEl.querySelectorAll('.bracket');
-      brackets.forEach(b => {
-        b.style.width = `${this.tokens.bracketSize}px`;
-        b.style.height = `${this.tokens.bracketSize}px`;
-      });
-
-      // Update dynamic vector stroke
-      const vectors = this.specimenEl.querySelectorAll('.specimen-vector');
-      vectors.forEach(v => {
-        v.style.stroke = this.tokens.accent;
-        v.style.strokeWidth = `${this.tokens.strokeWidth}px`;
-      });
-
-      // Update button & badge accents
-      const btn = this.specimenEl.querySelector('.specimen-btn');
-      if (btn) {
-        btn.style.backgroundColor = this.tokens.accent;
-        btn.style.clipPath = getPolygon(Math.min(8, this.tokens.chamfer));
-      }
-
-      const badge = this.specimenEl.querySelector('.specimen-badge');
-      if (badge) {
-        badge.style.borderColor = `${this.tokens.accent}80`;
-        badge.style.color = this.tokens.accent;
-      }
-    }
-
-    // 3. Update Code Output
+    // 3. Update Code Output block
     if (this.codeOutputEl) {
       if (this.activeExportTab === 'css') {
         this.codeOutputEl.textContent = exportCSS(this.tokens);
@@ -255,6 +646,8 @@ export class BlueprintConfigurator {
         this.codeOutputEl.textContent = exportTailwind(this.tokens);
       } else if (this.activeExportTab === 'json') {
         this.codeOutputEl.textContent = exportJSON(this.tokens);
+      } else if (this.activeExportTab === 'react') {
+        this.codeOutputEl.textContent = exportReact(this.tokens, this.activeSpecimen, this.activeGlyph);
       }
     }
 
@@ -282,9 +675,34 @@ export class BlueprintConfigurator {
 
     const colorPicker = document.getElementById('cfgColorPicker');
     if (colorPicker) colorPicker.value = this.tokens.accent;
+
+    const glyphSelect = document.getElementById('cfgGlyphSelect');
+    if (glyphSelect) glyphSelect.value = this.activeGlyph;
   }
 
   initControls() {
+    // Specimen tabs
+    const specimenTabs = document.querySelectorAll('.cfg-specimen-tab');
+    specimenTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        specimenTabs.forEach(t => {
+          t.classList.remove('bg-orange', 'text-near', 'font-bold');
+          t.classList.add('hover:bg-white/10', 'text-cream/70');
+        });
+        tab.classList.add('bg-orange', 'text-near', 'font-bold');
+        tab.classList.remove('hover:bg-white/10', 'text-cream/70');
+        this.setSpecimen(tab.dataset.specimen);
+        if (this.sfx) this.sfx.click();
+      });
+    });
+
+    // Glyph selector dropdown
+    const glyphSelect = document.getElementById('cfgGlyphSelect');
+    glyphSelect?.addEventListener('change', (e) => {
+      this.setGlyph(e.target.value);
+      if (this.sfx) this.sfx.tick();
+    });
+
     // Chamfer slider
     const chamferSlider = document.getElementById('cfgChamferSlider');
     const chamferVal = document.getElementById('cfgChamferVal');

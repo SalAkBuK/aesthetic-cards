@@ -624,54 +624,80 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
               <button class="cfg-stroke-btn px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-stroke="2.2">2.2px (HEAVY)</button>
             </div>
           </div>
+
+          <!-- 6. Active Vector Glyph Selector -->
+          <div class="space-y-1.5 pt-2 border-t border-white/10">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">TECHNICAL GLYPH (32 ICONS)</span>
+              <span class="text-orange text-[10px] font-mono uppercase" id="cfgGlyphCategory">COMPUTE</span>
+            </div>
+            <select id="cfgGlyphSelect" class="w-full bg-black/60 border border-white/20 text-cream text-xs px-2.5 py-1.5 rounded font-mono focus:border-orange focus:outline-none cursor-pointer">
+              <optgroup label="COMPUTE & TELEMETRY">
+                <option value="cluster" selected>01 // Cluster Topology</option>
+                <option value="shard">02 // Database Shard</option>
+                <option value="pipeline">03 // Stream Pipeline</option>
+                <option value="qubit">04 // Qubit Superposition</option>
+                <option value="latency">05 // Latency Waveform</option>
+                <option value="cpu">06 // Hardware Die / CPU</option>
+                <option value="neural">07 // Neural Node Matrix</option>
+                <option value="database">08 // Immutable Ledger</option>
+              </optgroup>
+              <optgroup label="INDUSTRIAL CONTROLS">
+                <option value="rotary">09 // Rotary Encoder</option>
+                <option value="toggle">10 // Safety Toggle Switch</option>
+                <option value="oscilloscope">11 // Oscilloscope CRT</option>
+                <option value="relay">12 // Mechanical Relay</option>
+                <option value="potentiometer">13 // Precision Trim Pot</option>
+                <option value="slider">14 // Linear Fader Slider</option>
+                <option value="fuse">15 // Thermal Breaker Fuse</option>
+                <option value="solenoid">16 // Actuator Solenoid</option>
+              </optgroup>
+              <optgroup label="CRYPTOGRAPHY & CONSENSUS">
+                <option value="stark">17 // ZK-STARK Verifier</option>
+                <option value="merkle">18 // Merkle Tree Root</option>
+                <option value="quarantine">19 // Quarantine Enclave</option>
+                <option value="entropy">20 // Entropy Generator</option>
+                <option value="enclave">21 // Hardware Enclave</option>
+                <option value="circuit">22 // Logic Circuit Gates</option>
+                <option value="signature">23 // Ed25519 Signature</option>
+                <option value="guardrail">24 // Runtime Guardrail</option>
+              </optgroup>
+              <optgroup label="SYSTEMS & NETWORK">
+                <option value="gateway">25 // Anycast Gateway</option>
+                <option value="mesh">26 // P2P Mesh Fabric</option>
+                <option value="telemetry">27 // Radio Telemetry Beam</option>
+                <option value="heartbeat">28 // Cluster Heartbeat</option>
+                <option value="packet">29 // Encrypted Packet</option>
+                <option value="satellite">30 // Orbital Uplink</option>
+                <option value="transceiver">31 // Optical Transceiver</option>
+                <option value="subsea">32 // Subsea Fiber Trunk</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
 
         <!-- Right Panel: Live Specimen Sandbox & Code Output (7 cols) -->
-        <div class="lg:col-span-7 space-y-6">
+        <div class="lg:col-span-7 space-y-4">
           
+          <!-- Specimen Switcher Tabs Bar -->
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-ink2/50 border border-white/10 font-mono text-xs">
+            <span class="text-[10px] uppercase text-cream/50 tracking-wider">SPECIMEN VIEW:</span>
+            <div class="flex items-center gap-1 bg-black/50 p-0.5 rounded text-[10px]">
+              <button class="cfg-specimen-tab px-2.5 py-1 rounded bg-orange text-near font-bold transition cursor-pointer" data-specimen="card">FEATURE CARD</button>
+              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="metric">METRIC TILE</button>
+              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="buttons">BUTTON RACK</button>
+              <button class="cfg-specimen-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-specimen="table_row">TABLE ROW</button>
+            </div>
+          </div>
+
           <!-- Live Interactive Specimen Stage -->
-          <div class="p-6 rounded-xl bg-ink/90 border border-white/12 relative overflow-hidden flex flex-col items-center justify-center min-h-[300px] shadow-2xl">
+          <div class="p-6 rounded-xl bg-ink/90 border border-white/12 relative overflow-hidden flex flex-col items-center justify-center min-h-[340px] shadow-2xl">
             <!-- Subtle preview grid background -->
             <div class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none"></div>
 
-            <!-- The Live Specimen Card -->
-            <div id="configSpecimen" class="relative z-10 w-full max-w-[340px] p-5 border border-white/15 transition-all shadow-xl group">
-              <!-- Corner Brackets -->
-              <span class="bracket tl" style="color: rgba(255,255,255,0.4)"></span>
-              <span class="bracket tr" style="color: rgba(255,255,255,0.4)"></span>
-              <span class="bracket bl" style="color: rgba(255,255,255,0.4)"></span>
-              <span class="bracket br" style="color: rgba(255,255,255,0.4)"></span>
-
-              <!-- Specimen Header -->
-              <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10 font-mono text-[10px]">
-                <div class="flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span class="font-bold uppercase tracking-wider">LIVE SPECIMEN // 001</span>
-                </div>
-                <span class="specimen-badge text-[9px] px-1.5 py-0.5 rounded border border-orange/40 text-orange font-mono">ACTIVE</span>
-              </div>
-
-              <!-- Specimen Media Viewport -->
-              <div class="specimen-media w-full h-32 p-3 flex items-center justify-center relative mb-4 border border-white/10">
-                <svg width="68" height="68" viewBox="0 0 72 72" class="specimen-vector text-orange" fill="none">
-                  <circle cx="36" cy="36" r="30" stroke="currentColor" stroke-width="1.35"/>
-                  <circle cx="36" cy="36" r="20" stroke="currentColor" stroke-width="1.35" stroke-dasharray="2 3"/>
-                  <circle cx="36" cy="36" r="10" stroke="currentColor" stroke-width="1.35"/>
-                  <path d="M36 6V66M6 36H66" stroke="currentColor" stroke-width="0.75" stroke-opacity="0.4"/>
-                  <path d="M36 28L44 36L36 44L28 36Z" fill="currentColor"/>
-                </svg>
-              </div>
-
-              <!-- Specimen Body & Button -->
-              <div class="space-y-3 font-mono">
-                <p class="text-[11.5px] leading-relaxed opacity-80">
-                  Polygonal chamfer silhouettes with dynamic coordinate clipping and balanced stroke weight.
-                </p>
-                <button class="specimen-btn w-full py-2 px-3 text-near font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition cursor-pointer">
-                  <span>DEPLOY BLUEPRINT</span>
-                  <span class="opacity-60 text-[9px]">↵</span>
-                </button>
-              </div>
+            <!-- The Live Specimen Container (Populated dynamically by configurator.js) -->
+            <div id="configSpecimen" class="relative z-10 w-full max-w-[360px] transition-all shadow-xl">
+              <!-- Dynamically rendered -->
             </div>
           </div>
 
@@ -683,6 +709,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
                 <button class="cfg-export-tab px-2.5 py-1 rounded bg-white/20 text-white font-bold cursor-pointer" data-tab="css">CSS VARIABLES</button>
                 <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="tailwind">TAILWIND CONFIG</button>
                 <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="json">DTCG JSON</button>
+                <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="react">REACT / JSX</button>
               </div>
 
               <button id="cfgCopyBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer">

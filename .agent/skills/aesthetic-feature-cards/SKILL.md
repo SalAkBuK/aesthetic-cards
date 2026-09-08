@@ -231,9 +231,19 @@ When adding acoustic telemetry, audio diagnostics, or laboratory monitors:
 
 ---
 
-## 9. Blueprint Design Token Configurator
+## 9. Blueprint Studio 2.0 & Multi-Component Workbench
 
 When users request theme customizers, design token generators, or preset variations:
+
+### Multi-Component Specimen Switcher
+Rather than previewing tokens on a single static card, Studio 2.0 dynamically re-renders 4 distinct component archetypes on the stage:
+1. **`CARD`**: Standard Blueprint Feature Card with 1:1 media viewport, corner crop brackets, seam diamond, and chamfered CTA button.
+2. **`METRIC`**: High-density telemetry tile with large latency readout, live status beacon, and inline sparkline graph.
+3. **`BUTTONS`**: Precision hardware control stack featuring Primary chamfered CTA, Secondary outline button, Danger button, and precision stepper `+`/`-`.
+4. **`TABLE_ROW`**: High-density infrastructure grid row with chamfered checkbox, status pill, node hash, and action button.
+
+### 30+ Technical Glyph Integration
+Directly coupled to the [`icons.js`](./icons.js) library, allowing real-time selection of 32 industrial glyphs (`cluster`, `shard`, `pipeline`, `qubit`, `latency`, `cpu`, `rotary`, `stark`, `mesh`, `oscilloscope`, etc.) with customizable stroke weights (`1.0px`–`2.2px`) and accent colors.
 
 ### Mathematical Clip-Path Resolution
 Generate the 8-point chamfer polygon dynamically from any corner cut value $c$:
@@ -256,6 +266,7 @@ Support standard export targets:
 - **CSS Variables**: Raw `:root` declarations and `.chamfer` clip-path classes.
 - **Tailwind Config**: `theme.extend.colors` and `clipPath` definitions.
 - **DTCG JSON**: Design Token Community Group specification compliant JSON.
+- **React / JSX**: Standalone TypeScript React component for the active specimen with tokens pre-baked.
 
 ---
 
