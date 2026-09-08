@@ -27,8 +27,8 @@
           cream:  '#e9e2d3',
           cream2: '#e2dac9',
           sand:   '#d8cdb4',
-          orange: '#f4551d',
-          orange2:'#ea4f1a',
+          orange: 'rgb(var(--orange-rgb, 244 85 29) / <alpha-value>)',
+          orange2:'var(--orange-hover, #ea4f1a)',
           near:   '#16150f',
         },
         fontFamily: {
@@ -161,6 +161,10 @@
 </head>
 
 <body class="min-h-dvh bg-ink text-cream font-sans selection:bg-orange selection:text-near">
+
+  <!-- Phosphor CRT Fullscreen Simulation Overlay -->
+  <div id="crtScreenOverlay" aria-hidden="true"></div>
+
   <!-- Top Technical HUD Header -->
   <header id="hud" class="fixed top-0 inset-x-0 z-50 h-13 sm:h-14 border-b hud-border bg-ink/85 backdrop-blur-md px-4 sm:px-8 flex items-center justify-between font-mono text-[11px] sm:text-xs">
     <!-- Brand / System identity -->
@@ -189,7 +193,13 @@
     </div>
 
     <!-- Actions & Navigation -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2.5 sm:gap-3">
+      <!-- Phosphor CRT Display Toggle -->
+      <button id="crtToggle" class="crt-toggle crt-muted" title="Toggle Cathode Ray Tube (CRT) Scanlines & Phosphor Bloom">
+        <span class="w-1.5 h-1.5 rounded-full bg-cream/30" id="crtDot"></span>
+        <span id="crtLabel" class="text-[10px] font-mono text-cream/50">CRT: OFF</span>
+      </button>
+
       <!-- Procedural Audio Toggle -->
       <button id="sfxToggle" class="sfx-toggle sfx-enabled" title="Toggle Mechanical Micro-Haptics (Web Audio API)">
         <div class="sfx-bars" aria-hidden="true">

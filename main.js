@@ -2,6 +2,11 @@ import { animate, inView, stagger } from 'motion';
 import { sfx } from './audio.js';
 import { initHeroRadar } from './radar.js';
 import { initOscilloscope } from './oscilloscope.js';
+import { initThemeEngine } from './theme.js';
+
+// Initialize Theme & CRT Engine
+const themeEngine = initThemeEngine({ sfx });
+sfx.attachListeners();
 
 // Motion.dev — https://motion.dev
 // Animation choices follow the design-engineering rules:

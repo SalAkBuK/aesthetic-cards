@@ -2,11 +2,12 @@
    KINETIC BLUEPRINT DESIGN SYSTEM - TOKENS & CORE UTILITIES
    ========================================================================== */
 
-:root {
+:root,
+[data-theme="orange"] {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
-  /* Color Palette */
+  /* Color Palette - Default Kinetic Orange */
   --ink: #2b2b29;
   --ink-dark: #16150f;
   --ink-surface: #33332f;
@@ -15,10 +16,47 @@
   --sand: #d8cdb4;
   --orange: #f4551d;
   --orange-hover: #ea4f1a;
+  --orange-rgb: 244 85 29;
+  --theme-glow: rgba(244, 85, 29, 0.45);
   --border-line: #3d3d39;
   --emerald: #10b981;
   --ruby: #ef4444;
   --amber: #f59e0b;
+}
+
+[data-theme="amber"] {
+  --orange: #f59e0b;
+  --orange-hover: #d97706;
+  --orange-rgb: 245 158 11;
+  --theme-glow: rgba(245, 158, 11, 0.45);
+}
+
+[data-theme="cyan"] {
+  --orange: #06b6d4;
+  --orange-hover: #0891b2;
+  --orange-rgb: 6 182 212;
+  --theme-glow: rgba(6, 182, 212, 0.45);
+}
+
+[data-theme="emerald"] {
+  --orange: #10b981;
+  --orange-hover: #059669;
+  --orange-rgb: 16 185 129;
+  --theme-glow: rgba(16, 185, 129, 0.45);
+}
+
+[data-theme="ruby"] {
+  --orange: #ef4444;
+  --orange-hover: #dc2626;
+  --orange-rgb: 239 68 68;
+  --theme-glow: rgba(239, 68 68, 0.45);
+}
+
+[data-theme="titanium"] {
+  --orange: #e5e5e5;
+  --orange-hover: #d4d4d4;
+  --orange-rgb: 229 229 229;
+  --theme-glow: rgba(229, 229, 229, 0.35);
 }
 
 /* --------------------------------------------------------------------------
@@ -748,6 +786,80 @@
 .pulse-particle {
   pointer-events: none;
   filter: drop-shadow(0 0 5px currentColor);
+}
+
+/* --------------------------------------------------------------------------
+   Phosphor CRT Display Simulation Engine
+   -------------------------------------------------------------------------- */
+#crtScreenOverlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: 
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.32) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)),
+    radial-gradient(circle at center, transparent 60%, rgba(0, 0, 0, 0.75) 100%);
+  background-size: 100% 3px, 3px 100%, 100% 100%;
+}
+
+body.crt-active #crtScreenOverlay {
+  opacity: 1;
+}
+
+body.crt-active {
+  animation: crt-flicker 0.12s infinite alternate;
+}
+
+body.crt-active h1,
+body.crt-active h2,
+body.crt-active h3,
+body.crt-active .btn-primary,
+body.crt-active .badge-tech,
+body.crt-active [data-theme] span.font-bold {
+  text-shadow: 0 0 4.5px var(--theme-glow, rgba(244, 85, 29, 0.45));
+}
+
+@keyframes crt-flicker {
+  0% {
+    opacity: 0.994;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.crt-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.crt-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.crt-toggle.crt-enabled {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.crt-toggle.crt-muted {
+  opacity: 0.7;
+  color: rgba(233, 226, 211, 0.6);
 }
 
 

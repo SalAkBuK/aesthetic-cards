@@ -20,10 +20,19 @@ export const COMMANDS = [
 
   // Actions
   { id: 'act-sfx', category: 'ACTIONS', label: 'Toggle Mechanical Audio Micro-Haptics', shortcut: 'S', action: (ctx) => { ctx.sfx?.toggle(); } },
+  { id: 'act-crt', category: 'ACTIONS', label: 'Toggle Phosphor CRT Display Simulation', shortcut: 'C', action: (ctx) => { ctx.themeEngine?.toggleCRT(); } },
   { id: 'act-safety', category: 'ACTIONS', label: 'Open Two-Phase Safety Confirmation Latch', shortcut: '⇧ D', action: (ctx) => { ctx.safetyLatch?.open({ title: 'EMERGENCY CLUSTER DRAIN', targetName: 'US-EAST-01', actionCode: 'DRAIN_CLUSTER' }); } },
   { id: 'act-drawer', category: 'ACTIONS', label: 'Toggle Full-Height Telemetry Drawer', shortcut: 'T', action: (ctx) => { ctx.telemetryDrawer?.toggle(); } },
   { id: 'act-csv', category: 'ACTIONS', label: 'Export Telemetry Table to CSV', shortcut: 'E', action: () => document.getElementById('batchExportBtn')?.click() },
   { id: 'act-download-tokens', category: 'ACTIONS', label: 'Download tokens.css Design System', shortcut: 'D', action: () => { const a = document.createElement('a'); a.href = './tokens.css'; a.download = 'tokens.css'; a.click(); } },
+
+  // Themes & Color Spaces
+  { id: 'theme-orange', category: 'PALETTES', label: 'Palette // Kinetic Orange (Aerospace Default)', shortcut: 'T O', action: (ctx) => { ctx.themeEngine?.setTheme('orange'); } },
+  { id: 'theme-amber', category: 'PALETTES', label: 'Palette // Synth Amber (Cathode Ray Phosphor)', shortcut: 'T A', action: (ctx) => { ctx.themeEngine?.setTheme('amber'); } },
+  { id: 'theme-cyan', category: 'PALETTES', label: 'Palette // Quantum Cyan (Clean-Room Avionics)', shortcut: 'T C', action: (ctx) => { ctx.themeEngine?.setTheme('cyan'); } },
+  { id: 'theme-emerald', category: 'PALETTES', label: 'Palette // Radar Emerald (Military Sonar HUD)', shortcut: 'T E', action: (ctx) => { ctx.themeEngine?.setTheme('emerald'); } },
+  { id: 'theme-ruby', category: 'PALETTES', label: 'Palette // Alarm Ruby (Emergency Lockdown)', shortcut: 'T R', action: (ctx) => { ctx.themeEngine?.setTheme('ruby'); } },
+  { id: 'theme-titanium', category: 'PALETTES', label: 'Palette // Monochrome Titanium (Dieter Rams Braun)', shortcut: 'T M', action: (ctx) => { ctx.themeEngine?.setTheme('titanium'); } },
 
   // Presets
   { id: 'pre-ent', category: 'PRESETS', label: 'Apply Preset: 01 Production Enterprise', shortcut: 'P 1', action: () => document.querySelector('[data-param-preset="enterprise"]')?.click() },
@@ -446,12 +455,13 @@ export class TelemetryDrawer {
 
 export function initIndustrialModals(options = {}) {
   const sfx = options.sfx || (typeof window !== 'undefined' ? window.sfx : null);
+  const themeEngine = options.themeEngine || null;
 
   const safetyLatch = new SafetyLatchModal({ sfx });
   const telemetryDrawer = new TelemetryDrawer({ sfx });
   const commandPalette = new CommandPalette({
     sfx,
-    context: { sfx, safetyLatch, telemetryDrawer }
+    context: { sfx, safetyLatch, telemetryDrawer, themeEngine }
   });
 
   return { commandPalette, safetyLatch, telemetryDrawer };
