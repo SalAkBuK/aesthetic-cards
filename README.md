@@ -38,6 +38,16 @@ Inspired by [aesthetic-cards.vercel.app](https://aesthetic-cards.vercel.app/) an
 - **Reusable Theme System & Component Catalog:**
   - Standalone [`tokens.css`](./tokens.css) containing chamfer polygon formulas, blueprint grids, and button/badge/input primitives.
   - Dedicated interactive documentation and copy-paste showcase in [`components.html`](./components.html).
+- **Custom Blueprint SVG Icon Library (32 Glyphs):**
+  - Proprietary technical vector icons engineered specifically for industrial & developer-first interfaces.
+  - Consistent **24×24 grid**, sharp **1.35px stroke-width**, 45° chamfered cuts, open corner brackets, and terminal diamond nodes.
+  - Exported as ES module [`icons.js`](./icons.js) with metadata, `renderIcon()`, and React/TSX component generator.
+  - Interactive searchable **Icon Explorer** with 1-click SVG / React copying in [`components.html#icons`](./components.html#icons).
+  - 4 specialized categories:
+    - *Compute & Telemetry*: `cluster`, `shard`, `pipeline`, `qubit`, `latency`, `cpu`, `neural`, `database`.
+    - *Industrial Hardware*: `rotary`, `toggle`, `oscilloscope`, `relay`, `slider`, `meter`, `fuse`, `crystal`.
+    - *Security & Guardrails*: `shield-zk`, `key-crypto`, `audit`, `reticle`, `vault`, `fingerprint`, `badge-check`, `hazard`.
+    - *Interface & Controls*: `crosshair`, `terminal`, `brackets`, `split-flap`, `chevron-chamfer`, `search-reticle`, `copy-blueprint`, `sound-wave`.
 - **Included Agent Skill:**
   - Pre-configured agent skill in [`.agent/skills/aesthetic-feature-cards/SKILL.md`](./.agent/skills/aesthetic-feature-cards/SKILL.md) for Antigravity, Cursor, and Claude Code.
 

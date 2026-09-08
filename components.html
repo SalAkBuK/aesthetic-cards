@@ -56,6 +56,8 @@
 
       <a href="./index.html" class="hover:text-cream text-cream/70 transition">Landing Page</a>
       <span class="text-white/20">|</span>
+      <a href="#icons" class="text-orange hover:text-white font-medium transition">Icons (32)</a>
+      <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
       <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
     </div>
@@ -381,6 +383,57 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 6: BLUEPRINT SVG ICON LIBRARY -->
+    <section class="space-y-6" id="icons">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">06 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Blueprint SVG Icon Library</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] text-cream/50 uppercase font-mono">EXPORT:</span>
+          <button id="iconFormatToggle" class="badge-tech bg-orange/20 border-orange/40 text-orange cursor-pointer hover:bg-orange/30 transition text-[10px]" title="Toggle Copy Format">
+            <span id="formatLabel">MODE: RAW SVG</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        32 proprietary technical glyphs designed on a 24×24 grid with 1.35px stroke, 45° chamfered enclosures, open crop brackets, and coordinate diamond nodes. Click any icon to copy its markup.
+      </p>
+
+      <!-- Filter and Search Toolbar -->
+      <div class="flex flex-col sm:flex-row gap-3 items-center justify-between">
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-80">
+          <input
+            id="iconSearch"
+            type="text"
+            placeholder="Filter 32 glyphs by name or keyword..."
+            class="input-chamfer pl-8 text-xs placeholder:text-cream/35"
+          />
+          <svg class="w-3.5 h-3.5 text-cream/40 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M21 21l-4.5-4.5"></path>
+          </svg>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="flex items-center gap-1.5 flex-wrap w-full sm:w-auto font-mono text-[10.5px]">
+          <button class="icon-cat-tab px-2.5 py-1 rounded bg-white/20 text-white font-medium transition" data-cat="all">ALL (32)</button>
+          <button class="icon-cat-tab px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition" data-cat="compute">COMPUTE (8)</button>
+          <button class="icon-cat-tab px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition" data-cat="hardware">HARDWARE (8)</button>
+          <button class="icon-cat-tab px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition" data-cat="security">SECURITY (8)</button>
+          <button class="icon-cat-tab px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition" data-cat="interface">INTERFACE (8)</button>
+        </div>
+      </div>
+
+      <!-- Icon Grid Container -->
+      <div id="iconGrid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 pt-2">
+        <!-- Dynamically rendered via icons.js -->
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -391,6 +444,7 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
 
   <script type="module">
     import { sfx } from './audio.js';
+    import { ICONS, ICON_META, getReactSnippet } from './icons.js';
 
     // Attach sound listeners
     sfx.attachListeners();
@@ -424,10 +478,115 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       sfx.success();
       navigator.clipboard?.writeText(code).then(() => {
         const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+        toastMsg.textContent = 'Copied snippet to clipboard!';
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2200);
       });
     };
+
+    /* --- Blueprint Icon Explorer Engine --- */
+    let iconFormat = 'svg'; // 'svg' or 'react'
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    const iconGrid = document.getElementById('iconGrid');
+    const iconSearch = document.getElementById('iconSearch');
+    const formatToggleBtn = document.getElementById('iconFormatToggle');
+    const formatLabel = document.getElementById('formatLabel');
+    const catTabs = document.querySelectorAll('.icon-cat-tab');
+
+    function renderIcons() {
+      if (!iconGrid) return;
+      const slugs = Object.keys(ICONS);
+      const filtered = slugs.filter(slug => {
+        const meta = ICON_META[slug];
+        if (!meta) return false;
+        const matchesCat = currentCategory === 'all' || meta.category === currentCategory;
+        const matchesQuery = !searchQuery || 
+          slug.toLowerCase().includes(searchQuery) ||
+          meta.title.toLowerCase().includes(searchQuery) ||
+          meta.tags.toLowerCase().includes(searchQuery);
+        return matchesCat && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        iconGrid.innerHTML = `
+          <div class="col-span-full py-12 text-center font-mono text-xs text-cream/40 border border-dashed border-white/10 rounded-lg">
+            NO TECHNICAL GLYPHS MATCHING CRITERIA
+          </div>
+        `;
+        return;
+      }
+
+      iconGrid.innerHTML = filtered.map(slug => {
+        const meta = ICON_META[slug];
+        return `
+          <div class="icon-card group" data-slug="${slug}" title="${meta.title} (${meta.category}) — Click to copy ${iconFormat.toUpperCase()}">
+            <div class="w-7 h-7 flex items-center justify-center text-cream/85 group-hover:text-orange transition pointer-events-none">
+              ${ICONS[slug]}
+            </div>
+            <span class="text-[11px] font-semibold text-cream group-hover:text-white truncate max-w-full pointer-events-none">${meta.title}</span>
+            <span class="text-[9px] font-mono text-cream/40 group-hover:text-orange/80 pointer-events-none">${slug}</span>
+          </div>
+        `;
+      }).join('');
+
+      // Wire click & hover events on newly rendered cards
+      iconGrid.querySelectorAll('.icon-card').forEach(card => {
+        card.addEventListener('pointerenter', () => sfx.tick());
+        card.addEventListener('click', () => {
+          const slug = card.dataset.slug;
+          const meta = ICON_META[slug];
+          const content = iconFormat === 'svg' ? ICONS[slug] : getReactSnippet(slug);
+          sfx.success();
+          navigator.clipboard?.writeText(content).then(() => {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = `Copied ${meta.title} (${iconFormat.toUpperCase()}) to clipboard!`;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2200);
+          });
+        });
+      });
+    }
+
+    renderIcons();
+
+    iconSearch?.addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase().trim();
+      renderIcons();
+    });
+
+    catTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        sfx.click();
+        catTabs.forEach(t => {
+          t.classList.remove('bg-white/20', 'text-white');
+          t.classList.add('bg-white/5', 'text-cream/70');
+        });
+        tab.classList.add('bg-white/20', 'text-white');
+        tab.classList.remove('bg-white/5', 'text-cream/70');
+        currentCategory = tab.dataset.cat;
+        renderIcons();
+      });
+    });
+
+    formatToggleBtn?.addEventListener('click', () => {
+      sfx.click();
+      iconFormat = iconFormat === 'svg' ? 'react' : 'svg';
+      formatLabel.textContent = `MODE: ${iconFormat === 'svg' ? 'RAW SVG' : 'REACT / TSX'}`;
+      if (iconFormat === 'react') {
+        formatToggleBtn.classList.replace('bg-orange/20', 'bg-emerald-500/20');
+        formatToggleBtn.classList.replace('border-orange/40', 'border-emerald-500/40');
+        formatToggleBtn.classList.replace('text-orange', 'text-emerald-400');
+      } else {
+        formatToggleBtn.classList.replace('bg-emerald-500/20', 'bg-orange/20');
+        formatToggleBtn.classList.replace('border-emerald-500/40', 'border-orange/40');
+        formatToggleBtn.classList.replace('text-emerald-400', 'text-orange');
+      }
+      renderIcons();
+    });
   </script>
 </body>
 </html>

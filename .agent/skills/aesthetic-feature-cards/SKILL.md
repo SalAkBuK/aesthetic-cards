@@ -120,3 +120,27 @@ Add physical instrumentation feel using browser-native `AudioContext` with zero 
 - Provide an accessible HUD audio toggle (`[SFX: ON / OFF]`) with `localStorage` persistence.
 - Throttle hover ticks (min 30ms interval) to keep rapid cursor movement clean and rhythmic.
 
+---
+
+## 6. Blueprint SVG Icon System Guidelines
+
+When creating UI icons to match this aesthetic, follow these geometric constraints:
+
+### Vector Constraints
+- **ViewBox**: `0 0 24 24` with 2px active padding (`2 2 22 22`).
+- **Stroke Width**: Strict `1.35px` (`stroke-width="1.35"`).
+- **Linecaps & Joins**: `stroke-linecap="round"` and `stroke-linejoin="round"`.
+- **Stroke Color**: Strict `currentColor` for dynamic theme adaptability.
+- **Fill**: Default `none`. Use `fill="currentColor" fill-opacity="0.15"` to `0.2` for accents or solid `fill="currentColor"` for micro terminal diamond nodes (`r="0.75"` to `1.5`).
+
+### Characteristic Geometry Patterns
+1. **45° Chamfered Corners**: Replace rounded fillets with 45-degree corner bevels:
+   - Outer container: `M5 3H19L21 5V19L19 21H5L3 19V5L5 3Z`
+2. **Terminal Diamond Nodes**: Center hubs and junction points terminate on a 4-point diamond:
+   - `<path d="M12 9.5L14.5 12L12 14.5L9.5 12Z" />`
+3. **Open Corner Crop Brackets**: Mark boundary perimeters with 90° corner brackets:
+   - `M3 8V3H8`, `M16 3H21V8`, `M3 16V21H8`, `M16 21H21V16`
+4. **Coordinate Crosshair Dashes**: Internal reference lines use sub-pixel dotted or dashed intervals:
+   - `stroke-dasharray="1 1.5"` with `stroke-opacity="0.5"`
+
+

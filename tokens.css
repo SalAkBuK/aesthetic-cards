@@ -376,3 +376,46 @@
   transform: translateY(0px) scale(0.99);
 }
 
+/* --------------------------------------------------------------------------
+   Blueprint SVG Icon System
+   -------------------------------------------------------------------------- */
+.icon-card {
+  --c: 6px;
+  background: rgba(18, 17, 16, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 14px 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 180ms var(--ease-out);
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0,
+    100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%,
+    0 calc(100% - var(--c)), 0 var(--c)
+  );
+  user-select: none;
+}
+.icon-card:hover {
+  border-color: rgba(255, 87, 34, 0.6);
+  background: rgba(36, 33, 30, 0.95);
+  transform: translateY(-2px);
+}
+.icon-card:active {
+  transform: translateY(0) scale(0.97);
+}
+.icon-card .blueprint-icon {
+  width: 28px;
+  height: 28px;
+  transition: transform 180ms var(--ease-out), color 180ms var(--ease-out);
+}
+.icon-card:hover .blueprint-icon {
+  color: var(--orange);
+  transform: scale(1.1);
+}
+
+
