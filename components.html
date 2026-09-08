@@ -56,7 +56,12 @@
 
       <a href="./index.html" class="hover:text-cream text-cream/70 transition">Landing Page</a>
       <span class="text-white/20">|</span>
-      <a href="#icons" class="text-orange hover:text-white font-medium transition">Icons (32)</a>
+      <a href="#configurator" class="text-orange hover:text-white font-medium transition flex items-center gap-1">
+        <span>Configurator</span>
+        <span class="text-[9px] px-1 py-0.2 rounded bg-orange/20 border border-orange/30">STUDIO</span>
+      </a>
+      <span class="text-white/20">|</span>
+      <a href="#icons" class="hover:text-cream text-cream/70 transition">Icons (32)</a>
       <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
       <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
@@ -516,6 +521,175 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 7: INTERACTIVE BLUEPRINT CONFIGURATOR -->
+    <section class="space-y-6" id="configurator">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">07 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Interactive Blueprint Configurator</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-cream/50 uppercase font-mono">GLOBAL INJECTION:</span>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="cfgGlobalToggle" class="sr-only peer">
+            <div class="w-8 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-cream after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange"></div>
+            <span class="ml-2 text-[10px] font-mono text-cream/70">APPLY TO PAGE</span>
+          </label>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Real-time design token laboratory. Tweak corner chamfer radii, coordinate grid densities, stroke weights, and accent palettes. Changes immediately render on the live specimen card and output production-ready CSS, Tailwind, or JSON tokens.
+      </p>
+
+      <!-- Preset Quick-Load Bar -->
+      <div class="flex items-center gap-2 flex-wrap font-mono text-xs p-2.5 rounded-lg bg-ink2/50 border border-white/10">
+        <span class="text-[10px] uppercase text-cream/50 tracking-wider">LOAD PRESET:</span>
+        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-orange text-near font-bold transition text-[10.5px]" data-preset="industrial">01 INDUSTRIAL BLUEPRINT</button>
+        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="teenage">02 TEENAGE OP-1</button>
+        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="cyberpunk">03 CYBERPUNK TERMINAL</button>
+        <button class="cfg-preset-pill px-2.5 py-1 rounded bg-white/5 hover:bg-white/10 text-cream/70 transition text-[10.5px]" data-preset="architectural">04 ARCHITECTURAL (LIGHT)</button>
+      </div>
+
+      <!-- Studio Grid: Controls on Left, Specimen & Code on Right -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Panel: Parameter Controls (5 cols) -->
+        <div class="lg:col-span-5 p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-5 font-mono text-xs">
+          
+          <!-- 1. Chamfer Cut Radius -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">CHAMFER RADIUS (--c)</span>
+              <span id="cfgChamferVal" class="text-orange font-bold">13px</span>
+            </div>
+            <input id="cfgChamferSlider" type="range" min="4" max="24" value="13" class="w-full accent-orange cursor-pointer" />
+            <div class="text-[9.5px] text-cream/40 truncate font-mono" id="configPolygonReadout">
+              clip-path: polygon(13px 0, calc(100% - 13px) 0...)
+            </div>
+          </div>
+
+          <!-- 2. Palette Color Swatches -->
+          <div class="space-y-2">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">ACCENT PALETTE</span>
+              <span class="text-[9.5px] text-cream/40">HEX / SWATCH</span>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border-2 border-white/40 hover:scale-110 transition cursor-pointer" style="background: #f4551d" data-color="#f4551d" data-hover="#ea4f1a" title="Kinetic Orange"></button>
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border border-white/20 hover:scale-110 transition cursor-pointer" style="background: #f59e0b" data-color="#f59e0b" data-hover="#d97706" title="Synth Amber"></button>
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border border-white/20 hover:scale-110 transition cursor-pointer" style="background: #10b981" data-color="#10b981" data-hover="#059669" title="Radar Emerald"></button>
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border border-white/20 hover:scale-110 transition cursor-pointer" style="background: #06b6d4" data-color="#06b6d4" data-hover="#0891b2" title="Quantum Cyan"></button>
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border border-white/20 hover:scale-110 transition cursor-pointer" style="background: #8b5cf6" data-color="#8b5cf6" data-hover="#7c3aed" title="Hydraulic Violet"></button>
+              <button class="cfg-color-swatch w-6 h-6 rounded-full border border-white/20 hover:scale-110 transition cursor-pointer" style="background: #ef4444" data-color="#ef4444" data-hover="#dc2626" title="Alarm Ruby"></button>
+              <input type="color" id="cfgColorPicker" value="#f4551d" class="w-6 h-6 rounded bg-transparent cursor-pointer border border-white/20 p-0" title="Custom Hex Color" />
+            </div>
+          </div>
+
+          <!-- 3. Grid Cell Spacing -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">COORDINATE GRID SPACING</span>
+              <span id="cfgGridVal" class="text-orange font-bold">84px</span>
+            </div>
+            <input id="cfgGridSlider" type="range" min="40" max="128" value="84" step="4" class="w-full accent-orange cursor-pointer" />
+          </div>
+
+          <!-- 4. Corner Crop Bracket Size -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between items-center text-[11px]">
+              <span class="text-cream font-semibold">CROP BRACKET SIZE</span>
+              <span id="cfgBracketVal" class="text-orange font-bold">13px</span>
+            </div>
+            <input id="cfgBracketSlider" type="range" min="8" max="22" value="13" class="w-full accent-orange cursor-pointer" />
+          </div>
+
+          <!-- 5. Vector Line Weight -->
+          <div class="space-y-2">
+            <span class="text-cream font-semibold text-[11px] block">VECTOR STROKE WEIGHT</span>
+            <div class="flex items-center gap-1.5 text-[10px]">
+              <button class="cfg-stroke-btn px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-stroke="1.0">1.0px (FINE)</button>
+              <button class="cfg-stroke-btn px-2.5 py-1 rounded bg-orange text-near font-bold transition cursor-pointer" data-stroke="1.35">1.35px (RAMS)</button>
+              <button class="cfg-stroke-btn px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-stroke="1.75">1.75px (BOLD)</button>
+              <button class="cfg-stroke-btn px-2.5 py-1 rounded hover:bg-white/10 text-cream/70 transition cursor-pointer" data-stroke="2.2">2.2px (HEAVY)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Panel: Live Specimen Sandbox & Code Output (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Live Interactive Specimen Stage -->
+          <div class="p-6 rounded-xl bg-ink/90 border border-white/12 relative overflow-hidden flex flex-col items-center justify-center min-h-[300px] shadow-2xl">
+            <!-- Subtle preview grid background -->
+            <div class="absolute inset-0 bg-blueprint opacity-60 pointer-events-none"></div>
+
+            <!-- The Live Specimen Card -->
+            <div id="configSpecimen" class="relative z-10 w-full max-w-[340px] p-5 border border-white/15 transition-all shadow-xl group">
+              <!-- Corner Brackets -->
+              <span class="bracket tl" style="color: rgba(255,255,255,0.4)"></span>
+              <span class="bracket tr" style="color: rgba(255,255,255,0.4)"></span>
+              <span class="bracket bl" style="color: rgba(255,255,255,0.4)"></span>
+              <span class="bracket br" style="color: rgba(255,255,255,0.4)"></span>
+
+              <!-- Specimen Header -->
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-white/10 font-mono text-[10px]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="font-bold uppercase tracking-wider">LIVE SPECIMEN // 001</span>
+                </div>
+                <span class="specimen-badge text-[9px] px-1.5 py-0.5 rounded border border-orange/40 text-orange font-mono">ACTIVE</span>
+              </div>
+
+              <!-- Specimen Media Viewport -->
+              <div class="specimen-media w-full h-32 p-3 flex items-center justify-center relative mb-4 border border-white/10">
+                <svg width="68" height="68" viewBox="0 0 72 72" class="specimen-vector text-orange" fill="none">
+                  <circle cx="36" cy="36" r="30" stroke="currentColor" stroke-width="1.35"/>
+                  <circle cx="36" cy="36" r="20" stroke="currentColor" stroke-width="1.35" stroke-dasharray="2 3"/>
+                  <circle cx="36" cy="36" r="10" stroke="currentColor" stroke-width="1.35"/>
+                  <path d="M36 6V66M6 36H66" stroke="currentColor" stroke-width="0.75" stroke-opacity="0.4"/>
+                  <path d="M36 28L44 36L36 44L28 36Z" fill="currentColor"/>
+                </svg>
+              </div>
+
+              <!-- Specimen Body & Button -->
+              <div class="space-y-3 font-mono">
+                <p class="text-[11.5px] leading-relaxed opacity-80">
+                  Polygonal chamfer silhouettes with dynamic coordinate clipping and balanced stroke weight.
+                </p>
+                <button class="specimen-btn w-full py-2 px-3 text-near font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition cursor-pointer">
+                  <span>DEPLOY BLUEPRINT</span>
+                  <span class="opacity-60 text-[9px]">↵</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Format Code Export Deck -->
+          <div class="p-4 rounded-xl bg-ink2/60 border border-white/10 space-y-3 font-mono text-xs">
+            <div class="flex items-center justify-between pb-2 border-b border-white/10">
+              <!-- Export Format Tabs -->
+              <div class="flex items-center gap-1 bg-black/40 p-0.5 rounded text-[10px]">
+                <button class="cfg-export-tab px-2.5 py-1 rounded bg-white/20 text-white font-bold cursor-pointer" data-tab="css">CSS VARIABLES</button>
+                <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="tailwind">TAILWIND CONFIG</button>
+                <button class="cfg-export-tab px-2.5 py-1 rounded hover:bg-white/10 text-cream/60 cursor-pointer" data-tab="json">DTCG JSON</button>
+              </div>
+
+              <button id="cfgCopyBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1 text-[10px] uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                <span>COPY CODE</span>
+              </button>
+            </div>
+
+            <!-- Code Output Block -->
+            <pre class="text-cream/90 text-[11px] overflow-x-auto p-3 bg-black/50 rounded-lg max-h-52 leading-relaxed"><code id="configCodeOutput"></code></pre>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -528,9 +702,18 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { sfx } from './audio.js';
     import { ICONS, ICON_META, getReactSnippet } from './icons.js';
     import { initOscilloscope } from './oscilloscope.js';
+    import { initConfigurator } from './configurator.js';
 
     // Attach sound listeners
     sfx.attachListeners();
+
+    // Initialize Blueprint Configurator
+    const configurator = initConfigurator({
+      sfx,
+      specimenId: 'configSpecimen',
+      codeOutputId: 'configCodeOutput',
+      polygonReadoutId: 'configPolygonReadout'
+    });
 
     // Initialize Oscilloscope
     const oscTriggerBadge = document.getElementById('oscTriggerBadge');

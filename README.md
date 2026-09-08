@@ -65,6 +65,14 @@ Inspired by [aesthetic-cards.vercel.app](https://aesthetic-cards.vercel.app/) an
   - Three phosphor themes: `AMBER` (`#f4551d`), `GREEN` (`#39ff14`), and `CREAM` (`#e9e2d3`).
   - Integrated Signal Generator test bench: Sine, Square, Sawtooth, and Chirp sweeps with 40Hz–2400Hz carrier tuning.
   - Live dual-sensor integration in the Hero monitor (`RADAR 3D` / `ACOUSTIC OSC`) and Soundboard lab in `components.html`.
+- **Interactive Blueprint Configurator & Token Studio:**
+  - Real-time token laboratory embedded in `components.html#configurator`.
+  - Dynamic 8-point chamfer polygon equation calculation (`--c: 4px` to `24px`).
+  - Swatch and native hex color picker for accents (`#f4551d`, `#f59e0b`, `#10b981`, `#06b6d4`, `#8b5cf6`, `#ef4444`).
+  - Interactive grid density (`40px`–`128px`), bracket sizing (`8px`–`22px`), and vector stroke weight selector (`1.0px`–`2.2px`).
+  - Live Specimen sandbox card + global page theme injection toggle.
+  - 4 one-click preset themes: `Industrial`, `Teenage OP-1`, `Cyberpunk`, and `Architectural Bone (Light)`.
+  - Multi-format token export: Raw CSS Variables, `tailwind.config.js` extension, and DTCG JSON schema.
 - **Included Agent Skill:**
   - Pre-configured agent skill in [`.agent/skills/aesthetic-feature-cards/SKILL.md`](./.agent/skills/aesthetic-feature-cards/SKILL.md) for Antigravity, Cursor, and Claude Code.
 
@@ -189,6 +197,36 @@ $$\text{bin}(i) = \min\left(N-1, \left\lfloor \left(\frac{i}{\text{bars}-1}\righ
 - Center axes with 5 sub-division tick marks per major division.
 - Semi-transparent background fills (`rgba(25, 24, 21, 0.26)`) simulating vector phosphor decay.
 - Switchable themes: `AMBER` (`#f4551d`), `GREEN` (`#39ff14`), and `CREAM` (`#e9e2d3`).
+
+---
+
+## Blueprint Configurator & Design Token System
+
+The Design System includes a real-time token configurator engine ([`configurator.js`](./configurator.js)) accessible in [`components.html#configurator`](./components.html#configurator).
+
+### 1. Mathematical Chamfer Calculation
+Corner cut radius is parameterized via `--c` and resolved dynamically as an 8-point polygon:
+```css
+clip-path: polygon(
+  var(--c) 0, calc(100% - var(--c)) 0,
+  100% var(--c), 100% calc(100% - var(--c)),
+  calc(100% - var(--c)) 100%, var(--c) 100%,
+  0 calc(100% - var(--c)), 0 var(--c)
+);
+```
+
+### 2. Available Token Parameters
+- **Chamfer Radius (`--c`)**: Scalable from `4px` (micro-chip) to `24px` (heavy hardware chassis). Default: `13px`.
+- **Accent Palette**: 6 high-contrast swatches plus custom hex color picker.
+- **Surface Modes**: Dark Ink (`#2b2b29`), Midnight Navy (`#0d1117`), Graphite Obsidian (`#181a18`), and Architectural Bone (`#f4efe6`).
+- **Blueprint Grid**: Cell spacing (`40px`–`128px`) and opacity (`0.01`–`0.15`).
+- **Vector Stroke Weight**: `1.0px` (Fine), `1.35px` (Standard Rams), `1.75px` (Bold), `2.2px` (Heavy).
+
+### 3. Preset Profiles
+- **`01 INDUSTRIAL BLUEPRINT`**: Dieter Rams / Linear dark aesthetic.
+- **`02 TEENAGE ENGINEERING OP-1`**: Slate well `#181a18`, phosphor green `#39ff14` accent.
+- **`03 CYBERPUNK TERMINAL`**: Deep obsidian `#0d1117`, sharp 6px chamfer, cyan `#06b6d4` accent.
+- **`04 ARCHITECTURAL DRAFTING`**: Light mode parchment `#f4efe6`, charcoal ink `#1c1c1a`, ruby `#ef4444`.
 
 ---
 
