@@ -48,6 +48,15 @@ Inspired by [aesthetic-cards.vercel.app](https://aesthetic-cards.vercel.app/) an
     - *Industrial Hardware*: `rotary`, `toggle`, `oscilloscope`, `relay`, `slider`, `meter`, `fuse`, `crystal`.
     - *Security & Guardrails*: `shield-zk`, `key-crypto`, `audit`, `reticle`, `vault`, `fingerprint`, `badge-check`, `hazard`.
     - *Interface & Controls*: `crosshair`, `terminal`, `brackets`, `split-flap`, `chevron-chamfer`, `search-reticle`, `copy-blueprint`, `sound-wave`.
+- **Interactive Cursor-Reactive 3D Wireframe & Telemetry Radar:**
+  - High-performance, zero-dependency Canvas 2D engine embedded in the Hero section.
+  - Multi-mode real-time sensor array:
+    - `GIMBAL`: Nested 3-axis gyro rings with pitch/roll/yaw angle markers.
+    - `ICOSA`: 3D wireframe icosahedron (12 vertices, 30 edges) with perspective depth scaling and terminal diamond nodes.
+    - `RADAR`: Polar range reticle with sweeping phosphor trail, pulsing target blips, and acoustic ping ripples.
+  - Cursor-tracking parallax with smooth lerp inertia (`smooth += (target - smooth) * 0.08`).
+  - Live azimuth (`000°`–`359°`) and elevation (`-90°`–`+90°`) telemetry readouts synced to canvas interaction.
+  - Full acoustic integration with procedural SFX (mode switch click and ping telemetry pulse).
 - **Included Agent Skill:**
   - Pre-configured agent skill in [`.agent/skills/aesthetic-feature-cards/SKILL.md`](./.agent/skills/aesthetic-feature-cards/SKILL.md) for Antigravity, Cursor, and Claude Code.
 
@@ -105,6 +114,38 @@ const EASE_IN_OUT = [0.77, 0, 0.175, 1]; // SVG stroke draw-on
 - **Hover**: Card lifts `translateY(-4px)` with corner crop brackets scaling to `1.35` (240ms `EASE_OUT`).
 - **Press**: Scales down to `0.985` (140ms duration on pointerdown).
 - **Reduced Motion**: Gracefully falls back to simple opacity fades.
+
+---
+
+## 3D Wireframe & Telemetry Radar Engine
+
+A zero-dependency Canvas 2D telemetry monitor simulating a hardware vector display (analogous to vector CRT instruments and aerospace HUD monitors).
+
+### 1. 3D Perspective Projection
+Coordinates in 3D model space \((x, y, z)\) are rotated by yaw (\(\alpha\)) and pitch (\(\beta\)) before perspective scaling:
+
+$$\begin{aligned}
+x_1 &= x \cos\alpha + z \sin\alpha \\
+z_1 &= -x \sin\alpha + z \cos\alpha \\
+y_2 &= y \cos\beta - z_1 \sin\beta \\
+z_2 &= y \sin\beta + z_1 \cos\beta \\
+p &= \frac{\text{fov}}{\text{fov} + z_2 \cdot \text{scale}}
+\end{aligned}$$
+
+Screen coordinates:
+$$\text{screenX} = c_x + x_1 \cdot \text{scale} \cdot p, \quad \text{screenY} = c_y + y_2 \cdot \text{scale} \cdot p$$
+
+### 2. Cursor Parallax & Inertia
+Yaw and pitch are coupled to pointer movements with an exponential lerp damping filter:
+```javascript
+smoothYaw   += (targetYaw   - smoothYaw)   * 0.08;
+smoothPitch += (targetPitch - smoothPitch) * 0.08;
+```
+
+### 3. Display Modes
+- **`GIMBAL`**: Nested 3-axis rotation rings (yaw, pitch, roll) with tick marks and orientation reticle.
+- **`ICOSA`**: 3D wireframe icosahedron with 12 vertices, 30 edges, and terminal diamond nodes.
+- **`RADAR`**: Polar coordinate range rings, sweeping phosphor beam with trail decay, animated target blips, and acoustic ripple rings.
 
 ---
 

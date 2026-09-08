@@ -1,5 +1,6 @@
 import { animate, inView, stagger } from 'motion';
 import { sfx } from './audio.js';
+import { initHeroRadar } from './radar.js';
 
 // Motion.dev — https://motion.dev
 // Animation choices follow the design-engineering rules:
@@ -627,5 +628,5 @@ print("Proof Valid:", verification.is_valid)`,
 // Initialize audio listeners
 sfx.attachListeners();
 
-
-
+// Initialize 3D Hero Radar
+initHeroRadar('heroRadarCanvas', { sfx });

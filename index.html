@@ -221,47 +221,103 @@
   <main class="blueprint min-h-dvh w-full px-4 sm:px-8 flex flex-col items-center">
 
     <!-- Hero Section -->
-    <section id="hero" class="w-full max-w-[1000px] pt-28 pb-16 sm:pt-36 sm:pb-24 flex flex-col items-start justify-center">
-      <!-- Sector Identifier -->
-      <div class="hero-reveal mb-4 flex items-center gap-3 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] text-cream/55">
-        <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" class="shrink-0 text-orange">
-          <path d="M5 .8 9.2 5 5 9.2.8 5Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
-        </svg>
-        <span>SEC-01 // AUTONOMOUS AGENTIC ARCHITECTURE</span>
-        <span class="leader h-[6px] w-24 opacity-60"></span>
-      </div>
-
-      <!-- Main Headline -->
-      <h1 class="hero-reveal text-[36px] sm:text-[54px] md:text-[62px] font-bold leading-[1.02] tracking-[-0.035em] text-cream max-w-[20ch] mb-6">
-        Deterministic systems for <span class="text-orange inline-block">autonomous</span> agents.
-      </h1>
-
-      <!-- Subtitle -->
-      <p class="hero-reveal text-[15px] sm:text-[17px] text-cream/75 max-w-[56ch] leading-relaxed mb-8">
-        High-assurance execution framework combining sub-millisecond signal routing, runtime guardrail verification, and stateful workflow execution on an immutable blueprint.
-      </p>
-
-      <!-- CTA Console & Command Box -->
-      <div class="hero-reveal flex flex-wrap items-center gap-3 sm:gap-4 mb-12 w-full">
-        <a href="#features" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-5 py-3 text-[12.5px] uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-orange/15">
-          <span>Explore Capabilities</span>
-          <span class="opacity-50 text-[10px] font-mono">↵</span>
-        </a>
-
-        <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="btn-chamfer bg-ink2/80 hover:bg-ink2 border border-white/15 text-cream font-medium px-4 py-3 text-[12.5px] uppercase tracking-wider flex items-center gap-2">
-          <span>GitHub Repository</span>
-          <span class="opacity-50 text-[10px] font-mono">↗</span>
-        </a>
-
-        <!-- CLI Quick Install Box -->
-        <div class="relative flex-1 min-w-[260px] max-w-[380px] bg-ink2/90 border border-white/10 px-3.5 py-2.5 rounded-lg flex items-center justify-between font-mono text-[11px] text-cream/90">
-          <div class="flex items-center gap-2 overflow-hidden">
-            <span class="text-orange select-none">$</span>
-            <code id="curlSnippet" class="truncate text-cream/90">curl -fsSL https://get.kinetic.dev | sh</code>
+    <section id="hero" class="w-full max-w-[1040px] pt-28 pb-16 sm:pt-34 sm:pb-20 flex flex-col items-start justify-center">
+      <!-- Split Hero Container -->
+      <div class="w-full flex flex-col lg:flex-row items-start justify-between gap-8 lg:gap-12 mb-10">
+        <!-- Left Column: Copy & Actions -->
+        <div class="flex-1 flex flex-col items-start w-full">
+          <!-- Sector Identifier -->
+          <div class="hero-reveal mb-4 flex items-center gap-3 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] text-cream/55">
+            <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" class="shrink-0 text-orange">
+              <path d="M5 .8 9.2 5 5 9.2.8 5Z" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+            <span>SEC-01 // AUTONOMOUS AGENTIC ARCHITECTURE</span>
+            <span class="leader h-[6px] w-24 opacity-60"></span>
           </div>
-          <button id="copyCliBtn" class="shrink-0 ml-2 p-1 hover:bg-white/10 rounded text-cream/60 hover:text-white transition" title="Copy install command">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-          </button>
+
+          <!-- Main Headline -->
+          <h1 class="hero-reveal text-[36px] sm:text-[50px] md:text-[56px] font-bold leading-[1.02] tracking-[-0.035em] text-cream max-w-[18ch] mb-5">
+            Deterministic systems for <span class="text-orange inline-block">autonomous</span> agents.
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="hero-reveal text-[14.5px] sm:text-[16px] text-cream/75 max-w-[50ch] leading-relaxed mb-8">
+            High-assurance execution framework combining sub-millisecond signal routing, runtime guardrail verification, and stateful workflow execution on an immutable blueprint.
+          </p>
+
+          <!-- CTA Console & Command Box -->
+          <div class="hero-reveal flex flex-wrap items-center gap-3 sm:gap-4 w-full">
+            <a href="#features" class="btn-chamfer bg-orange hover:bg-orange2 text-near font-semibold px-5 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-orange/15">
+              <span>Explore Capabilities</span>
+              <span class="opacity-50 text-[10px] font-mono">↵</span>
+            </a>
+
+            <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="btn-chamfer bg-ink2/80 hover:bg-ink2 border border-white/15 text-cream font-medium px-4 py-2.5 text-[12px] uppercase tracking-wider flex items-center gap-2">
+              <span>GitHub</span>
+              <span class="opacity-50 text-[10px] font-mono">↗</span>
+            </a>
+
+            <!-- CLI Quick Install Box -->
+            <div class="relative flex-1 min-w-[240px] max-w-[340px] bg-ink2/90 border border-white/10 px-3 py-2 rounded-lg flex items-center justify-between font-mono text-[11px] text-cream/90">
+              <div class="flex items-center gap-2 overflow-hidden">
+                <span class="text-orange select-none">$</span>
+                <code id="curlSnippet" class="truncate text-cream/90">curl -fsSL https://get.kinetic.dev | sh</code>
+              </div>
+              <button id="copyCliBtn" class="shrink-0 ml-2 p-1 hover:bg-white/10 rounded text-cream/60 hover:text-white transition" title="Copy install command">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: 3D Telemetry Sensor Array Monitor -->
+        <div class="hero-reveal w-full lg:w-[350px] shrink-0">
+          <div class="chamfer-card p-3.5 bg-ink2/50 border border-white/12 relative group shadow-2xl">
+            <!-- Corner crop brackets -->
+            <span class="bracket tl" style="color: rgba(255,255,255,0.3)"></span>
+            <span class="bracket tr" style="color: rgba(255,255,255,0.3)"></span>
+            <span class="bracket bl" style="color: rgba(255,255,255,0.3)"></span>
+            <span class="bracket br" style="color: rgba(255,255,255,0.3)"></span>
+
+            <!-- Monitor Header -->
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-white/10 font-mono text-[10px]">
+              <div class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-semibold tracking-wider text-cream/90 uppercase">TELEMETRY // 3D ARRAY</span>
+              </div>
+              <button id="radarModeBtn" class="badge-tech text-[9px] hover:border-orange/50 transition cursor-pointer" title="Click to cycle 3D mode">
+                MODE: GIMBAL
+              </button>
+            </div>
+
+            <!-- 3D Canvas Viewport -->
+            <div class="relative w-full h-[250px] bg-ink/90 border border-white/10 rounded overflow-hidden flex items-center justify-center cursor-crosshair">
+              <canvas id="heroRadarCanvas" class="w-full h-full block"></canvas>
+              <div class="absolute bottom-2 left-2 text-[9px] font-mono text-cream/50 pointer-events-none flex items-center gap-2 bg-ink/75 px-1.5 py-0.5 rounded border border-white/5 backdrop-blur-xs">
+                <span id="radarAzimuth">AZ: 0.0°</span>
+                <span class="text-white/20">|</span>
+                <span id="radarElevation">EL: 0.0°</span>
+              </div>
+              <button id="radarPingBtn" class="absolute bottom-2 right-2 text-[9px] font-mono px-2 py-0.5 rounded bg-white/10 hover:bg-orange hover:text-near border border-white/15 text-orange transition cursor-pointer" title="Trigger Acoustic Ping Wave">
+                PING ↵
+              </button>
+            </div>
+
+            <!-- Monitor Footer Ribbon -->
+            <div class="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between font-mono text-[9.5px] text-cream/60">
+              <div class="flex items-center gap-1">
+                <span class="text-orange font-bold">RANGE:</span>
+                <span>42.0 KM</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-white/20">|</span>
+                <span class="text-emerald-400 font-semibold flex items-center gap-1">
+                  <span class="w-1 h-1 rounded-full bg-emerald-400"></span>
+                  3 TARGETS LOCK
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

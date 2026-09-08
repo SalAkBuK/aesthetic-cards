@@ -143,4 +143,53 @@ When creating UI icons to match this aesthetic, follow these geometric constrain
 4. **Coordinate Crosshair Dashes**: Internal reference lines use sub-pixel dotted or dashed intervals:
    - `stroke-dasharray="1 1.5"` with `stroke-opacity="0.5"`
 
+---
+
+## 7. 3D Cursor-Reactive Telemetry Radar Engine
+
+When adding interactive 3D telemetry or radar monitors to Hero sections or dashboards, use a zero-dependency HTML5 Canvas 2D engine rather than heavy 3D frameworks.
+
+### Canvas Configuration & HiDPI
+- Handle high-density displays via `window.devicePixelRatio` scaling:
+  ```javascript
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  ```
+- Stroke styling: `ctx.lineWidth = 1.35`, `ctx.strokeStyle = 'rgba(233, 226, 211, 0.45)'` (or accent `rgba(244, 85, 29, 0.85)`).
+- Linecaps: `ctx.lineCap = 'round'`, `ctx.lineJoin = 'round'`.
+
+### 3D Perspective Projection Formulas
+Given a 3D point $(x, y, z)$ normalized to $[-1, 1]$:
+1. **Yaw Rotation** ($\alpha$ around Y axis):
+   $$x_1 = x \cos\alpha + z \sin\alpha, \quad z_1 = -x \sin\alpha + z \cos\alpha$$
+2. **Pitch Rotation** ($\beta$ around X axis):
+   $$y_2 = y \cos\beta - z_1 \sin\beta, \quad z_2 = y \sin\beta + z_1 \cos\beta$$
+3. **Perspective Division**:
+   $$p = \frac{\text{fov}}{\text{fov} + z_2 \cdot \text{scale}}$$
+4. **Viewport Mapping**:
+   $$\text{screenX} = c_x + x_1 \cdot \text{scale} \cdot p, \quad \text{screenY} = c_y + y_2 \cdot \text{scale} \cdot p$$
+
+### Inertia & Parallax Damping
+Smooth the pointer interaction with an exponential lerp filter in the `requestAnimationFrame` loop:
+```javascript
+smoothYaw   += (targetYaw   - smoothYaw)   * 0.08;
+smoothPitch += (targetPitch - smoothPitch) * 0.08;
+```
+
+### Display Modes
+- **`GIMBAL`**: Nested 3-axis rotation rings with orientation tick marks, central crosshair, and pitch/roll readout.
+- **`ICOSA`**: 3D wireframe icosahedron constructed with golden ratio $\phi = (1 + \sqrt{5}) / 2$, 12 vertices, 30 edges, and terminal diamond nodes drawn at each projected vertex.
+- **`RADAR`**: 3 concentric polar range circles, 4-quadrant crosshair axes, continuous phosphor sweep ray ($1.2\text{ rad/s}$) with fading alpha trail, simulated target blips, and acoustic ping expansion rings.
+
+### Live Telemetry Coupling
+Compute live Azimuth ($000^\circ$–$359^\circ$) and Elevation ($-90^\circ$–$+90^\circ$) from current yaw and pitch:
+```javascript
+const az = Math.round(((smoothYaw % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) * (180 / Math.PI));
+const el = Math.round(smoothPitch * (180 / Math.PI));
+```
+Coupled to HUD readout elements and procedural audio triggers (`sfx.click()`, `sfx.telemetry()`).
+
+
 
