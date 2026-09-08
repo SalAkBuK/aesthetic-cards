@@ -230,6 +230,38 @@ clip-path: polygon(
 
 ---
 
+## High-Density Telemetry Data Table & Log Inspector
+
+Engineered for infrastructure dashboards, telemetry feeds, and cluster management ([`table.js`](./table.js) & [`components.html#telemetry`](./components.html#telemetry)).
+
+### 1. Architectural Highlights
+- **Monospace Density**: Compact typography (`JetBrains Mono`, `10.5px`–`12px`) with strict visual alignment.
+- **Inline Micro-Sparklines**: High-performance `<canvas>` sparklines with automatic HiDPI device pixel ratio scaling (`dpr = window.devicePixelRatio || 1`).
+- **Chamfered Polygon Checkboxes**: Custom 8-point polygon checkboxes (`.checkbox-chamfer`) matching the hardware design language.
+- **Bi-Directional Column Sorting**: Instant sorting on latency, node identifier, load, and status with interactive arrow indicators.
+- **Live Search & Status Filtering**: Real-time multi-attribute query filtering matching IDs, names, regions, and cryptographic signatures.
+- **Zero-Knowledge Audit Drawers**: Expandable row inspector displaying runtime engines, memory footprints, tasks processed, and formatted JSON state payloads with one-click copy.
+- **Batch Operations**: Multi-row selection toolbar with `DRAIN TRAFFIC` and `EXPORT CSV` triggers.
+- **Procedural Haptics Integration**: Coupled with Web Audio API micro-haptics (`sfx.click()`, `sfx.tick()`, `sfx.modalOpen()`, `sfx.telemetry()`, `sfx.success()`).
+
+### 2. Usage & Controller Initialization
+```javascript
+import { initTelemetryTable } from './table.js';
+import { sfx } from './audio.js';
+
+const telemetryTable = initTelemetryTable({
+  sfx,
+  tableBodyId: 'telemetryTableBody',
+  searchId: 'telemetrySearch',
+  statusSelectId: 'telemetryStatusFilter',
+  selectedCountId: 'telemetrySelectedCount',
+  batchActionsId: 'telemetryBatchActions',
+  selectAllId: 'telemetrySelectAll'
+});
+```
+
+---
+
 ## Universal Prompt for LLMs
 
 To generate similar cards with Claude, ChatGPT, v0, or Cursor:

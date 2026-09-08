@@ -257,7 +257,59 @@ Support standard export targets:
 - **Tailwind Config**: `theme.extend.colors` and `clipPath` definitions.
 - **DTCG JSON**: Design Token Community Group specification compliant JSON.
 
+---
 
+## 10. High-Density Telemetry Data Tables & Log Inspectors
 
+When generating mission-critical data tables, telemetry logs, or node monitors:
 
+### 1. Monospace Visual Density & Layout
+- Container: Monospace font stack (`JetBrains Mono`, `ui-monospace`), `11px` body text, `9.5px`–`10.5px` badges and auxiliary metrics.
+- Color hierarchy: Muted tabular borders (`border-white/5` to `border-white/10`), near-black rows with subtle hover glow (`hover:bg-white/[0.03]`), active row selection tint (`bg-orange/5`).
 
+### 2. Chamfered Form Checkbox Specification
+Use an 8-point cut corner polygon on checkboxes to preserve industrial continuity:
+```css
+.checkbox-chamfer {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: all 120ms var(--ease-out);
+  --c: 3px;
+  clip-path: polygon(
+    var(--c) 0, calc(100% - var(--c)) 0,
+    100% var(--c), 100% calc(100% - var(--c)),
+    calc(100% - var(--c)) 100%, var(--c) 100%,
+    0 calc(100% - var(--c)), 0 var(--c)
+  );
+}
+.checkbox-chamfer:checked {
+  background-color: var(--orange);
+  border-color: var(--orange);
+}
+```
+
+### 3. Inline Micro-Sparkline Canvas Architecture
+Draw real-time time-series latency micro-sparklines directly onto compact `<canvas>` elements (`80px × 20px`) inside table cells:
+- Scale for HiDPI displays:
+  ```javascript
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  ctx.scale(dpr, dpr);
+  ```
+- Color code based on operational status:
+  - Online (`#10b981`), Throttled (`#f59e0b`), Degraded (`#ef4444`), Syncing (`#06b6d4`).
+- Fill subtle gradient under the trend line (`rgba(..., 0.12)`) and draw a 3px terminal beacon dot at the most recent coordinate.
+
+### 4. Zero-Knowledge Expandable Audit Drawers
+Each row can expand to reveal a dark nested telemetry drawer (`bg-near/80 border-orange/30`):
+- Formatted state JSON block with 1-click clipboard copy.
+- Telemetry matrix (jitter, cipher, SLA uptime, failover peer).
+- Trigger procedural sound cues on expand (`sfx.modalOpen()`) and collapse (`sfx.modalClose()`).

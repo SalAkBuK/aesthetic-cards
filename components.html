@@ -63,6 +63,8 @@
       <span class="text-white/20">|</span>
       <a href="#icons" class="hover:text-cream text-cream/70 transition">Icons (32)</a>
       <span class="text-white/20">|</span>
+      <a href="#telemetry" class="hover:text-orange text-cream/70 transition">Telemetry Table</a>
+      <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
       <a href="./tokens.css" download class="btn-primary py-1 px-3 text-[10.5px]">Download tokens.css</a>
     </div>
@@ -690,6 +692,117 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
       </div>
     </section>
 
+    <!-- SECTION 8: HIGH-DENSITY TELEMETRY DATA TABLE & LOG INSPECTOR -->
+    <section class="space-y-6" id="telemetry">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 font-mono gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">08 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">High-Density Telemetry Data Table</h2>
+        </div>
+        <div class="flex items-center gap-2 text-[10.5px] text-cream/50">
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>CLUSTER QUORUM: 6/6 NODES SYNCHRONIZED</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Mission-critical monospace data table engineered for infrastructure dashboards and telemetry monitors. Features sortable columns, inline micro-sparkline canvas graphs, chamfered bulk multi-selection, live query filtering, and expandable zero-knowledge audit drawers.
+      </p>
+
+      <div class="p-4 sm:p-6 rounded-xl bg-ink2/50 border border-white/10 space-y-4 font-mono">
+        <!-- Control Toolbar: Search + Status Filter + Batch Actions -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-white/10 text-xs">
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- Search Input -->
+            <div class="relative">
+              <input 
+                id="telemetrySearch" 
+                type="text" 
+                placeholder="FILTER NODES, REGIONS, HASHES..." 
+                class="bg-black/50 border border-white/20 focus:border-orange text-cream text-[11px] px-3 py-1.5 pl-8 rounded w-64 focus:outline-none transition"
+              />
+              <svg class="w-3.5 h-3.5 text-cream/40 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
+
+            <!-- Status Dropdown -->
+            <select 
+              id="telemetryStatusFilter" 
+              class="bg-black/50 border border-white/20 focus:border-orange text-cream text-[11px] px-2.5 py-1.5 rounded focus:outline-none cursor-pointer"
+            >
+              <option value="all">ALL STATUS (6)</option>
+              <option value="online">STATUS: ONLINE</option>
+              <option value="throttled">STATUS: THROTTLED</option>
+              <option value="degraded">STATUS: DEGRADED</option>
+              <option value="syncing">STATUS: SYNCING</option>
+            </select>
+          </div>
+
+          <!-- Batch Selection Actions (revealed when rows selected) -->
+          <div id="telemetryBatchActions" class="flex items-center gap-2 transition-opacity duration-200 opacity-0 pointer-events-none">
+            <span id="telemetrySelectedCount" class="text-[10px] text-orange font-bold uppercase tracking-wider">0 SELECTED</span>
+            <button id="batchDrainBtn" class="btn-chamfer bg-amber/20 hover:bg-amber hover:text-near text-amber border border-amber/40 px-2.5 py-1 text-[10px] uppercase font-bold transition flex items-center gap-1 cursor-pointer" title="Drain and throttle selected nodes">
+              <span>DRAIN TRAFFIC</span>
+            </button>
+            <button id="batchExportBtn" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-2.5 py-1 text-[10px] uppercase font-bold transition flex items-center gap-1 cursor-pointer" title="Export selection to CSV">
+              <span>EXPORT CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Monospace Telemetry Table -->
+        <div class="overflow-x-auto rounded-lg border border-white/10 bg-black/30">
+          <table class="w-full text-left font-mono text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-white/10 bg-white/[0.02] text-[10.5px] uppercase tracking-wider text-cream/50 select-none">
+                <th class="py-2.5 px-3 w-10 text-center">
+                  <input type="checkbox" id="telemetrySelectAll" class="checkbox-chamfer" title="Select all rows" />
+                </th>
+                <th class="py-2.5 px-3 cursor-pointer hover:text-orange transition whitespace-nowrap" data-sort="status">
+                  <span>STATUS</span>
+                  <span class="sort-arrow opacity-20 ml-1">⇅</span>
+                </th>
+                <th class="py-2.5 px-3 cursor-pointer hover:text-orange transition whitespace-nowrap" data-sort="id">
+                  <span>NODE IDENTIFIER</span>
+                  <span class="sort-arrow opacity-20 ml-1">⇅</span>
+                </th>
+                <th class="py-2.5 px-3 cursor-pointer hover:text-orange transition whitespace-nowrap" data-sort="currentLatency">
+                  <span>LATENCY (P99 HIST)</span>
+                  <span class="sort-arrow text-orange ml-1">▲</span>
+                </th>
+                <th class="py-2.5 px-3 cursor-pointer hover:text-orange transition whitespace-nowrap hidden md:table-cell" data-sort="load">
+                  <span>THROUGHPUT / LOAD</span>
+                  <span class="sort-arrow opacity-20 ml-1">⇅</span>
+                </th>
+                <th class="py-2.5 px-3 whitespace-nowrap hidden lg:table-cell">
+                  <span>SIGNATURE (ED25519)</span>
+                </th>
+                <th class="py-2.5 px-3 text-right whitespace-nowrap">
+                  <span>INSPECT</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="telemetryTableBody">
+              <!-- Dynamically populated via TelemetryTable in table.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Footer Telemetry Summary -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-[10.5px] text-cream/50">
+          <div class="flex items-center gap-3">
+            <span>CONSENSUS: <strong class="text-cream">BFT-QUORUM (99.99%)</strong></span>
+            <span class="text-white/20">|</span>
+            <span>INGESTION RATE: <strong class="text-emerald-400">98.9k ops/s</strong></span>
+          </div>
+          <div class="flex items-center gap-1.5 text-cream/40">
+            <span class="text-orange">TIP:</span>
+            <span>CLICK "TRACE" TO EXPAND REAL-TIME AUDIT DRAWER & PAYLOAD JSON</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -703,9 +816,21 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     import { ICONS, ICON_META, getReactSnippet } from './icons.js';
     import { initOscilloscope } from './oscilloscope.js';
     import { initConfigurator } from './configurator.js';
+    import { initTelemetryTable } from './table.js';
 
     // Attach sound listeners
     sfx.attachListeners();
+
+    // Initialize High-Density Telemetry Table
+    const telemetryTable = initTelemetryTable({
+      sfx,
+      tableBodyId: 'telemetryTableBody',
+      searchId: 'telemetrySearch',
+      statusSelectId: 'telemetryStatusFilter',
+      selectedCountId: 'telemetrySelectedCount',
+      batchActionsId: 'telemetryBatchActions',
+      selectAllId: 'telemetrySelectAll'
+    });
 
     // Initialize Blueprint Configurator
     const configurator = initConfigurator({
