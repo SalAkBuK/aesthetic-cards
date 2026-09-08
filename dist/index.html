@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Feature Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:    '#2b2b29',
+          ink2:   '#33332f',
+          line:   '#3d3d39',
+          cream:  '#e9e2d3',
+          cream2: '#e2dac9',
+          sand:   '#d8cdb4',
+          orange: '#f4551d',
+          orange2:'#ea4f1a',
+          near:   '#16150f',
+        },
+        fontFamily: {
+          sans: ['"Inter Tight"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: #2b2b29; }
+
+  /* Faint blueprint grid behind everything, like the reference */
+  .blueprint {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 84px 84px;
+    background-position: center top;
+  }
+
+  /* Chamfered card silhouette */
+  .chamfer {
+    --c: 13px;
+    clip-path: polygon(
+      var(--c) 0, calc(100% - var(--c)) 0,
+      100% var(--c), 100% calc(100% - var(--c)),
+      calc(100% - var(--c)) 100%, var(--c) 100%,
+      0 calc(100% - var(--c)), 0 var(--c)
+    );
+  }
+  @media (max-width: 640px) { .chamfer { --c: 11px; } }
+
+  /* Dotted media panel */
+  .dotgrid {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 7px 7px;
+    background-position: 0 0;
+  }
+
+  /* Dotted leader line for section labels */
+  .leader {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 6px 6px;
+    background-position: 0 center;
+    background-repeat: repeat-x;
+  }
+
+  /* Corner crop brackets around the media panel */
+  .bracket { position: absolute; width: 13px; height: 13px; pointer-events: none; }
+  .bracket::before, .bracket::after { content: ''; position: absolute; background: currentColor; }
+  .bracket::before { width: 100%; height: 1px; }
+  .bracket::after  { width: 1px; height: 100%; }
+  .bracket.tl { top: 0; left: 0; }
+  .bracket.tl::before { top: 0; left: 0; } .bracket.tl::after { top: 0; left: 0; }
+  .bracket.tr { top: 0; right: 0; }
+  .bracket.tr::before { top: 0; right: 0; } .bracket.tr::after { top: 0; right: 0; }
+  .bracket.bl { bottom: 0; left: 0; }
+  .bracket.bl::before { bottom: 0; left: 0; } .bracket.bl::after { bottom: 0; left: 0; }
+  .bracket.br { bottom: 0; right: 0; }
+  .bracket.br::before { bottom: 0; right: 0; } .bracket.br::after { bottom: 0; right: 0; }
+
+  /* Draw-on for the line art is applied as SVG attributes by main.js, so
+     Motion can animate them without a stylesheet rule winning over it. */
+
+  /* Hover motion lives in CSS: transitions are interruptible and run off the
+     main thread, and Motion would write SVG transforms as attributes (which
+     reject px units) rather than as styles. */
+  .art .ripple, .art .sign, .art .v, .art .tri {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .bracket { transform-origin: center; transition: transform 240ms var(--ease-out); }
+
+  .card {
+    --lift: 0px;
+    --press: 1;
+    transform: translateY(var(--lift)) scale(var(--press));
+    transition: transform 240ms var(--ease-out);
+  }
+  .card-shell.is-press .card { --press: 0.985; transition-duration: 140ms; }
+
+  @media (hover: hover) and (pointer: fine) {
+    /* The card lifts; the line art stays exactly where it is. */
+    .card-shell.is-hover .card { --lift: -4px; }
+    .card-shell.is-hover .bracket { transform: scale(1.35); }
+  }
+
+  /* Cards start hidden only when JS will reveal them */
+  .js .card-shell { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .card-shell { opacity: 1; }
+    .card, .bracket { transition: none; }
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "motion": "https://cdn.jsdelivr.net/npm/motion@12/+esm"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-BeOS5XxS.js"></script>
+</head>
+
+<body class="min-h-dvh bg-ink text-cream font-sans">
+  <main class="blueprint min-h-dvh w-full px-4 py-14 sm:px-8 sm:py-20 flex items-center justify-center">
+    <section class="w-full max-w-[1000px]">
+
+      <!-- Section label -->
+      <div id="label" class="mb-3 flex items-center gap-3 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.18em] text-cream/55">
+        <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" class="shrink-0">
+          <path d="M5 .8 9.2 5 5 9.2.8 5Z" fill="none" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        <span class="shrink-0">Features</span>
+        <span class="leader h-[6px] flex-1 opacity-70"></span>
+      </div>
+
+      <!-- Cards -->
+      <div id="cards" class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-[10px]">
+
+        <!-- 001 — Smart Actions -->
+        <article class="card-shell group relative" data-card="1">
+          <div class="card flex h-full flex-col gap-[6px] will-change-transform">
+            <div class="block chamfer relative bg-orange text-near">
+            <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Smart Actions</h3>
+              <span class="font-mono text-[10px] leading-none pt-[3px] opacity-60">001</span>
+            </header>
+
+            <div class="px-4 pb-4 sm:px-[14px] sm:pb-[14px]">
+              <div class="media relative aspect-square w-full overflow-hidden bg-orange2/60">
+                <div class="dotgrid absolute inset-0 text-near/25"></div>
+                <span class="bracket tl text-near/70"></span>
+                <span class="bracket tr text-near/70"></span>
+                <span class="bracket bl text-near/70"></span>
+                <span class="bracket br text-near/70"></span>
+
+                <!-- Stacked circles with +/− -->
+                <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
+                     stroke="currentColor" stroke-width="1.35" aria-hidden="true">
+                  <g class="rings" stroke-linecap="round">
+                    <circle class="draw ripple" cx="100" cy="110" r="70"/>
+                    <circle class="draw ripple" cx="100" cy="128" r="52"/>
+                    <circle class="draw ripple" cx="100" cy="144" r="36"/>
+                    <circle class="draw ripple" cx="100" cy="158" r="22"/>
+                  </g>
+                  <g class="signs" stroke-linecap="round">
+                    <g class="sign"><path d="M93 56h14"/></g>
+                    <g class="sign"><path d="M93 92h14"/><path d="M100 85v14"/></g>
+                    <g class="sign"><path d="M93 124h14"/></g>
+                    <g class="sign"><path d="M93 152h14"/><path d="M100 145v14"/></g>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            </div>
+
+            <div class="block chamfer flex flex-1 bg-orange text-near">
+
+            <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
+              <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
+                Execute actions: refunds, plan changes, CRM updates
+              </p>
+              <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-45">
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+              </span>
+            </footer>
+            </div>
+          </div>
+          <!-- divider node between cards -->
+          <span class="node pointer-events-none absolute right-[-9px] z-10 hidden sm:block h-[12px] w-[12px] rotate-45 bg-ink"></span>
+        </article>
+
+        <!-- 002 — Auto-Resolve -->
+        <article class="card-shell group relative" data-card="2">
+          <div class="card flex h-full flex-col gap-[6px] will-change-transform">
+            <div class="block chamfer relative bg-cream text-near">
+            <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Auto-Resolve</h3>
+              <span class="font-mono text-[10px] leading-none pt-[3px] opacity-45">002</span>
+            </header>
+
+            <div class="px-4 pb-4 sm:px-[14px] sm:pb-[14px]">
+              <div class="media relative aspect-square w-full overflow-hidden bg-cream2">
+                <div class="dotgrid absolute inset-0 text-near/20"></div>
+                <span class="bracket tl text-near/55"></span>
+                <span class="bracket tr text-near/55"></span>
+                <span class="bracket bl text-near/55"></span>
+                <span class="bracket br text-near/55"></span>
+
+                <!-- Woven triangle -->
+                <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
+                     stroke="currentColor" aria-hidden="true">
+                  <g class="fan" stroke-width="0.75" opacity="0.85"></g>
+                  <path class="draw tri" d="M100 32 172 168 28 168Z" stroke-width="1.35" stroke-linejoin="round"/>
+                  <path class="draw spine" d="M100 32V168" stroke-width="1"/>
+                </svg>
+              </div>
+            </div>
+
+            </div>
+
+            <div class="block chamfer flex flex-1 bg-cream text-near">
+
+            <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
+              <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
+                Deflection + safe auto-resolution with guardrails
+              </p>
+              <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-35">
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+              </span>
+            </footer>
+            </div>
+          </div>
+          <span class="node pointer-events-none absolute right-[-9px] z-10 hidden sm:block h-[12px] w-[12px] rotate-45 bg-ink"></span>
+        </article>
+
+        <!-- 003 — Agent assist -->
+        <article class="card-shell group relative" data-card="3">
+          <div class="card flex h-full flex-col gap-[6px] will-change-transform">
+            <div class="block chamfer relative bg-cream text-near">
+            <header class="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:px-[14px] sm:pt-[14px]">
+              <h3 class="text-[20px] sm:text-[21px] font-semibold leading-none tracking-[-0.02em]">Agent assist</h3>
+              <span class="font-mono text-[10px] leading-none pt-[3px] opacity-45">003</span>
+            </header>
+
+            <div class="px-4 pb-4 sm:px-[14px] sm:pb-[14px]">
+              <div class="media relative aspect-square w-full overflow-hidden bg-cream2">
+                <div class="dotgrid absolute inset-0 text-near/20"></div>
+                <span class="bracket tl text-near/55"></span>
+                <span class="bracket tr text-near/55"></span>
+                <span class="bracket bl text-near/55"></span>
+                <span class="bracket br text-near/55"></span>
+
+                <!-- Venn -->
+                <svg class="art absolute inset-0 h-full w-full" viewBox="0 0 200 200" fill="none"
+                     stroke="currentColor" stroke-width="1.35" aria-hidden="true">
+                  <defs>
+                    <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+                      <line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1"/>
+                    </pattern>
+                    <clipPath id="clipB"><circle cx="124" cy="90" r="42"/></clipPath>
+                    <clipPath id="clipBC" clipPathUnits="userSpaceOnUse">
+                      <circle cx="100" cy="128" r="42" clip-path="url(#clipB)"/>
+                    </clipPath>
+                  </defs>
+
+                  <rect class="hatch" x="0" y="0" width="200" height="200"
+                        fill="url(#hatch)" stroke="none" clip-path="url(#clipBC)" opacity="0.9"/>
+
+                  <g class="venn">
+                    <circle class="draw v v-a" cx="76"  cy="90"  r="42"/>
+                    <circle class="draw v v-b" cx="124" cy="90"  r="42"/>
+                    <circle class="draw v v-c" cx="100" cy="128" r="42"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            </div>
+
+            <div class="block chamfer flex flex-1 bg-cream text-near">
+
+            <footer class="flex w-full items-start justify-between gap-3 px-4 py-[14px] sm:px-[14px]">
+              <p class="max-w-[22ch] text-[12.5px] sm:text-[13px] leading-[1.45] tracking-[-0.005em]">
+                Suggested replies, brand tone, cited knowledge, macros
+              </p>
+              <span class="mt-[3px] flex shrink-0 flex-col items-center gap-[3px] opacity-35">
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+                <i class="block h-[2.5px] w-[2.5px] rounded-full bg-current"></i>
+              </span>
+            </footer>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
