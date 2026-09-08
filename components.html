@@ -46,6 +46,14 @@
     </div>
 
     <div class="flex items-center gap-3">
+      <!-- Procedural Audio Toggle -->
+      <button id="sfxToggle" class="sfx-toggle sfx-enabled" title="Toggle Mechanical Micro-Haptics (Web Audio API)">
+        <div class="sfx-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="sfx-label">SFX: ON</span>
+      </button>
+
       <a href="./index.html" class="hover:text-cream text-cream/70 transition">Landing Page</a>
       <span class="text-white/20">|</span>
       <a href="https://github.com/SalAkBuK/aesthetic-cards" target="_blank" class="hover:text-cream text-cream/70 transition">GitHub</a>
@@ -253,6 +261,126 @@
       </div>
     </section>
 
+    <!-- SECTION 5: AUDIO & MICRO-HAPTICS RACK -->
+    <section class="space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10 font-mono">
+        <div class="flex items-center gap-2">
+          <span class="text-orange font-bold">05 //</span>
+          <h2 class="text-lg font-semibold tracking-wide text-cream uppercase">Audio & Micro-Haptics Rack</h2>
+        </div>
+        <span class="text-xs text-orange font-mono uppercase tracking-wider">TEENAGE ENGINEERING SOUND PROFILE</span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-cream/70 leading-relaxed font-mono">
+        Sub-millisecond procedural synthesizer powered entirely by browser Web Audio API. Zero asset downloads, zero network latency. Click each transducer below to preview sound profiles or inspect wave shapes.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- 01: Rotary Detent Tick -->
+        <div class="sound-test-card" data-sound="tick">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">01 // ROTARY TICK</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">6ms SINE</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">Rotary Detent Blip</p>
+          <p class="text-[11px] text-cream/60 mb-3">2400Hz → 1800Hz exponential pitch drop. Plays on card & button hover.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: HOVER / CLICK</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+
+        <!-- 02: Mechanical Relay Clack -->
+        <div class="sound-test-card" data-sound="click">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">02 // RELAY CLACK</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">35ms DUAL</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">Mechanical Solenoid Snap</p>
+          <p class="text-[11px] text-cream/60 mb-3">170Hz triangle thump + 980Hz high transient snap. Tactile button click.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: BUTTON PRESS</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+
+        <!-- 03: Servo Hydraulic Disengage -->
+        <div class="sound-test-card" data-sound="modalOpen">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">03 // SERVO DISENGAGE</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">130ms SAW+LP</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">Hydraulic Seal Depressurize</p>
+          <p class="text-[11px] text-cream/60 mb-3">110Hz → 320Hz sawtooth through 350Hz-1200Hz lowpass filter. Plays on modal open.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: MODAL OPEN</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+
+        <!-- 04: Hydraulic Latch -->
+        <div class="sound-test-card" data-sound="modalClose">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">04 // HYDRAULIC LATCH</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">85ms DAMPED</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">Pneumatic Latch Clamp</p>
+          <p class="text-[11px] text-cream/60 mb-3">260Hz → 75Hz damped descending sine sweep. Plays on modal dismiss / ESC.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: MODAL CLOSE</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+
+        <!-- 05: Harmonic Success Chime -->
+        <div class="sound-test-card" data-sound="success">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">05 // HARMONIC CHIME</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">90ms FIFTH</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">Rising Dual Tone Confirmation</p>
+          <p class="text-[11px] text-cream/60 mb-3">D6 (1175Hz) to A6 (1760Hz) musical fifth interval. Plays on clipboard copy.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: CLIPBOARD COPY</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+
+        <!-- 06: Telemetry Burst -->
+        <div class="sound-test-card" data-sound="telemetry">
+          <div class="flex items-center justify-between mb-3 text-[11px] font-mono text-cream/60">
+            <span class="text-orange font-bold">06 // TELEMETRY BURST</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10">3x 35ms FM</span>
+          </div>
+          <p class="text-xs text-cream font-semibold mb-1">High-Speed Gateway Packet</p>
+          <p class="text-[11px] text-cream/60 mb-3">880Hz → 1320Hz → 1760Hz rapid square wave burst. Plays on simulation execution.</p>
+          <div class="flex items-center justify-between pt-2 border-t border-white/10 text-[10px] font-mono text-orange">
+            <span>TRIGGER: RUN SIMULATION</span>
+            <span>▶ TEST</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Integration Snippet -->
+      <div class="p-5 rounded-xl bg-ink2/50 border border-white/10 space-y-3 font-mono text-xs">
+        <div class="flex items-center justify-between text-[11px] text-cream/60 pb-2 border-b border-white/10">
+          <span>INTEGRATION JAVASCRIPT SNIPPET</span>
+          <button class="text-orange hover:text-white transition flex items-center gap-1" onclick="copySnippet('audio-snippet')">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            <span>Copy JS</span>
+          </button>
+        </div>
+        <pre class="text-cream/80 text-[11px] overflow-x-auto"><code>import { sfx } from './audio.js';
+
+// Play sound on demand
+sfx.tick();      // On hover (2400Hz -> 1800Hz)
+sfx.click();     // On button click (relay snap)
+sfx.success();   // On copy or confirm (dual chime)
+sfx.modalOpen(); // On drawer / modal open (servo depressurize)
+sfx.toggle();    // Mute / unmute audio</code></pre>
+      </div>
+    </section>
+
   </main>
 
   <!-- Toast Notification -->
@@ -261,29 +389,45 @@
     <span id="toastMsg">Copied snippet to clipboard!</span>
   </div>
 
-  <script>
+  <script type="module">
+    import { sfx } from './audio.js';
+
+    // Attach sound listeners
+    sfx.attachListeners();
+
+    // Sound test cards
+    document.querySelectorAll('.sound-test-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const sound = card.dataset.sound;
+        if (sfx[sound]) sfx[sound]();
+      });
+    });
+
     const slider = document.getElementById('demoSlider');
     const val = document.getElementById('sliderVal');
-    slider.addEventListener('input', () => {
+    slider?.addEventListener('input', () => {
       val.textContent = `${slider.value}ms`;
+      sfx.tick();
     });
 
     const SNIPPETS = {
       'primary-btn': `<button class="btn-primary">\n  <span>Primary Action</span>\n  <span class="opacity-50 text-[10px]">↵</span>\n</button>`,
       'secondary-btn': `<button class="btn-secondary">\n  <span>Secondary Spec</span>\n  <span class="opacity-40 text-[10px]">⌘K</span>\n</button>`,
       'danger-btn': `<button class="btn-danger">\n  <span>Terminate Cluster</span>\n  <span class="opacity-50 text-[10px]">✕</span>\n</button>`,
-      'icon-btn': `<button class="btn-secondary px-3">\n  <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n    <path d="M12 4v16m8-8H4"/>\n  </svg>\n</button>`
+      'icon-btn': `<button class="btn-secondary px-3">\n  <svg class="w-4 h-4 text-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">\n    <path d="M12 4v16m8-8H4"/>\n  </svg>\n</button>`,
+      'audio-snippet': `import { sfx } from './audio.js';\n\nsfx.tick();      // On hover (rotary detent)\nsfx.click();     // On button click (relay snap)\nsfx.modalOpen(); // On modal open (servo sweep)\nsfx.modalClose();// On modal close (hydraulic latch)\nsfx.success();   // On copy or confirm (harmonic chime)\nsfx.telemetry(); // On simulation / stream burst`
     };
 
-    function copySnippet(key) {
+    window.copySnippet = function(key) {
       const code = SNIPPETS[key];
       if (!code) return;
+      sfx.success();
       navigator.clipboard?.writeText(code).then(() => {
         const toast = document.getElementById('toast');
         toast.classList.remove('hidden');
         setTimeout(() => toast.classList.add('hidden'), 2200);
       });
-    }
+    };
   </script>
 </body>
 </html>

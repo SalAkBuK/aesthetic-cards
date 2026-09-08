@@ -25,6 +25,19 @@ Inspired by [aesthetic-cards.vercel.app](https://aesthetic-cards.vercel.app/) an
   - Staggered desktop cascade (`70ms` lead per card)
   - `0.9s` SVG path drawing with `cubic-bezier(0.77, 0, 0.175, 1)`
   - Micro-glyph and thread staggers (`cubic-bezier(0.23, 1, 0.32, 1)`)
+- **Procedural Web Audio Micro-Haptics:**
+  - Zero external audio files or network requests — 100% synthesized in real time via browser `AudioContext`.
+  - Inspired by **Teenage Engineering OP-1** hardware and Dieter Rams industrial instruments.
+  - **Rotary Detent Tick**: 6ms sine sweep (2400Hz → 1800Hz) on card & button hover.
+  - **Relay Clack**: Dual-layer 35ms mechanical solenoid snap on button click.
+  - **Servo Disengage**: 130ms lowpass-filtered sawtooth sweep on modal open.
+  - **Hydraulic Latch**: 85ms damped descending sine clamp on modal dismiss.
+  - **Harmonic Success Chime**: 90ms rising fifth interval (D6 → A6) on clipboard copy.
+  - **Telemetry Burst**: Rapid 3-pulse FM square wave sequence on simulation execution.
+  - HUD audio toggle `[SFX: ON / OFF]` with `localStorage` persistence.
+- **Reusable Theme System & Component Catalog:**
+  - Standalone [`tokens.css`](./tokens.css) containing chamfer polygon formulas, blueprint grids, and button/badge/input primitives.
+  - Dedicated interactive documentation and copy-paste showcase in [`components.html`](./components.html).
 - **Included Agent Skill:**
   - Pre-configured agent skill in [`.agent/skills/aesthetic-feature-cards/SKILL.md`](./.agent/skills/aesthetic-feature-cards/SKILL.md) for Antigravity, Cursor, and Claude Code.
 

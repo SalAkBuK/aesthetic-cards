@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./tokens.css" />
 <script type="importmap">
 {
   "imports": {
@@ -189,6 +190,14 @@
 
     <!-- Actions & Navigation -->
     <div class="flex items-center gap-3">
+      <!-- Procedural Audio Toggle -->
+      <button id="sfxToggle" class="sfx-toggle sfx-enabled" title="Toggle Mechanical Micro-Haptics (Web Audio API)">
+        <div class="sfx-bars" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="sfx-label">SFX: ON</span>
+      </button>
+
       <nav class="hidden sm:flex items-center gap-4 text-cream/70 text-[11px] uppercase tracking-wider mr-2">
         <a href="#hero" class="hover:text-cream transition">Architecture</a>
         <a href="#features" class="hover:text-cream transition">Features</a>

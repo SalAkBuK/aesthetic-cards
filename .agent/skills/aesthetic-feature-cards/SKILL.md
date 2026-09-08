@@ -99,3 +99,24 @@ const EASE_IN_OUT = [0.77, 0, 0.175, 1]; // Geometric SVG path stroke draw-on
 - **Bracket Expansion**: `scale(1.35)` (240ms duration)
 - **Card Press**: `scale(0.985)` (140ms duration on pointerdown)
 - **Reduced Motion**: Gracefully fall back to opacity fades with no translation.
+
+---
+
+## 5. Procedural Web Audio Micro-Haptics
+
+Add physical instrumentation feel using browser-native `AudioContext` with zero external assets:
+
+| Sound Profile | Wave Shape | Frequency Envelope | Duration | Trigger Event |
+| :--- | :--- | :--- | :--- | :--- |
+| **Rotary Tick** | Sine | `2400Hz -> 1800Hz` (exp) | 6ms | Card & button hover (throttled 32ms) |
+| **Relay Clack** | Triangle + Sine | `170Hz -> 45Hz` + `980Hz` snap | 35ms | Primary / secondary button clicks |
+| **Servo Disengage**| Sawtooth + LP | `110Hz -> 320Hz` (Q: 3.5 filter sweep) | 130ms | Modal or drawer open |
+| **Hydraulic Latch**| Sine | `260Hz -> 75Hz` (exp damp) | 85ms | Modal dismiss / ESC press |
+| **Success Chime**  | Sine (dual tone)| `1175Hz -> 1760Hz` (rising fifth) | 90ms | Clipboard copy / confirmation |
+| **Telemetry Burst**| Square (3x pulse)| `880Hz -> 1320Hz -> 1760Hz` (FM) | 3x 35ms | Live simulation / worker dispatch |
+
+### Audio Rules:
+- Resume suspended audio context upon first user gesture (`pointerdown`, `keydown`).
+- Provide an accessible HUD audio toggle (`[SFX: ON / OFF]`) with `localStorage` persistence.
+- Throttle hover ticks (min 30ms interval) to keep rapid cursor movement clean and rhythmic.
+

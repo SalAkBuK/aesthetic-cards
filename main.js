@@ -1,4 +1,5 @@
 import { animate, inView, stagger } from 'motion';
+import { sfx } from './audio.js';
 
 // Motion.dev — https://motion.dev
 // Animation choices follow the design-engineering rules:
@@ -204,7 +205,10 @@ function run({ animate, inView, stagger }) {
   // Only the state flag lives here; the motion itself is CSS (see index.html).
   cards.forEach((shell) => {
     if (canHover.matches) {
-      shell.addEventListener('pointerenter', () => shell.classList.add('is-hover'));
+      shell.addEventListener('pointerenter', () => {
+        sfx.tick();
+        shell.classList.add('is-hover');
+      });
       shell.addEventListener('pointerleave', () => shell.classList.remove('is-hover'));
     }
 
@@ -219,6 +223,7 @@ function run({ animate, inView, stagger }) {
   const copyCliBtn = document.getElementById('copyCliBtn');
   if (copyCliBtn) {
     copyCliBtn.addEventListener('click', () => {
+      sfx.success();
       const text = document.getElementById('curlSnippet')?.textContent?.trim() || 'curl -fsSL https://get.kinetic.dev | sh';
       navigator.clipboard?.writeText(text).then(() => {
         copyCliBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>`;
@@ -544,6 +549,7 @@ print("Proof Valid:", verification.is_valid)`,
   }
 
   function openDossier(id) {
+    sfx.modalOpen();
     renderDossier(id);
     modal.classList.remove('hidden');
     animate(modal, { opacity: [0, 1] }, { duration: 0.25, ease: EASE_OUT });
@@ -551,6 +557,7 @@ print("Proof Valid:", verification.is_valid)`,
   }
 
   function closeDossier() {
+    sfx.modalClose();
     animate(modal, { opacity: [1, 0] }, { duration: 0.2, ease: EASE_OUT }).then(() => {
       modal.classList.add('hidden');
     });
@@ -580,6 +587,7 @@ print("Proof Valid:", verification.is_valid)`,
   // Tab switching
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      sfx.click();
       tabs.forEach(t => {
         t.classList.remove('bg-white/20', 'font-medium', 'text-white');
         t.classList.add('text-white/60');
@@ -593,6 +601,7 @@ print("Proof Valid:", verification.is_valid)`,
 
   // Copy code snippet
   copyCodeBtn?.addEventListener('click', () => {
+    sfx.success();
     const code = DOSSIERS[activeCardId].code[activeLang];
     navigator.clipboard?.writeText(code).then(() => {
       copyCodeText.textContent = '✓ Copied!';
@@ -602,6 +611,7 @@ print("Proof Valid:", verification.is_valid)`,
 
   // Run simulation
   runSimBtn?.addEventListener('click', () => {
+    sfx.telemetry();
     const data = DOSSIERS[activeCardId];
     simOutputBox.classList.remove('hidden');
     simExecutionTime.textContent = 'EXECUTING...';
@@ -613,5 +623,9 @@ print("Proof Valid:", verification.is_valid)`,
     }, 280);
   });
 }
+
+// Initialize audio listeners
+sfx.attachListeners();
+
 
 
