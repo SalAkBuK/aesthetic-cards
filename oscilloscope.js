@@ -79,6 +79,7 @@ export class AudioOscilloscope {
     // Setup canvas resolution & listeners
     this.updateThemeColor();
     if (typeof window !== 'undefined') {
+      window.addEventListener('kinetic:themechange', () => this.updateThemeColor());
       window.addEventListener('aesthetic:themechange', () => this.updateThemeColor());
     }
     this.resize();

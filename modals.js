@@ -7,10 +7,13 @@
 export const COMMANDS = [
   // Navigation
   { id: 'nav-hero', category: 'NAVIGATION', label: 'Go to Hero & 3D Sensor Monitor', shortcut: 'G H', action: () => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-cards', category: 'NAVIGATION', label: 'Feature Cards // Chamfered Blueprint Grid', shortcut: 'G C', action: () => document.getElementById('cards')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-buttons', category: 'NAVIGATION', label: 'Section 01 // Buttons & Action Triggers', shortcut: '01', action: () => document.getElementById('buttons')?.scrollIntoView({ behavior: 'smooth' }) },
-  { id: 'nav-cards', category: 'NAVIGATION', label: 'Section 02 // Chamfered Feature Cards', shortcut: '02', action: () => document.getElementById('cards')?.scrollIntoView({ behavior: 'smooth' }) },
-  { id: 'nav-icons', category: 'NAVIGATION', label: 'Section 06 // Blueprint SVG Icon Library (32)', shortcut: '06', action: () => document.getElementById('icons')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-inputs', category: 'NAVIGATION', label: 'Section 02 // Inputs, Sliders & Toggles', shortcut: '02', action: () => (document.getElementById('inputs') || document.getElementById('cards'))?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-badges', category: 'NAVIGATION', label: 'Section 03 // Status Badges & Telemetry Pills', shortcut: '03', action: () => document.getElementById('badges')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-callouts', category: 'NAVIGATION', label: 'Section 04 // Technical Callouts & Alerts', shortcut: '04', action: () => document.getElementById('callouts')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-osc', category: 'NAVIGATION', label: 'Section 05 // Audio Oscilloscope & Spectrogram', shortcut: '05', action: () => document.getElementById('oscilloscope')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-icons', category: 'NAVIGATION', label: 'Section 06 // Blueprint SVG Icon Library (32)', shortcut: '06', action: () => document.getElementById('icons')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-cfg', category: 'NAVIGATION', label: 'Section 07 // Blueprint Configurator Studio', shortcut: '07', action: () => document.getElementById('configurator')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-table', category: 'NAVIGATION', label: 'Section 08 // High-Density Telemetry Table', shortcut: '08', action: () => document.getElementById('telemetry')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-forms', category: 'NAVIGATION', label: 'Section 09 // Technical Forms & Parameter Rack', shortcut: '09', action: () => document.getElementById('forms')?.scrollIntoView({ behavior: 'smooth' }) },

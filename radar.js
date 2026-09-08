@@ -12,6 +12,7 @@ function updateCachedAccentRgb() {
 }
 if (typeof window !== 'undefined') {
   updateCachedAccentRgb();
+  window.addEventListener('kinetic:themechange', updateCachedAccentRgb);
   window.addEventListener('aesthetic:themechange', updateCachedAccentRgb);
 }
 

@@ -8,7 +8,8 @@ export class MicroHapticsEngine {
     this.ctx = null;
     this.masterGain = null;
     this.analyser = null;
-    this.enabled = localStorage.getItem('aesthetic_sfx') !== 'false'; // default ON
+    const storedSfx = localStorage.getItem('kinetic_sfx') ?? localStorage.getItem('aesthetic_sfx');
+    this.enabled = storedSfx !== 'false'; // default ON
     this.lastTickTime = 0;
     this.carrierOsc = null;
     this.carrierGain = null;
@@ -58,6 +59,7 @@ export class MicroHapticsEngine {
 
   toggle() {
     this.enabled = !this.enabled;
+    localStorage.setItem('kinetic_sfx', this.enabled ? 'true' : 'false');
     localStorage.setItem('aesthetic_sfx', this.enabled ? 'true' : 'false');
     if (this.ctx) {
       this.ensureContext();

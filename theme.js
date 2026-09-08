@@ -70,8 +70,8 @@ export const THEMES = {
 export class ThemeEngine {
   constructor(options = {}) {
     this.sfx = options.sfx || null;
-    this.currentThemeId = localStorage.getItem('aesthetic_theme') || 'orange';
-    this.crtActive = localStorage.getItem('aesthetic_crt') === 'true';
+    this.currentThemeId = localStorage.getItem('kinetic_theme') || localStorage.getItem('aesthetic_theme') || 'orange';
+    this.crtActive = (localStorage.getItem('kinetic_crt') || localStorage.getItem('aesthetic_crt')) === 'true';
 
     this.themeMenuBtn = document.getElementById('themeMenuBtn');
     this.themeDropdown = document.getElementById('themeDropdown');
@@ -96,6 +96,7 @@ export class ThemeEngine {
   setTheme(themeId, silent = false) {
     const theme = THEMES[themeId] || THEMES.orange;
     this.currentThemeId = theme.id;
+    localStorage.setItem('kinetic_theme', theme.id);
     localStorage.setItem('aesthetic_theme', theme.id);
 
     // Set data-theme on root & body
@@ -149,9 +150,9 @@ export class ThemeEngine {
     }
 
     // Dispatch global custom event for dynamic canvas redrawing
-    window.dispatchEvent(new CustomEvent('aesthetic:themechange', {
-      detail: { themeId: theme.id, theme }
-    }));
+    const eventDetail = { detail: { themeId: theme.id, theme } };
+    window.dispatchEvent(new CustomEvent('kinetic:themechange', eventDetail));
+    window.dispatchEvent(new CustomEvent('aesthetic:themechange', eventDetail));
   }
 
   getTheme() {
@@ -160,6 +161,7 @@ export class ThemeEngine {
 
   toggleCRT(silent = false) {
     this.crtActive = !this.crtActive;
+    localStorage.setItem('kinetic_crt', this.crtActive ? 'true' : 'false');
     localStorage.setItem('aesthetic_crt', this.crtActive ? 'true' : 'false');
     this.applyCRT(silent);
     return this.crtActive;
@@ -167,6 +169,7 @@ export class ThemeEngine {
 
   setCRT(state, silent = false) {
     this.crtActive = Boolean(state);
+    localStorage.setItem('kinetic_crt', this.crtActive ? 'true' : 'false');
     localStorage.setItem('aesthetic_crt', this.crtActive ? 'true' : 'false');
     this.applyCRT(silent);
   }

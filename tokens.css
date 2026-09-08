@@ -850,9 +850,10 @@ select {
   color-scheme: dark;
 }
 
-select option {
-  background-color: #1a1916 !important;
-  color: #e9e2d3 !important;
+select option,
+select optgroup {
+  background-color: var(--ink-dark, #16150f) !important;
+  color: var(--cream, #e9e2d3) !important;
   padding: 6px 10px;
 }
 

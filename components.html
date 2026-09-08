@@ -7,7 +7,7 @@
 <script>
   (function() {
     try {
-      var savedTheme = localStorage.getItem('aesthetic_theme') || 'orange';
+      var savedTheme = localStorage.getItem('kinetic_theme') || localStorage.getItem('aesthetic_theme') || 'orange';
       var themes = {
         orange:   { hex: '#f4551d', hoverHex: '#ea4f1a', rgb: '244 85 29', glow: 'rgba(244, 85, 29, 0.45)' },
         amber:    { hex: '#f59e0b', hoverHex: '#d97706', rgb: '245 158 11', glow: 'rgba(245, 158, 11, 0.45)' },
@@ -24,7 +24,7 @@
       s.setProperty('--orange-rgb', t.rgb);
       s.setProperty('--theme-glow', t.glow);
 
-      if (localStorage.getItem('aesthetic_crt') === 'true') {
+      if (localStorage.getItem('kinetic_crt') === 'true' || localStorage.getItem('aesthetic_crt') === 'true') {
         document.documentElement.classList.add('crt-active');
       }
     } catch (e) {}
@@ -2088,11 +2088,13 @@ sfx.toggle();    // Mute / unmute audio</code></pre>
     sfx.attachListeners();
 
     // Re-render canvas elements on theme change
-    window.addEventListener('aesthetic:themechange', () => {
+    const handleThemeRerender = () => {
       if (kineticCharts?.timeSeries) kineticCharts.timeSeries.render();
       if (kineticCharts?.tachometer) kineticCharts.tachometer.updateTicks();
       if (blueprintPipeline) blueprintPipeline.renderCables();
-    });
+    };
+    window.addEventListener('kinetic:themechange', handleThemeRerender);
+    window.addEventListener('aesthetic:themechange', handleThemeRerender);
 
     // Initialize High-Density Telemetry Table
     const telemetryTable = initTelemetryTable({
