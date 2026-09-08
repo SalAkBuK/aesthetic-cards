@@ -1,7 +1,8 @@
 /**
  * Interactive Blueprint Node Flow Graph & Circuit Pipeline Engine (Section 12)
  * Features draggable chamfered logic nodes, dynamic cubic Bézier spline cables,
- * kinetic energy pulse packets, and drag-and-drop socket patching.
+ * kinetic energy pulse packets, drag-and-drop socket patching, and infinite
+ * pan and zoom with automatic viewport fitting.
  */
 
 function getAccentColor(fallback = '#f4551d') {
@@ -42,19 +43,19 @@ export class PipelineNode {
     node.id = `node_${this.id}`;
     node.className = 'pipeline-node rounded-lg bg-ink2/90 border border-white/15 p-3.5 font-mono text-xs shadow-2xl flex flex-col justify-between backdrop-blur-md';
     node.style.width = `${this.width}px`;
-    node.style.left = `${this.x}px`;
-    node.style.top = `${this.y}px`;
+    node.style.left = `${Math.round(this.x)}px`;
+    node.style.top = `${Math.round(this.y)}px`;
     node.style.borderColor = `${this.color}40`;
 
     // Corner tactical crop brackets
     const bTL = document.createElement('span');
-    bTL.className = 'bracket tl border-t-2 border-l-2 border-white/30';
+    bTL.className = 'bracket tl border-t-2 border-l-2 border-white/30 pointer-events-none';
     const bTR = document.createElement('span');
-    bTR.className = 'bracket tr border-t-2 border-r-2 border-white/30';
+    bTR.className = 'bracket tr border-t-2 border-r-2 border-white/30 pointer-events-none';
     const bBL = document.createElement('span');
-    bBL.className = 'bracket bl border-b-2 border-l-2 border-white/30';
+    bBL.className = 'bracket bl border-b-2 border-l-2 border-white/30 pointer-events-none';
     const bBR = document.createElement('span');
-    bBR.className = 'bracket br border-b-2 border-r-2 border-white/30';
+    bBR.className = 'bracket br border-b-2 border-r-2 border-white/30 pointer-events-none';
     node.appendChild(bTL);
     node.appendChild(bTR);
     node.appendChild(bBL);
@@ -62,7 +63,7 @@ export class PipelineNode {
 
     // Header bar with status LED & ID tag
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between pb-2 border-b border-white/10 text-[10px] pointer-events-none';
+    header.className = 'flex items-center justify-between pb-2 border-b border-white/10 text-[10px] pointer-events-none select-none';
 
     const leftHeader = document.createElement('div');
     leftHeader.className = 'flex items-center gap-1.5 font-bold';
@@ -82,7 +83,7 @@ export class PipelineNode {
 
     // Title & Metric section
     const body = document.createElement('div');
-    body.className = 'py-2 space-y-1.5 pointer-events-none';
+    body.className = 'py-2 space-y-1.5 pointer-events-none select-none';
 
     const titleEl = document.createElement('div');
     titleEl.className = 'text-[11px] font-semibold text-cream truncate';
@@ -170,17 +171,19 @@ export class PipelineNode {
 
   getSocketPoint(portId, isOutput) {
     const socket = this.el?.querySelector(`#socket_${this.id}_${portId}`);
-    if (!socket || !this.engine.viewport) {
+    const world = this.engine.world || this.engine.viewport;
+    if (!socket || !world) {
       return {
         x: isOutput ? this.x + this.width : this.x,
         y: this.y + 110
       };
     }
-    const vpRect = this.engine.viewport.getBoundingClientRect();
+    const worldRect = world.getBoundingClientRect();
     const sockRect = socket.getBoundingClientRect();
+    const zoom = this.engine.zoom || 1.0;
     return {
-      x: sockRect.left - vpRect.left + sockRect.width / 2,
-      y: sockRect.top - vpRect.top + sockRect.height / 2
+      x: (sockRect.left - worldRect.left + sockRect.width / 2) / zoom,
+      y: (sockRect.top - worldRect.top + sockRect.height / 2) / zoom
     };
   }
 
@@ -282,7 +285,7 @@ export class PipelineCable {
 }
 
 /**
- * 3. Master Blueprint Pipeline Engine
+ * 3. Master Blueprint Pipeline Engine with Pan & Zoom Architecture
  */
 export class BlueprintPipelineEngine {
   constructor(containerId, options = {}) {
@@ -291,14 +294,25 @@ export class BlueprintPipelineEngine {
     this.sfx = options.sfx || null;
 
     this.viewport = this.container.querySelector('.pipeline-viewport');
+    this.world = this.container.querySelector('#pipelineWorld') || this.viewport;
     this.svgCablesLayer = this.container.querySelector('#pipelineCablesLayer');
     this.svgPulsesLayer = this.container.querySelector('#pipelinePulsesLayer');
     this.rubberbandPath = this.container.querySelector('#pipelineRubberband');
 
+    // Pan & Zoom Coordinate State
+    this.zoom = 1.0;
+    this.pan = { x: 0, y: 0 };
+    this.minZoom = 0.35;
+    this.maxZoom = 2.2;
+    this.isPanning = false;
+    this.panStart = { x: 0, y: 0 };
+    this.panOrigin = { x: 0, y: 0 };
+
     this.nodes = new Map();
     this.cables = [];
     this.draggingNode = null;
-    this.dragOffset = { x: 0, y: 0 };
+    this.dragStartPointer = { x: 0, y: 0 };
+    this.dragStartNodePos = { x: 0, y: 0 };
     this.activePatch = null;
 
     // Telemetry readouts
@@ -306,6 +320,10 @@ export class BlueprintPipelineEngine {
     this.cableCountEl = document.getElementById('pipelineCableCount');
     this.busRateEl = document.getElementById('pipelineBusRate');
     this.quorumStatusEl = document.getElementById('pipelineQuorumStatus');
+
+    // Zoom readouts
+    this.zoomLevelEl = document.getElementById('pipelineZoomLevel');
+    this.floatZoomTextEl = document.getElementById('floatZoomText');
 
     this.init();
   }
@@ -315,6 +333,95 @@ export class BlueprintPipelineEngine {
     this.bindToolbarEvents();
     this.loadDefaultTopology();
     this.startLoop();
+
+    window.addEventListener('resize', () => {
+      this.renderCables();
+    });
+  }
+
+  updateWorldTransform() {
+    if (this.world) {
+      this.world.style.transform = `translate(${this.pan.x}px, ${this.pan.y}px) scale(${this.zoom})`;
+    }
+    // Synchronously scroll and scale background blueprint grid for tactile visual feedback
+    if (this.viewport) {
+      this.viewport.style.backgroundPosition = `${this.pan.x}px ${this.pan.y}px, ${this.pan.x}px ${this.pan.y}px, ${this.pan.x}px ${this.pan.y}px`;
+      this.viewport.style.backgroundSize = `${20 * this.zoom}px ${20 * this.zoom}px, ${80 * this.zoom}px ${80 * this.zoom}px, ${80 * this.zoom}px ${80 * this.zoom}px`;
+    }
+    const percent = `${Math.round(this.zoom * 100)}%`;
+    if (this.zoomLevelEl) this.zoomLevelEl.textContent = percent;
+    if (this.floatZoomTextEl) this.floatZoomTextEl.textContent = percent;
+  }
+
+  zoomAt(targetZoom, clientX, clientY) {
+    const clampedZoom = Math.min(this.maxZoom, Math.max(this.minZoom, targetZoom));
+    if (Math.abs(clampedZoom - this.zoom) < 0.001) return;
+
+    const vpRect = this.viewport.getBoundingClientRect();
+    const cx = clientX !== undefined ? clientX - vpRect.left : vpRect.width / 2;
+    const cy = clientY !== undefined ? clientY - vpRect.top : vpRect.height / 2;
+
+    const worldX = (cx - this.pan.x) / this.zoom;
+    const worldY = (cy - this.pan.y) / this.zoom;
+
+    this.pan.x = cx - worldX * clampedZoom;
+    this.pan.y = cy - worldY * clampedZoom;
+    this.zoom = clampedZoom;
+
+    this.updateWorldTransform();
+    this.renderCables();
+  }
+
+  zoomIn() {
+    this.zoomAt(this.zoom * 1.25);
+  }
+
+  zoomOut() {
+    this.zoomAt(this.zoom / 1.25);
+  }
+
+  resetZoom() {
+    this.zoom = 1.0;
+    this.pan = { x: 0, y: 0 };
+    this.updateWorldTransform();
+    this.renderCables();
+  }
+
+  fitView() {
+    if (this.nodes.size === 0) {
+      this.resetZoom();
+      return;
+    }
+
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    this.nodes.forEach(node => {
+      minX = Math.min(minX, node.x);
+      minY = Math.min(minY, node.y);
+      maxX = Math.max(maxX, node.x + node.width);
+      maxY = Math.max(maxY, node.y + node.height);
+    });
+
+    const padding = 45;
+    const contentWidth = (maxX - minX) + padding * 2;
+    const contentHeight = (maxY - minY) + padding * 2;
+
+    const vpRect = this.viewport.getBoundingClientRect();
+    const vpWidth = vpRect.width > 100 ? vpRect.width : 900;
+    const vpHeight = vpRect.height > 100 ? vpRect.height : 560;
+
+    const scaleX = vpWidth / contentWidth;
+    const scaleY = vpHeight / contentHeight;
+    const targetZoom = Math.min(1.0, Math.max(this.minZoom, Math.min(scaleX, scaleY) * 0.94));
+
+    const scaledWidth = (maxX - minX) * targetZoom;
+    const scaledHeight = (maxY - minY) * targetZoom;
+
+    this.pan.x = (vpWidth - scaledWidth) / 2 - (minX * targetZoom);
+    this.pan.y = (vpHeight - scaledHeight) / 2 - (minY * targetZoom);
+    this.zoom = targetZoom;
+
+    this.updateWorldTransform();
+    this.renderCables();
   }
 
   loadDefaultTopology() {
@@ -432,12 +539,17 @@ export class BlueprintPipelineEngine {
     this.connect('ND-04', 'quorum', 'ND-05', 'stream_a', '#10b981');
 
     this.updateTelemetryReadout();
+
+    // Automatically fit topology into view
+    setTimeout(() => {
+      this.fitView();
+    }, 60);
   }
 
   addNode(spec) {
     const node = new PipelineNode(spec, this);
     this.nodes.set(node.id, node);
-    this.viewport?.appendChild(node.el);
+    (this.world || this.viewport)?.appendChild(node.el);
     this.bindNodeEvents(node);
     this.updateTelemetryReadout();
     return node;
@@ -495,31 +607,28 @@ export class BlueprintPipelineEngine {
   }
 
   bindNodeEvents(node) {
-    // Node Dragging pointer handler
+    // Node Dragging pointer handler in World Coordinates
     node.el.addEventListener('pointerdown', (e) => {
-      if (e.target.classList.contains('node-socket')) return;
+      if (e.target.closest('.node-socket')) return;
+      e.stopPropagation();
       e.preventDefault();
 
       this.draggingNode = node;
       node.el.classList.add('dragging');
       if (this.sfx) this.sfx.tick();
 
-      const vpRect = this.viewport.getBoundingClientRect();
-      this.dragOffset = {
-        x: (e.clientX - vpRect.left) - node.x,
-        y: (e.clientY - vpRect.top) - node.y
-      };
+      this.dragStartPointer = { x: e.clientX, y: e.clientY };
+      this.dragStartNodePos = { x: node.x, y: node.y };
 
       node.el.setPointerCapture(e.pointerId);
     });
 
     node.el.addEventListener('pointermove', (e) => {
       if (this.draggingNode !== node) return;
-      const vpRect = this.viewport.getBoundingClientRect();
-      const newX = Math.max(10, Math.min(vpRect.width - node.width - 10, (e.clientX - vpRect.left) - this.dragOffset.x));
-      const newY = Math.max(10, Math.min(vpRect.height - node.height - 10, (e.clientY - vpRect.top) - this.dragOffset.y));
+      const dx = (e.clientX - this.dragStartPointer.x) / this.zoom;
+      const dy = (e.clientY - this.dragStartPointer.y) / this.zoom;
 
-      node.updatePosition(newX, newY);
+      node.updatePosition(this.dragStartNodePos.x + dx, this.dragStartNodePos.y + dy);
       this.renderCables();
     });
 
@@ -567,16 +676,46 @@ export class BlueprintPipelineEngine {
   bindViewportEvents() {
     if (!this.viewport) return;
 
-    // Viewport dragging for Rubberband Spline
+    // Mouse wheel zoom centered on cursor
+    this.viewport.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.12 : 0.89;
+      this.zoomAt(this.zoom * zoomFactor, e.clientX, e.clientY);
+    }, { passive: false });
+
+    // Background Pan Dragging
+    this.viewport.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.pipeline-node') || 
+          e.target.closest('.node-socket') || 
+          e.target.closest('button') || 
+          e.target.closest('.cable-path')) {
+        return;
+      }
+      this.isPanning = true;
+      this.panStart = { x: e.clientX, y: e.clientY };
+      this.panOrigin = { x: this.pan.x, y: this.pan.y };
+      this.viewport.classList.add('is-panning');
+      this.viewport.setPointerCapture(e.pointerId);
+    });
+
     this.viewport.addEventListener('pointermove', (e) => {
+      // 1. Handle Canvas Panning
+      if (this.isPanning) {
+        this.pan.x = this.panOrigin.x + (e.clientX - this.panStart.x);
+        this.pan.y = this.panOrigin.y + (e.clientY - this.panStart.y);
+        this.updateWorldTransform();
+        return;
+      }
+
+      // 2. Handle Rubberband Patch Spline
       if (!this.activePatch || !this.rubberbandPath) return;
 
-      const vpRect = this.viewport.getBoundingClientRect();
-      const currentX = e.clientX - vpRect.left;
-      const currentY = e.clientY - vpRect.top;
+      const worldRect = (this.world || this.viewport).getBoundingClientRect();
+      const currentWorldX = (e.clientX - worldRect.left) / this.zoom;
+      const currentWorldY = (e.clientY - worldRect.top) / this.zoom;
 
       const p1 = { x: this.activePatch.startX, y: this.activePatch.startY };
-      const p2 = { x: currentX, y: currentY };
+      const p2 = { x: currentWorldX, y: currentWorldY };
       const dx = Math.max(40, Math.abs(p2.x - p1.x) * 0.55);
 
       const d = `M ${p1.x},${p1.y} C ${p1.x + dx},${p1.y} ${p2.x - dx},${p2.y} ${p2.x},${p2.y}`;
@@ -591,34 +730,42 @@ export class BlueprintPipelineEngine {
       }
     });
 
-    const finishPatch = (e) => {
-      if (!this.activePatch) return;
-
-      const hoverEl = document.elementFromPoint(e.clientX, e.clientY);
-      const inSocket = hoverEl?.closest('.in-socket');
-
-      if (inSocket && inSocket.dataset.nodeId !== this.activePatch.fromNodeId) {
-        const toNodeId = inSocket.dataset.nodeId;
-        const toPortId = inSocket.dataset.portId;
-
-        this.connect(
-          this.activePatch.fromNodeId,
-          this.activePatch.fromPortId,
-          toNodeId,
-          toPortId,
-          this.activePatch.color
-        );
-
-        if (this.sfx) this.sfx.click();
+    const stopPanOrPatch = (e) => {
+      if (this.isPanning) {
+        this.isPanning = false;
+        this.viewport.classList.remove('is-panning');
+        if (this.viewport.hasPointerCapture(e.pointerId)) {
+          this.viewport.releasePointerCapture(e.pointerId);
+        }
       }
 
-      this.viewport.querySelectorAll('.in-socket').forEach(s => s.classList.remove('snap-active'));
-      if (this.rubberbandPath) this.rubberbandPath.classList.add('hidden');
-      this.activePatch = null;
+      if (this.activePatch) {
+        const hoverEl = document.elementFromPoint(e.clientX, e.clientY);
+        const inSocket = hoverEl?.closest('.in-socket');
+
+        if (inSocket && inSocket.dataset.nodeId !== this.activePatch.fromNodeId) {
+          const toNodeId = inSocket.dataset.nodeId;
+          const toPortId = inSocket.dataset.portId;
+
+          this.connect(
+            this.activePatch.fromNodeId,
+            this.activePatch.fromPortId,
+            toNodeId,
+            toPortId,
+            this.activePatch.color
+          );
+
+          if (this.sfx) this.sfx.click();
+        }
+
+        this.viewport.querySelectorAll('.in-socket').forEach(s => s.classList.remove('snap-active'));
+        if (this.rubberbandPath) this.rubberbandPath.classList.add('hidden');
+        this.activePatch = null;
+      }
     };
 
-    this.viewport.addEventListener('pointerup', finishPatch);
-    this.viewport.addEventListener('pointercancel', finishPatch);
+    this.viewport.addEventListener('pointerup', stopPanOrPatch);
+    this.viewport.addEventListener('pointercancel', stopPanOrPatch);
   }
 
   bindToolbarEvents() {
@@ -672,7 +819,43 @@ export class BlueprintPipelineEngine {
     resetBtn?.addEventListener('click', () => {
       if (this.sfx) this.sfx.modalClose();
       this.loadDefaultTopology();
-      this.renderCables();
+    });
+
+    // Zoom In (Toolbar & Floating HUD)
+    const zoomInBtn = document.getElementById('pipelineZoomInBtn');
+    const floatZoomIn = document.getElementById('floatZoomIn');
+    [zoomInBtn, floatZoomIn].forEach(btn => {
+      btn?.addEventListener('click', () => {
+        if (this.sfx) this.sfx.tick();
+        this.zoomIn();
+      });
+    });
+
+    // Zoom Out (Toolbar & Floating HUD)
+    const zoomOutBtn = document.getElementById('pipelineZoomOutBtn');
+    const floatZoomOut = document.getElementById('floatZoomOut');
+    [zoomOutBtn, floatZoomOut].forEach(btn => {
+      btn?.addEventListener('click', () => {
+        if (this.sfx) this.sfx.tick();
+        this.zoomOut();
+      });
+    });
+
+    // Fit View (Toolbar & Floating HUD)
+    const fitViewBtn = document.getElementById('pipelineFitViewBtn');
+    const floatFitView = document.getElementById('floatFitView');
+    [fitViewBtn, floatFitView].forEach(btn => {
+      btn?.addEventListener('click', () => {
+        if (this.sfx) this.sfx.click();
+        this.fitView();
+      });
+    });
+
+    // Reset Zoom 1:1
+    const resetZoomBtn = document.getElementById('pipelineResetZoomBtn');
+    resetZoomBtn?.addEventListener('click', () => {
+      if (this.sfx) this.sfx.click();
+      this.resetZoom();
     });
   }
 
@@ -688,6 +871,7 @@ export class BlueprintPipelineEngine {
     });
 
     this.renderCables();
+    this.fitView();
   }
 
   triggerPulseBurst() {

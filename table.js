@@ -367,46 +367,46 @@ export class TelemetryTable {
       return `
         <tr class="table-row-tech ${isSelected ? 'bg-orange/5' : ''} border-b border-white/5 hover:bg-white/[0.03] transition group" data-node-id="${node.id}">
           <!-- Checkbox -->
-          <td class="py-3 px-3 w-10 text-center">
+          <td class="py-2.5 px-2.5 w-8 text-center">
             <input type="checkbox" class="checkbox-chamfer node-select" data-id="${node.id}" ${isSelected ? 'checked' : ''} />
           </td>
 
           <!-- Status -->
-          <td class="py-3 px-3 font-mono text-[11px] whitespace-nowrap">
+          <td class="py-2.5 px-2.5 font-mono text-[10.5px] whitespace-nowrap">
             ${statusBadge}
           </td>
 
           <!-- Node ID & Name -->
-          <td class="py-3 px-3 font-mono">
-            <div class="flex items-center gap-2">
-              <span class="font-semibold text-cream group-hover:text-white text-[12px] whitespace-nowrap shrink-0">${node.id}</span>
-              <span class="text-[9px] px-1 py-0.2 rounded bg-white/5 text-cream/50 border border-white/10 hidden sm:inline-block whitespace-nowrap">${node.name}</span>
+          <td class="py-2.5 px-2.5 font-mono">
+            <div class="flex items-center gap-1.5">
+              <span class="font-semibold text-cream group-hover:text-white text-[11.5px] whitespace-nowrap">${node.id}</span>
+              <span class="text-[8.5px] px-1 py-0.2 rounded bg-white/5 text-cream/50 border border-white/10 hidden xl:inline-block whitespace-nowrap">${node.name}</span>
             </div>
-            <span class="text-[10px] text-cream/40 block font-mono">${node.region}</span>
+            <span class="text-[9.5px] text-cream/40 block font-mono">${node.region}</span>
           </td>
 
           <!-- Latency with Inline Micro-Sparkline -->
-          <td class="py-3 px-3 font-mono">
-            <div class="flex items-center gap-3">
-              <div class="w-20 h-5">
+          <td class="py-2.5 px-2.5 font-mono">
+            <div class="flex items-center gap-2">
+              <div class="w-16 h-4">
                 <canvas class="sparkline-canvas block w-full h-full" data-spark-id="${node.id}"></canvas>
               </div>
-              <span class="font-bold text-xs ${node.currentLatency > 1.0 ? 'text-ruby' : node.currentLatency > 0.6 ? 'text-amber' : 'text-emerald-400'}">
+              <span class="font-bold text-[11px] sm:text-xs ${node.currentLatency > 1.0 ? 'text-ruby' : node.currentLatency > 0.6 ? 'text-amber' : 'text-emerald-400'} whitespace-nowrap">
                 ${node.currentLatency.toFixed(2)}ms
               </span>
             </div>
           </td>
 
           <!-- Throughput & Load -->
-          <td class="py-3 px-3 font-mono text-xs text-cream/80 whitespace-nowrap hidden md:table-cell">
-            <div class="flex items-center gap-2">
+          <td class="py-2.5 px-2.5 font-mono text-[11px] text-cream/80 whitespace-nowrap hidden md:table-cell">
+            <div class="flex items-center gap-1.5">
               <span>${node.throughput}</span>
-              <span class="text-[9.5px] text-cream/40">(${node.load}% LOAD)</span>
+              <span class="text-[9px] text-cream/40">(${node.load}%)</span>
             </div>
           </td>
 
           <!-- Hash Signature -->
-          <td class="py-3 px-3 font-mono text-[11px] whitespace-nowrap hidden lg:table-cell">
+          <td class="py-2.5 px-2.5 font-mono text-[10.5px] whitespace-nowrap hidden lg:table-cell">
             <button class="copy-sig-btn hover:text-orange text-cream/60 transition flex items-center gap-1" data-full="${node.fullSignature}" title="Click to copy full hash signature">
               <code>${node.signature}</code>
               <svg class="w-3 h-3 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
@@ -414,7 +414,7 @@ export class TelemetryTable {
           </td>
 
           <!-- Row Expand Action -->
-          <td class="py-3 px-3 text-right">
+          <td class="py-2.5 px-2.5 text-right">
             <button class="row-expand-btn px-2 py-1 rounded bg-white/5 hover:bg-orange hover:text-near text-cream font-mono text-[10px] transition flex items-center gap-1 ml-auto" data-id="${node.id}">
               <span>${isExpanded ? 'CLOSE' : 'TRACE'}</span>
               <span class="text-[9px] font-bold">${isExpanded ? '▲' : '▼'}</span>

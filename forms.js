@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Technical Forms & Hardware Parameter Rack Engine
  * Provides key-value config management, numeric steppers, multi-state switches,
  * dual/precision sliders, and real-time ENV/YAML generation with audio micro-haptics.
@@ -408,13 +408,13 @@ export class ParameterRack {
 
           <div class="w-24 shrink-0">
             <select 
-              class="w-full bg-white/5 border border-white/15 focus:border-orange text-cream/80 font-mono text-[10px] px-1.5 py-1 rounded focus:outline-none pair-type-select cursor-pointer"
+              class="w-full bg-near border border-white/20 focus:border-orange text-cream font-mono text-[10px] px-2 py-1 rounded focus:outline-none pair-type-select cursor-pointer"
               data-id="${pair.id}"
             >
-              <option value="string" ${pair.type === 'string' ? 'selected' : ''}>STRING</option>
-              <option value="number" ${pair.type === 'number' ? 'selected' : ''}>NUMBER</option>
-              <option value="boolean" ${pair.type === 'boolean' ? 'selected' : ''}>BOOLEAN</option>
-              <option value="secret" ${pair.type === 'secret' ? 'selected' : ''}>SECRET</option>
+              <option value="string" class="bg-[#1a1916] text-[#e9e2d3]" ${pair.type === 'string' ? 'selected' : ''}>STRING</option>
+              <option value="number" class="bg-[#1a1916] text-[#e9e2d3]" ${pair.type === 'number' ? 'selected' : ''}>NUMBER</option>
+              <option value="boolean" class="bg-[#1a1916] text-[#e9e2d3]" ${pair.type === 'boolean' ? 'selected' : ''}>BOOLEAN</option>
+              <option value="secret" class="bg-[#1a1916] text-[#e9e2d3]" ${pair.type === 'secret' ? 'selected' : ''}>SECRET</option>
             </select>
           </div>
 
