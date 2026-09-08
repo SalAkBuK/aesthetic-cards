@@ -509,6 +509,121 @@ print("Proof Valid:", verification.is_valid)`,
         pii_leakage_risk: '0.0000%',
         timestamp: '2026-09-08T08:33:00Z'
       }
+    },
+    7: {
+      index: '007',
+      tag: 'DOSSIER // STATE SYNTHESIS',
+      title: 'Deterministic State Machine & Checkpoints',
+      desc: 'Byzantine fault-tolerant consensus and state replication across autonomous agent swarms with zero-drift state snapshots.',
+      specs: [
+        { key: 'CONSENSUS MODEL', value: 'Raft / PBFT Hybrid' },
+        { key: 'CHECKPOINT INTERVAL', value: '100ms Delta Compression' },
+        { key: 'STATE SERIALIZATION', value: 'Deterministic FlatBuffers' },
+        { key: 'RECOVERY TIME (RTO)', value: '< 2.4ms' },
+      ],
+      code: {
+        ts: `const snapshot = await kinetic.state.checkpoint({
+  sessionId: 'session_alpha_77',
+  compression: 'zstd_level_3',
+  syncReplication: true
+});
+
+console.log('State Root Merkle:', snapshot.merkleRoot);`,
+        py: `snapshot = client.state.checkpoint(
+    session_id="session_alpha_77",
+    compression="zstd_level_3",
+    sync_replication=True
+)
+print("State Root Merkle:", snapshot.merkle_root)`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/state/checkpoint \\
+  -H "Authorization: Bearer $KINETIC_KEY" \\
+  -d '{"sessionId": "session_alpha_77"}'`
+      },
+      simOutput: {
+        snapshot_id: 'snap_9921_07',
+        merkle_root: '0x88f219c0...ea31',
+        active_nodes_synced: 16,
+        delta_size_bytes: 412,
+        sync_duration_ms: 0.84
+      }
+    },
+    8: {
+      index: '008',
+      tag: 'DOSSIER // TELEMETRY MESH',
+      title: 'Real-time Stream Fabric & Pub/Sub',
+      desc: 'Sub-millisecond pub/sub streaming pipeline with zero-copy ring buffers and dynamic subscriber backpressure.',
+      specs: [
+        { key: 'STREAM PROTOCOL', value: 'QUIC / WebTransport / gRPC' },
+        { key: 'RING BUFFER SIZE', value: '64MB Shared Memory' },
+        { key: 'THROUGHPUT', value: '1.8M Events / Sec / Core' },
+        { key: 'END-TO-END LATENCY', value: '0.42ms p99' },
+      ],
+      code: {
+        ts: `const stream = await kinetic.mesh.subscribe({
+  topic: 'telemetry.nodes.v1',
+  sampleRateHz: 1000,
+  backpressure: 'drop_oldest'
+});
+
+stream.on('event', (msg) => {
+  console.log(\`[\${msg.timestamp}] \${msg.topic}:\`, msg.metrics);
+});`,
+        py: `stream = client.mesh.subscribe(
+    topic="telemetry.nodes.v1",
+    sample_rate_hz=1000,
+    backpressure="drop_oldest"
+)
+
+for msg in stream:
+    print(f"[{msg.timestamp}] {msg.topic}:", msg.metrics)`,
+        curl: `curl -N https://api.kinetic.dev/v1/mesh/stream?topic=telemetry.nodes.v1 \\
+  -H "Authorization: Bearer $KINETIC_KEY"`
+      },
+      simOutput: {
+        stream_status: 'ACTIVE_SUBSCRIBED',
+        events_ingested: 48201,
+        dropped_frames: 0,
+        jitter_us: 18.4,
+        bandwidth_mbps: 12.8
+      }
+    },
+    9: {
+      index: '009',
+      tag: 'DOSSIER // CIRCUIT PIPELINE',
+      title: 'Deterministic Hardware-Accelerated Circuits',
+      desc: 'Silicon-grade circuit execution pipeline with pre-compiled graph kernels and byte-exact hardware deterministic execution.',
+      specs: [
+        { key: 'EXECUTION TARGET', value: 'SIMD AVX-512 / Apple Metal / CUDA' },
+        { key: 'KERNEL LATENCY', value: '14 microseconds' },
+        { key: 'PIPELINE DEPTH', value: '8 Concurrent Stages' },
+        { key: 'BYTE DETERMINISM', value: '100% Cross-Architecture' },
+      ],
+      code: {
+        ts: `const circuit = await kinetic.pipeline.compile({
+  graphId: 'pipeline_neural_core_9',
+  optimizationLevel: 'O3_FPGA_TARGET',
+  enableZeroCopy: true
+});
+
+const result = await circuit.execute({ payload: inputTensor });`,
+        py: `circuit = client.pipeline.compile(
+    graph_id="pipeline_neural_core_9",
+    optimization_level="O3_FPGA_TARGET",
+    enable_zero_copy=True
+)
+
+result = circuit.execute(payload=input_tensor)`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/pipeline/execute \\
+  -H "Authorization: Bearer $KINETIC_KEY" \\
+  -d '{"graphId": "pipeline_neural_core_9"}'`
+      },
+      simOutput: {
+        circuit_id: 'ckt_9901_core',
+        execution_time_us: 13.8,
+        deterministic_hash: '0x3c99a0f...f91a',
+        hardware_target: 'AVX-512 VNNI',
+        verified: true
+      }
     }
   };
 
