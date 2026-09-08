@@ -152,8 +152,8 @@ interface BlueprintCardProps {
 
 export function BlueprintCard({
   index = '001',
-  title = 'SMART ACTIONS',
-  caption = 'Deterministic tool-use orchestration with sub-millisecond dispatch',
+  title = 'DETERMINISTIC KERNEL',
+  caption = 'Sub-millisecond signal routing and state transitions',
   variant = 'cream',
   children
 }: BlueprintCardProps) {
@@ -221,8 +221,8 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
   index: '001',
-  title: 'SMART ACTIONS',
-  caption: 'Deterministic tool-use orchestration with sub-millisecond dispatch',
+  title: 'DETERMINISTIC KERNEL',
+  caption: 'Sub-millisecond signal routing and state transitions',
   variant: 'cream'
 })
 </script>
@@ -279,8 +279,8 @@ withDefaults(defineProps<Props>(), {
 
   let {
     index = '001',
-    title = 'SMART ACTIONS',
-    caption = 'Deterministic tool-use orchestration with sub-millisecond dispatch',
+    title = 'DETERMINISTIC KERNEL',
+    caption = 'Sub-millisecond signal routing and state transitions',
     variant = 'cream',
     children
   }: Props = $props();

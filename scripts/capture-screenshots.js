@@ -77,7 +77,7 @@ async function capture() {
   await page.goto(`${baseUrl}/index.html`, { waitUntil: 'networkidle0' });
   await page.addStyleTag({ content: `
     html, body { scroll-behavior: auto !important; }
-    header, #hud { position: absolute !important; }
+    #hud { position: absolute !important; }
   ` });
   await new Promise(r => setTimeout(r, 2000));
   await page.screenshot({
@@ -101,7 +101,7 @@ async function capture() {
   await page.goto(`${baseUrl}/components.html`, { waitUntil: 'networkidle0' });
   await page.addStyleTag({ content: `
     html, body { scroll-behavior: auto !important; }
-    header { position: absolute !important; }
+    #hud { position: absolute !important; }
   ` });
   await new Promise(r => setTimeout(r, 1500));
 

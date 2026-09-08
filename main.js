@@ -255,9 +255,9 @@ function run({ animate, inView, stagger }) {
   const DOSSIERS = {
     1: {
       index: '001',
-      tag: 'DOSSIER // SMART ACTIONS',
-      title: 'Smart Actions Engine',
-      desc: 'Deterministic tool-use orchestration with sub-millisecond dispatch and strict state verification.',
+      tag: 'DOSSIER // DETERMINISTIC KERNEL',
+      title: 'Deterministic Kernel Engine',
+      desc: 'Sub-millisecond signal routing, runtime guardrails, and atomic state transitions.',
       specs: [
         { key: 'PROTOCOL', value: 'gRPC / HTTP3 Streaming' },
         { key: 'DISPATCH LATENCY', value: '0.42ms (p99)' },
@@ -269,142 +269,164 @@ function run({ animate, inView, stagger }) {
 
 const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
 
-// Execute verified transaction with automatic guardrails
-const result = await kinetic.actions.execute({
-  action: 'refund.process',
-  params: {
-    customerId: 'cus_941a8',
-    amount: 4900,
-    currency: 'USD',
-    reason: 'service_credit'
+// Execute verified atomic kernel dispatch with runtime guardrails
+const result = await kinetic.kernel.dispatch({
+  signal: 'kernel.state_transition',
+  nodeId: 'node_alpha_09',
+  payload: {
+    epoch: 184209,
+    stateVector: [0.94, 0.12, 0.88],
+    commitHash: '0x8f2a49b01e4'
   },
   guardrails: {
-    maxThreshold: 10000,
-    requireIdempotency: true
+    maxJitterMs: 0.5,
+    requireQuorum: true
   }
 });
 
-console.log('Action State:', result.state); // 'RESOLVED'`,
+console.log('Kernel State:', result.state); // 'COMMITTED'`,
         py: `from kinetic import Kinetic
 import os
 
 client = Kinetic(api_key=os.environ["KINETIC_KEY"])
 
-# Execute verified action
-result = client.actions.execute(
-    action="refund.process",
-    params={
-        "customer_id": "cus_941a8",
-        "amount": 4900,
-        "currency": "USD"
+# Dispatch atomic state transition
+result = client.kernel.dispatch(
+    signal="kernel.state_transition",
+    node_id="node_alpha_09",
+    payload={
+        "epoch": 184209,
+        "state_vector": [0.94, 0.12, 0.88],
+        "commit_hash": "0x8f2a49b01e4",
     },
-    guardrails={"max_threshold": 10000, "require_idempotency": True}
+    guardrails={"max_jitter_ms": 0.5, "require_quorum": True},
 )
 
-print(f"Action Status: {result.status}")`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/actions/execute \\
+print(f"Kernel Status: {result.status}")`,
+        curl: `curl -X POST https://api.kinetic.dev/v1/kernel/dispatch \\
   -H "Authorization: Bearer $KINETIC_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
-    "action": "refund.process",
-    "params": {
-      "customerId": "cus_941a8",
-      "amount": 4900,
-      "currency": "USD"
+    "signal": "kernel.state_transition",
+    "nodeId": "node_alpha_09",
+    "payload": {
+      "epoch": 184209,
+      "stateVector": [0.94, 0.12, 0.88]
     },
-    "guardrails": { "requireIdempotency": true }
+    "guardrails": { "requireQuorum": true }
   }'`
       },
       simOutput: {
-        status: 'RESOLVED',
-        transaction_id: 'tx_984fbc71a02',
-        execution_time_ms: 0.42,
-        idempotency_key: 'idemp_3490b8f',
-        guardrails_verified: true,
-        audit_hash: '0x8f2a...e41c'
+        status: 'COMMITTED',
+        epoch: 184209,
+        dispatch_latency_ms: 0.38,
+        quorum_verified: true,
+        guardrails_passed: true,
+        consensus_hash: '0x9e12...77bb'
       }
     },
     2: {
       index: '002',
-      tag: 'DOSSIER // AUTO-RESOLVE',
-      title: 'Auto-Resolve Deflection Gateway',
-      desc: 'Autonomous ticket & intent resolution using verified policy bounds with human-in-the-loop fallback.',
+      tag: 'DOSSIER // STREAM PIPELINE',
+      title: 'Stream Pipeline Ingestion Engine',
+      desc: 'Continuous event ingestion, zero-drop backpressure buffers, and real-time fault detection.',
       specs: [
-        { key: 'POLICY ENGINE', value: 'Open Policy Agent (Rego / WASM)' },
-        { key: 'CONFIDENCE THRESHOLD', value: '>= 98.4% (Autonomous)' },
-        { key: 'FALLBACK ROUTE', value: 'Instant Human Escalation (<100ms)' },
-        { key: 'DEFLECTION RATE', value: '74.2% Avg Production' },
+        { key: 'INGESTION RATE', value: '4.8M events/sec' },
+        { key: 'BUFFER TOPOLOGY', value: 'Ring Buffer / Zero-Copy Memory' },
+        { key: 'BACKPRESSURE DROP', value: '0.000% Guaranteed' },
+        { key: 'FAULT TOLERANCE', value: 'Sub-10ms Active-Active Failover' },
       ],
       code: {
-        ts: `// Evaluate incoming ticket against compiled policy rules
-const evaluation = await kinetic.autoResolve.evaluate({
-  ticketId: 'tkt_7721',
-  intent: 'plan_downgrade',
-  userTier: 'enterprise',
-  sentimentScore: 0.88
+        ts: `import { Kinetic } from '@kinetic/sdk';
+
+const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
+
+// Connect to real-time ingestion pipeline with backpressure buffer
+const pipeline = await kinetic.pipeline.stream({
+  channel: 'telemetry.signals',
+  bufferStrategy: 'ring-zero-copy',
+  maxBatchSize: 10000,
+  onBackpressure: 'throttle-source'
 });
 
-if (evaluation.canAutoResolve) {
-  await evaluation.applyResolution({ notifyCustomer: true });
-}`,
-        py: `evaluation = client.auto_resolve.evaluate(
-    ticket_id="tkt_7721",
-    intent="plan_downgrade",
-    user_tier="enterprise",
-    sentiment_score=0.88
+pipeline.on('event', (batch) => {
+  console.log(\`Ingested \${batch.length} events with zero drop\`);
+});`,
+        py: `from kinetic import Kinetic
+import os
+
+client = Kinetic(api_key=os.environ["KINETIC_KEY"])
+
+pipeline = client.pipeline.stream(
+    channel="telemetry.signals",
+    buffer_strategy="ring-zero-copy",
+    max_batch_size=10000,
+    on_backpressure="throttle-source",
 )
 
-if evaluation.can_auto_resolve:
-    evaluation.apply_resolution(notify_customer=True)`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/resolve/evaluate \\
+for batch in pipeline:
+    print(f"Ingested {len(batch)} events without drop")`,
+        curl: `curl -N https://api.kinetic.dev/v1/pipeline/stream \\
   -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"ticketId": "tkt_7721", "intent": "plan_downgrade"}'`
+  -d '{"channel": "telemetry.signals", "bufferStrategy": "ring-zero-copy"}'`
       },
       simOutput: {
-        canAutoResolve: true,
-        policy_id: 'pol_enterprise_downgrade_v4',
-        confidence: 0.992,
-        applied_guardrail: 'RETENTION_OFFER_APPLIED',
-        resolution_state: 'SUCCESS'
+        pipeline_status: 'HEALTHY',
+        events_per_second: 4820000,
+        buffer_saturation: '12.4%',
+        dropped_frames: 0,
+        jitter_p99_us: 18
       }
     },
     3: {
       index: '003',
-      tag: 'DOSSIER // AGENT ASSIST',
-      title: 'Agent Assist Co-Pilot',
-      desc: 'Context-injected macro recommendations, brand-tone adherence, and citation validation.',
+      tag: 'DOSSIER // TELEMETRY MESH',
+      title: 'Distributed Telemetry Mesh',
+      desc: 'Distributed node discovery, peer-to-peer gossip protocol, and verifiable state proofs.',
       specs: [
-        { key: 'EMBEDDING DIMENSION', value: '1536-Dimensional Vector Space' },
-        { key: 'CONTEXT CACHE', value: 'Prefix-Cached (0ms Cold Start)' },
-        { key: 'CITATION RECALL', value: '99.8% Ground Truth Alignment' },
-        { key: 'LATENCY', value: '120ms Time-To-First-Token' },
+        { key: 'GOSSIP PROTOCOL', value: 'SWIM + Epidemic Dissemination' },
+        { key: 'TOPOLOGY DISCOVERY', value: '< 25ms Convergence' },
+        { key: 'PROOF MECHANISM', value: 'Merkle Mountain Range (MMR)' },
+        { key: 'CLUSTER CAPACITY', value: '10,000+ Edge Nodes' },
       ],
       code: {
-        ts: `const stream = await kinetic.assist.generateSuggestions({
-  conversationId: 'conv_84920',
-  brandGuidelines: 'strict_concise',
-  requireCitations: true
+        ts: `import { Kinetic } from '@kinetic/sdk';
+
+const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
+
+// Join peer-to-peer mesh and listen for gossip state updates
+const mesh = await kinetic.mesh.join({
+  clusterId: 'kinetic-prod-mesh',
+  gossipIntervalMs: 50,
+  verifyProofs: true
 });
 
-for await (const token of stream) {
-  process.stdout.write(token.delta);
-}`,
-        py: `stream = client.assist.generate_suggestions(
-    conversation_id="conv_84920",
-    brand_guidelines="strict_concise",
-    require_citations=True
+mesh.on('stateProof', (proof) => {
+  console.log('Verified state proof from node:', proof.nodeId);
+});`,
+        py: `from kinetic import Kinetic
+import os
+
+client = Kinetic(api_key=os.environ["KINETIC_KEY"])
+
+mesh = client.mesh.join(
+    cluster_id="kinetic-prod-mesh",
+    gossip_interval_ms=50,
+    verify_proofs=True,
 )
 
-for token in stream:
-    print(token.delta, end="", flush=True)`,
-        curl: `curl -N https://api.kinetic.dev/v1/assist/stream \\
+for proof in mesh.proofs():
+    print(f"Verified state proof from node: {proof.node_id}")`,
+        curl: `curl -N https://api.kinetic.dev/v1/mesh/peers \\
   -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"conversationId": "conv_84920"}'`
+  -d '{"clusterId": "kinetic-prod-mesh"}'`
       },
       simOutput: {
-        suggested_reply: 'Your subscription renewal has been updated with the 20% annual discount applied.',
-        citations: ['kb_billing_faq_p14', 'policy_annual_discount_v2'],
-        brand_tone_score: 0.98
+        mesh_status: 'CONVERGED',
+        peer_count: 1024,
+        gossip_round: 48920,
+        merkle_root: '0x3c89...bf10',
+        convergence_time_ms: 18.4
       }
     },
     4: {
