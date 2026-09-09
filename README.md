@@ -1,10 +1,13 @@
 # Kinetic UI
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-kinetic--ui.ai.studio-f4551d.svg?style=flat&logo=googlechrome&logoColor=white)](https://kinetic-ui.ai.studio/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f4551d.svg)](https://opensource.org/licenses/MIT)
 [![Frameworks](https://img.shields.io/badge/Frameworks-React%20%7C%20Vue%20%7C%20Svelte%20%7C%20HTML5-e9e2d3.svg?color=2b2b29)](https://github.com/SalAkBuK/kinetic-ui)
 [![Components](https://img.shields.io/badge/Components-15%20Production%20Primitives-f4551d.svg)](https://github.com/SalAkBuK/kinetic-ui)
 [![Icons](https://img.shields.io/badge/Glyphs-32%20Technical%20SVGs-e9e2d3.svg?color=2b2b29)](https://github.com/SalAkBuK/kinetic-ui)
 [![Zero Audio Assets](https://img.shields.io/badge/Audio-Procedural%20Web%20Audio-10b981.svg)](https://github.com/SalAkBuK/kinetic-ui)
+
+> 🚀 **Live Interactive Demo**: [**kinetic-ui.ai.studio**](https://kinetic-ui.ai.studio/) — explore the 15 components, live 3D radar, oscilloscope, and code exporter directly in your browser.
 
 **Kinetic UI** is an independent, high-assurance industrial engineering design system and component architecture built for aerospace telemetry, mission control consoles, distributed infrastructure dashboards, and developer platforms.
 
