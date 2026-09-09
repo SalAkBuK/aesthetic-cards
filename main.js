@@ -232,7 +232,7 @@ function run({ animate, inView, stagger }) {
   if (copyCliBtn) {
     copyCliBtn.addEventListener('click', () => {
       sfx.success();
-      const text = document.getElementById('curlSnippet')?.textContent?.trim() || 'curl -fsSL https://get.kinetic.dev | sh';
+      const text = document.getElementById('curlSnippet')?.textContent?.trim() || 'git clone https://github.com/SalAkBuK/kinetic-ui.git';
       navigator.clipboard?.writeText(text).then(() => {
         copyCliBtn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>`;
         setTimeout(() => {
@@ -242,467 +242,247 @@ function run({ animate, inView, stagger }) {
     });
   }
 
-  /* --- Simulated Latency Ticker --- */
-  const latencyEl = document.getElementById('hudLatency');
-  if (latencyEl) {
-    setInterval(() => {
-      const ping = Math.floor(9 + Math.random() * 6);
-      latencyEl.textContent = `${ping}ms`;
-    }, 3800);
+  function makeCardCode(title, index, caption, isOrange) {
+    const bg = isOrange ? 'bg-[#f4551d] text-[#16150f]' : 'bg-[#e9e2d3] text-[#16150f]';
+    const mediaBg = isOrange ? 'bg-[#ea4f1a]/60' : 'bg-[#e2dac9]';
+    const chamferStyle = "clipPath: 'polygon(13px 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px), 0 13px)'";
+    const chamferCss = "clip-path: polygon(13px 0, calc(100% - 13px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px), 0 13px);";
+
+    return {
+      react: `import React from 'react';
+
+// Kinetic UI // Blueprint Card Primitive (${index} — ${title})
+export function FeatureCard() {
+  return (
+    <article className="group relative w-full max-w-sm select-none cursor-pointer">
+      <div className="flex flex-col gap-1.5 transition-transform duration-200 group-hover:-translate-y-1">
+        {/* Top Media Block with 8-Point Chamfer */}
+        <div 
+          className="relative p-4 pb-3.5 ${bg}"
+          style={{ ${chamferStyle} }}
+        >
+          <header className="flex items-start justify-between gap-3 pb-3">
+            <h3 className="text-xl font-semibold tracking-tight">${title}</h3>
+            <span className="font-mono text-[10px] opacity-45">${index}</span>
+          </header>
+
+          <div className="relative aspect-square w-full overflow-hidden rounded ${mediaBg}">
+            <div 
+              className="absolute inset-0 opacity-20" 
+              style={{ backgroundImage: 'radial-gradient(currentColor 1px, transparent 1px)', backgroundSize: '7px 7px' }} 
+            />
+            {/* Corner Crop Brackets */}
+            <span className="absolute top-0 left-0 w-3 h-3 border-t border-l border-current opacity-60" />
+            <span className="absolute top-0 right-0 w-3 h-3 border-t border-r border-current opacity-60" />
+            <span className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-current opacity-60" />
+            <span className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-current opacity-60" />
+          </div>
+        </div>
+
+        {/* Bottom Caption Block */}
+        <div 
+          className="flex items-center justify-between gap-3 px-4 py-3.5 ${bg}"
+          style={{ ${chamferStyle} }}
+        >
+          <p className="text-xs leading-relaxed opacity-90">${caption}</p>
+          <div className="flex flex-col gap-1 opacity-35 shrink-0">
+            <span className="w-1 h-1 rounded-full bg-current" />
+            <span className="w-1 h-1 rounded-full bg-current" />
+            <span className="w-1 h-1 rounded-full bg-current" />
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}`,
+      vue: `<template>
+  <!-- Kinetic UI // Blueprint Card (${index} — ${title}) -->
+  <article class="group relative w-full max-w-sm select-none cursor-pointer">
+    <div class="flex flex-col gap-1.5 transition-transform duration-200 group-hover:-translate-y-1">
+      <div 
+        class="relative p-4 pb-3.5 ${bg}"
+        style="${chamferCss}"
+      >
+        <header class="flex items-start justify-between gap-3 pb-3">
+          <h3 class="text-xl font-semibold tracking-tight">${title}</h3>
+          <span class="font-mono text-[10px] opacity-45">${index}</span>
+        </header>
+
+        <div class="relative aspect-square w-full overflow-hidden rounded ${mediaBg}">
+          <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 7px 7px;" />
+          <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-current opacity-60" />
+          <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-current opacity-60" />
+          <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-current opacity-60" />
+          <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-current opacity-60" />
+        </div>
+      </div>
+
+      <div 
+        class="flex items-center justify-between gap-3 px-4 py-3.5 ${bg}"
+        style="${chamferCss}"
+      >
+        <p class="text-xs leading-relaxed opacity-90">${caption}</p>
+        <div class="flex flex-col gap-1 opacity-35 shrink-0">
+          <span class="w-1 h-1 rounded-full bg-current" />
+          <span class="w-1 h-1 rounded-full bg-current" />
+          <span class="w-1 h-1 rounded-full bg-current" />
+        </div>
+      </div>
+    </div>
+  </article>
+</template>`,
+      svelte: `<!-- Kinetic UI // Blueprint Card (${index} — ${title}) -->
+<article class="group relative w-full max-w-sm select-none cursor-pointer">
+  <div class="flex flex-col gap-1.5 transition-transform duration-200 group-hover:-translate-y-1">
+    <div 
+      class="relative p-4 pb-3.5 ${bg}"
+      style="${chamferCss}"
+    >
+      <header class="flex items-start justify-between gap-3 pb-3">
+        <h3 class="text-xl font-semibold tracking-tight">${title}</h3>
+        <span class="font-mono text-[10px] opacity-45">${index}</span>
+      </header>
+
+      <div class="relative aspect-square w-full overflow-hidden rounded ${mediaBg}">
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 7px 7px;"></div>
+        <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-current opacity-60"></span>
+        <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-current opacity-60"></span>
+        <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-current opacity-60"></span>
+        <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-current opacity-60"></span>
+      </div>
+    </div>
+
+    <div 
+      class="flex items-center justify-between gap-3 px-4 py-3.5 ${bg}"
+      style="${chamferCss}"
+    >
+      <p class="text-xs leading-relaxed opacity-90">${caption}</p>
+      <div class="flex flex-col gap-1 opacity-35 shrink-0">
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+      </div>
+    </div>
+  </div>
+</article>`,
+      html: `<!-- Kinetic UI // Blueprint Card (${index} — ${title}) -->
+<article class="group relative w-full max-w-sm select-none cursor-pointer">
+  <div class="flex flex-col gap-1.5 transition-transform duration-200 group-hover:-translate-y-1">
+    <!-- Top Media Block with 8-Point Chamfer -->
+    <div 
+      class="relative p-4 pb-3.5 ${bg}"
+      style="${chamferCss}"
+    >
+      <header class="flex items-start justify-between gap-3 pb-3">
+        <h3 class="text-xl font-semibold tracking-tight">${title}</h3>
+        <span class="font-mono text-[10px] opacity-45">${index}</span>
+      </header>
+
+      <div class="relative aspect-square w-full overflow-hidden rounded ${mediaBg}">
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(currentColor 1px, transparent 1px); background-size: 7px 7px;"></div>
+        <!-- Corner Crop Brackets -->
+        <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-current opacity-60"></span>
+        <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-current opacity-60"></span>
+        <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-current opacity-60"></span>
+        <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-current opacity-60"></span>
+      </div>
+    </div>
+
+    <!-- Bottom Caption Block -->
+    <div 
+      class="flex items-center justify-between gap-3 px-4 py-3.5 ${bg}"
+      style="${chamferCss}"
+    >
+      <p class="text-xs leading-relaxed opacity-90">${caption}</p>
+      <div class="flex flex-col gap-1 opacity-35 shrink-0">
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+        <span class="w-1 h-1 rounded-full bg-current"></span>
+      </div>
+    </div>
+  </div>
+</article>`
+    };
   }
 
-  /* --- Technical Dossier Modal Logic --- */
   const DOSSIERS = {
     1: {
       index: '001',
-      tag: 'DOSSIER // DETERMINISTIC KERNEL',
-      title: 'Deterministic Kernel Engine',
-      desc: 'Sub-millisecond signal routing, runtime guardrails, and atomic state transitions.',
+      tag: 'COMPONENT // DETERMINISTIC KERNEL',
+      title: 'Deterministic Kernel Card',
+      desc: 'Chamfered aerospace blueprint feature card with dual-orbit gyroscope & reticle vector artwork.',
       specs: [
-        { key: 'PROTOCOL', value: 'gRPC / HTTP3 Streaming' },
-        { key: 'DISPATCH LATENCY', value: '0.42ms (p99)' },
-        { key: 'IDEMPOTENCY GUARANTEE', value: 'Strict Two-Phase Commit' },
-        { key: 'CONCURRENCY LIMIT', value: '64,000 workers / node' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'VECTOR ART', value: 'Resolution-Independent Inline SVG' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `import { Kinetic } from '@kinetic/sdk';
-
-const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
-
-// Execute verified atomic kernel dispatch with runtime guardrails
-const result = await kinetic.kernel.dispatch({
-  signal: 'kernel.state_transition',
-  nodeId: 'node_alpha_09',
-  payload: {
-    epoch: 184209,
-    stateVector: [0.94, 0.12, 0.88],
-    commitHash: '0x8f2a49b01e4'
-  },
-  guardrails: {
-    maxJitterMs: 0.5,
-    requireQuorum: true
-  }
-});
-
-console.log('Kernel State:', result.state); // 'COMMITTED'`,
-        py: `from kinetic import Kinetic
-import os
-
-client = Kinetic(api_key=os.environ["KINETIC_KEY"])
-
-# Dispatch atomic state transition
-result = client.kernel.dispatch(
-    signal="kernel.state_transition",
-    node_id="node_alpha_09",
-    payload={
-        "epoch": 184209,
-        "state_vector": [0.94, 0.12, 0.88],
-        "commit_hash": "0x8f2a49b01e4",
-    },
-    guardrails={"max_jitter_ms": 0.5, "require_quorum": True},
-)
-
-print(f"Kernel Status: {result.status}")`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/kernel/dispatch \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "signal": "kernel.state_transition",
-    "nodeId": "node_alpha_09",
-    "payload": {
-      "epoch": 184209,
-      "stateVector": [0.94, 0.12, 0.88]
-    },
-    "guardrails": { "requireQuorum": true }
-  }'`
-      },
-      simOutput: {
-        status: 'COMMITTED',
-        epoch: 184209,
-        dispatch_latency_ms: 0.38,
-        quorum_verified: true,
-        guardrails_passed: true,
-        consensus_hash: '0x9e12...77bb'
-      }
+      code: makeCardCode('Deterministic Kernel', '001', 'Sub-millisecond signal routing, runtime guardrails, and atomic state transitions', true)
     },
     2: {
       index: '002',
-      tag: 'DOSSIER // STREAM PIPELINE',
-      title: 'Stream Pipeline Ingestion Engine',
-      desc: 'Continuous event ingestion, zero-drop backpressure buffers, and real-time fault detection.',
+      tag: 'COMPONENT // STREAM PIPELINE',
+      title: 'Stream Pipeline Card',
+      desc: 'Chamfered technical feature card with harmonic frequency spectrum and quantizer sampling nodes.',
       specs: [
-        { key: 'INGESTION RATE', value: '4.8M events/sec' },
-        { key: 'BUFFER TOPOLOGY', value: 'Ring Buffer / Zero-Copy Memory' },
-        { key: 'BACKPRESSURE DROP', value: '0.000% Guaranteed' },
-        { key: 'FAULT TOLERANCE', value: 'Sub-10ms Active-Active Failover' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'CANVAS TEXTURE', value: '7px Radial Dotted Grid Pattern' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `import { Kinetic } from '@kinetic/sdk';
-
-const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
-
-// Connect to real-time ingestion pipeline with backpressure buffer
-const pipeline = await kinetic.pipeline.stream({
-  channel: 'telemetry.signals',
-  bufferStrategy: 'ring-zero-copy',
-  maxBatchSize: 10000,
-  onBackpressure: 'throttle-source'
-});
-
-pipeline.on('event', (batch) => {
-  console.log(\`Ingested \${batch.length} events with zero drop\`);
-});`,
-        py: `from kinetic import Kinetic
-import os
-
-client = Kinetic(api_key=os.environ["KINETIC_KEY"])
-
-pipeline = client.pipeline.stream(
-    channel="telemetry.signals",
-    buffer_strategy="ring-zero-copy",
-    max_batch_size=10000,
-    on_backpressure="throttle-source",
-)
-
-for batch in pipeline:
-    print(f"Ingested {len(batch)} events without drop")`,
-        curl: `curl -N https://api.kinetic.dev/v1/pipeline/stream \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"channel": "telemetry.signals", "bufferStrategy": "ring-zero-copy"}'`
-      },
-      simOutput: {
-        pipeline_status: 'HEALTHY',
-        events_per_second: 4820000,
-        buffer_saturation: '12.4%',
-        dropped_frames: 0,
-        jitter_p99_us: 18
-      }
+      code: makeCardCode('Stream Pipeline', '002', 'Continuous event ingestion, zero-drop backpressure buffers, and fault detection', false)
     },
     3: {
       index: '003',
-      tag: 'DOSSIER // TELEMETRY MESH',
-      title: 'Distributed Telemetry Mesh',
-      desc: 'Distributed node discovery, peer-to-peer gossip protocol, and verifiable state proofs.',
+      tag: 'COMPONENT // TELEMETRY MESH',
+      title: 'Telemetry Mesh Card',
+      desc: 'Chamfered technical feature card with tri-node topology mesh and Merkle quorum verification ring.',
       specs: [
-        { key: 'GOSSIP PROTOCOL', value: 'SWIM + Epidemic Dissemination' },
-        { key: 'TOPOLOGY DISCOVERY', value: '< 25ms Convergence' },
-        { key: 'PROOF MECHANISM', value: 'Merkle Mountain Range (MMR)' },
-        { key: 'CLUSTER CAPACITY', value: '10,000+ Edge Nodes' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'CANVAS TEXTURE', value: '7px Radial Dotted Grid Pattern' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `import { Kinetic } from '@kinetic/sdk';
-
-const kinetic = new Kinetic({ apiKey: process.env.KINETIC_KEY });
-
-// Join peer-to-peer mesh and listen for gossip state updates
-const mesh = await kinetic.mesh.join({
-  clusterId: 'kinetic-prod-mesh',
-  gossipIntervalMs: 50,
-  verifyProofs: true
-});
-
-mesh.on('stateProof', (proof) => {
-  console.log('Verified state proof from node:', proof.nodeId);
-});`,
-        py: `from kinetic import Kinetic
-import os
-
-client = Kinetic(api_key=os.environ["KINETIC_KEY"])
-
-mesh = client.mesh.join(
-    cluster_id="kinetic-prod-mesh",
-    gossip_interval_ms=50,
-    verify_proofs=True,
-)
-
-for proof in mesh.proofs():
-    print(f"Verified state proof from node: {proof.node_id}")`,
-        curl: `curl -N https://api.kinetic.dev/v1/mesh/peers \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"clusterId": "kinetic-prod-mesh"}'`
-      },
-      simOutput: {
-        mesh_status: 'CONVERGED',
-        peer_count: 1024,
-        gossip_round: 48920,
-        merkle_root: '0x3c89...bf10',
-        convergence_time_ms: 18.4
-      }
+      code: makeCardCode('Telemetry Mesh', '003', 'Distributed node discovery, peer-to-peer gossip protocol, and verifiable state proofs', false)
     },
     4: {
       index: '004',
-      tag: 'DOSSIER // SIGNAL ROUTING',
-      title: 'Signal Routing & Priority Queue',
-      desc: 'Weighted priority triage, cross-region mesh dispatch, and sub-millisecond worker routing.',
+      tag: 'COMPONENT // SIGNAL ROUTING',
+      title: 'Signal Routing Card',
+      desc: 'Chamfered technical feature card with diamond reticle and multi-tier priority crosshair.',
       specs: [
-        { key: 'TOPOLOGY', value: 'Global Anycast Mesh' },
-        { key: 'QUEUE CAPACITY', value: '1.2M Pending Concurrent Tasks' },
-        { key: 'DISPATCH JITTER', value: '< 0.05ms' },
-        { key: 'FAILOVER TIME', value: '12ms Auto-Recovery' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'CANVAS TEXTURE', value: '7px Radial Dotted Grid Pattern' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `await kinetic.router.dispatch({
-  signalId: 'sig_voice_input_04',
-  priority: 'URGENT',
-  affinity: 'geo_nearest',
-  maxLatencyBudgetMs: 50
-});`,
-        py: `client.router.dispatch(
-    signal_id="sig_voice_input_04",
-    priority="URGENT",
-    affinity="geo_nearest",
-    max_latency_budget_ms=50
-)`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/router/dispatch \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"priority": "URGENT", "maxLatencyBudgetMs": 50}'`
-      },
-      simOutput: {
-        dispatched_to: 'worker_node_iad_09',
-        hop_count: 1,
-        routing_latency_ms: 0.18,
-        queue_position: 0
-      }
+      code: makeCardCode('Signal Routing', '004', 'Intelligent triage, priority queues, latency-optimized dispatch', false)
     },
     5: {
       index: '005',
-      tag: 'DOSSIER // NEURAL SEARCH',
-      title: 'Neural Hybrid Retrieval',
-      desc: 'Sparse-dense hybrid vector indexing with sub-ms reciprocal rank fusion across enterprise knowledge.',
+      tag: 'COMPONENT // NEURAL SEARCH',
+      title: 'Neural Search Card',
+      desc: 'Chamfered technical feature card with dual-arc radar reticle and sweep vector artwork.',
       specs: [
-        { key: 'VECTOR INDEX', value: 'HNSW (M=16, efConstruction=200)' },
-        { key: 'SPARSE INDEX', value: 'BM25 Okapi with Term Proximity' },
-        { key: 'FUSION METHOD', value: 'Reciprocal Rank Fusion (RRF k=60)' },
-        { key: 'SEARCH SPEED', value: '0.68ms Average' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'CANVAS TEXTURE', value: '7px Radial Dotted Grid Pattern' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `const results = await kinetic.search.query({
-  query: 'SOC2 compliant data retention policies',
-  topK: 3,
-  hybridAlpha: 0.75, // 75% semantic, 25% keyword
-  filter: { classification: 'internal' }
-});`,
-        py: `results = client.search.query(
-    query="SOC2 compliant data retention policies",
-    top_k=3,
-    hybrid_alpha=0.75,
-    filter={"classification": "internal"}
-)`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/search/query \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{"query": "SOC2 compliance policies", "topK": 3}'`
-      },
-      simOutput: {
-        matches_found: 3,
-        top_score: 0.9412,
-        latency_ms: 0.68,
-        documents: ['sec_handbook_ch4.md', 'soc2_audit_2026.pdf']
-      }
+      code: makeCardCode('Neural Search', '005', 'Semantic indexing, multimodal embeddings, sub-ms retrieval', true)
     },
     6: {
       index: '006',
-      tag: 'DOSSIER // AUDIT & GUARDRAILS',
-      title: 'Immutable Audit & Runtime Guardrails',
-      desc: 'Cryptographically signed zero-knowledge proof trail with real-time PII scrubbing and policy enforcement.',
+      tag: 'COMPONENT // AUDIT & GUARDRAILS',
+      title: 'Audit & Guardrails Card',
+      desc: 'Chamfered technical feature card with concentric hexagonal maze and core verification terminal.',
       specs: [
-        { key: 'PROOF SYSTEM', value: 'ZK-STARK (Post-Quantum Resilient)' },
-        { key: 'PII SCRUBBING', value: 'Zero-Retention Deterministic Redaction' },
-        { key: 'SIGNATURE SCHEME', value: 'Ed25519 Elliptic Curve' },
-        { key: 'AUDIT COMPLIANCE', value: 'SOC2 Type II / HIPAA / ISO 27001' },
+        { key: 'FRAMEWORKS', value: 'React (TSX) · Vue 3 · Svelte 5 · HTML5' },
+        { key: 'CLIP-PATH', value: '13px 8-Point Chamfer Polygon' },
+        { key: 'CANVAS TEXTURE', value: '7px Radial Dotted Grid Pattern' },
+        { key: 'DEPENDENCIES', value: 'Tailwind CSS (Zero Runtime JS)' }
       ],
-      code: {
-        ts: `const verification = await kinetic.audit.verifyTransaction({
-  txHash: '0x49f82d1c...b02',
-  expectedPolicyVersion: 'v2.4.1'
-});
-
-console.log('Cryptographic Proof Valid:', verification.isValid);`,
-        py: `verification = client.audit.verify_transaction(
-    tx_hash="0x49f82d1c...b02",
-    expected_policy_version="v2.4.1"
-)
-print("Proof Valid:", verification.is_valid)`,
-        curl: `curl https://api.kinetic.dev/v1/audit/verify/0x49f82d1c...b02 \\
-  -H "Authorization: Bearer $KINETIC_KEY"`
-      },
-      simOutput: {
-        isValid: true,
-        zk_proof: '0x99482f...a10e',
-        redacted_fields_count: 4,
-        pii_leakage_risk: '0.0000%',
-        timestamp: '2026-09-08T08:33:00Z'
-      }
-    },
-    7: {
-      index: '007',
-      tag: 'DOSSIER // STATE CONSENSUS',
-      title: 'State Consensus & Merkle DAG',
-      desc: 'Byzantine quorum replication with zero-knowledge state commitments, Sparse Merkle Patricia Tries, and sub-millisecond finality.',
-      specs: [
-        { key: 'FAULT TOLERANCE', value: 'Byzantine Fault Tolerance (2f + 1)' },
-        { key: 'CONSENSUS PROTOCOL', value: 'HotStuff-BFT Pipeline' },
-        { key: 'STATE ACCUMULATOR', value: 'Sparse Merkle Patricia Trie' },
-        { key: 'FINALITY LATENCY', value: 'Sub-Millisecond Quorum Finality (<0.4ms)' },
-      ],
-      code: {
-        ts: `import { Kinetic } from '@kinetic/sdk';
-
-const consensus = new Kinetic.Consensus({
-  quorum: '2f_plus_1',
-  protocol: 'HotStuff-BFT',
-  accumulator: 'SparseMerkleTree'
-});
-
-// Commit state transition with verifiable Merkle proof
-const receipt = await consensus.commitStateTransition({
-  stateRoot: '0x7e1b40a...99cf',
-  deltaPayload: txBatch,
-  requireZKProof: true
-});
-
-console.log('Finality latency:', receipt.finalityMs); // 0.38ms`,
-        py: `from kinetic import Consensus
-
-engine = Consensus(
-    quorum="2f_plus_1",
-    protocol="HotStuff-BFT",
-    accumulator="SparseMerkleTree"
-)
-
-receipt = engine.commit_state_transition(
-    state_root="0x7e1b40a...99cf",
-    delta_payload=tx_batch,
-    require_zk_proof=True
-)
-print(f"Quorum Achieved: {receipt.quorum_achieved}")`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/consensus/commit \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{
-    "protocol": "HotStuff-BFT",
-    "quorum": "2f_plus_1",
-    "stateRoot": "0x7e1b40a...99cf"
-  }'`
-      },
-      simOutput: {
-        status: 'QUORUM_COMMITTED',
-        consensus_model: 'HotStuff-BFT (2f + 1)',
-        validators_signed: '11/16 nodes (68.75%)',
-        sparse_merkle_root: '0x7e1b40a92d1c...99cf',
-        finality_latency_ms: 0.38,
-        zk_stark_proof: '0x9924a...bc01 (VALID)'
-      }
-    },
-    8: {
-      index: '008',
-      tag: 'DOSSIER // WAVE SYNTHESIS',
-      title: 'Wave Synthesis & DSP Pipeline',
-      desc: 'Precision digital signal processing engine with high-order harmonic synthesis, FFT spectral analysis, and picosecond-grade jitter stabilization.',
-      specs: [
-        { key: 'AUDIO PIPELINE', value: '192 kHz / 32-bit Float Audio' },
-        { key: 'SPECTRAL TRANSFORM', value: '4096-Point Radix-4 FFT' },
-        { key: 'PHASE JITTER', value: '< 1.4ps RMS Phase Jitter' },
-        { key: 'HARMONIC TRACKING', value: 'Real-Time Dynamic Peak Locking' },
-      ],
-      code: {
-        ts: `import { KineticDSP } from '@kinetic/dsp';
-
-const dsp = new KineticDSP({
-  sampleRate: 192000,
-  bitDepth: 32,
-  fftSize: 4096
-});
-
-// Run real-time harmonic FFT decomposition with jitter stabilization
-const spectrum = await dsp.synthesizeHarmonics({
-  fundamentalHz: 440.0,
-  harmonicsCount: 16,
-  jitterClockSync: 'hardware_ptp'
-});
-
-console.log('RMS Phase Jitter:', spectrum.phaseJitterPs); // 1.18ps`,
-        py: `from kinetic_dsp import DSPStream
-
-dsp = DSPStream(sample_rate=192000, bit_depth=32, fft_size=4096)
-
-spectrum = dsp.synthesize_harmonics(
-    fundamental_hz=440.0,
-    harmonics_count=16,
-    jitter_clock_sync="hardware_ptp"
-)
-print(f"FFT Peak Lock: {spectrum.peak_locked}")`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/dsp/synthesize \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{
-    "sampleRate": 192000,
-    "fftSize": 4096,
-    "jitterStabilization": true
-  }'`
-      },
-      simOutput: {
-        stream_status: 'SYNCHRONIZED',
-        sample_rate_khz: 192,
-        bit_depth: '32-bit float',
-        fft_resolution_bins: 4096,
-        phase_jitter_rms_ps: 1.18,
-        harmonic_thd_db: -128.4
-      }
-    },
-    9: {
-      index: '009',
-      tag: 'DOSSIER // QUANTUM ENCLAVE',
-      title: 'Quantum Enclave Secure Isolation',
-      desc: 'Hardware security modules, memory-safe deterministic isolation, and post-quantum lattice cryptography with zero-trust enclave attestation.',
-      specs: [
-        { key: 'HARDWARE ISOLATION', value: 'Hardware TPM 2.0 / Nitro Hypervisor' },
-        { key: 'PQC CIPHERSUITE', value: 'Kyber-1024 + Dilithium-3 Post-Quantum' },
-        { key: 'MEMORY ISOLATION', value: 'Deterministic Memory Partitions' },
-        { key: 'SECURITY BOUNDARY', value: 'Zero-Trust Enclave Attestation' },
-      ],
-      code: {
-        ts: `import { QuantumEnclave } from '@kinetic/enclave';
-
-const enclave = await QuantumEnclave.bootstrap({
-  hypervisor: 'Nitro_TPM_2_0',
-  cipherSuite: 'ML_KEM_1024_Kyber',
-  signatureScheme: 'Dilithium_3'
-});
-
-// Execute confidential workload in isolated memory partition
-const attestedReceipt = await enclave.executeConfidential({
-  sealedPayload: encryptedBlob,
-  verifyHardwarePcr: true
-});
-
-console.log('Enclave PCR Attested:', attestedReceipt.isVerified);`,
-        py: `from kinetic_enclave import QuantumEnclave
-
-enclave = QuantumEnclave.bootstrap(
-    hypervisor="Nitro_TPM_2_0",
-    cipher_suite="ML_KEM_1024_Kyber",
-    signature_scheme="Dilithium_3"
-)
-
-receipt = enclave.execute_confidential(
-    sealed_payload=encrypted_blob,
-    verify_hardware_pcr=True
-)
-print(f"PQC Attested: {receipt.is_verified}")`,
-        curl: `curl -X POST https://api.kinetic.dev/v1/enclave/execute \\
-  -H "Authorization: Bearer $KINETIC_KEY" \\
-  -d '{
-    "isolation": "Nitro_TPM_2_0",
-    "ciphersuite": "Kyber1024_Dilithium3",
-    "verifyHardwarePcr": true
-  }'`
-      },
-      simOutput: {
-        enclave_state: 'ISOLATED_LOCKED',
-        hypervisor: 'AWS Nitro / Hardware TPM 2.0',
-        pqc_key_exchange: 'ML-KEM-1024 (Kyber-1024)',
-        pqc_signature: 'ML-DSA-87 (Dilithium-3)',
-        memory_partition_safe: true,
-        attestation_pcr_match: true
-      }
+      code: makeCardCode('Audit & Guardrails', '006', 'Real-time policy enforcement, PII redaction, immutable event logs', false)
     }
   };
 
@@ -716,14 +496,10 @@ print(f"PQC Attested: {receipt.is_verified}")`,
   const closeBtn = document.getElementById('closeDossierBtn');
   const copyCodeBtn = document.getElementById('copyDossierCodeBtn');
   const copyCodeText = document.getElementById('copyCodeText');
-  const runSimBtn = document.getElementById('runSimBtn');
-  const simOutputBox = document.getElementById('simOutputBox');
-  const simExecutionTime = document.getElementById('simExecutionTime');
-  const simOutputPayload = document.getElementById('simOutputPayload');
   const tabs = document.querySelectorAll('.dossier-tab');
 
   let activeCardId = 1;
-  let activeLang = 'ts';
+  let activeLang = 'react';
 
   function renderDossier(id) {
     const data = DOSSIERS[id];
@@ -745,8 +521,7 @@ print(f"PQC Attested: {receipt.is_verified}")`,
     `).join('');
 
     // Render code block
-    dCode.textContent = data.code[activeLang];
-    simOutputBox.classList.add('hidden');
+    dCode.textContent = data.code[activeLang] || '';
   }
 
   function openDossier(id) {
@@ -796,32 +571,18 @@ print(f"PQC Attested: {receipt.is_verified}")`,
       tab.classList.add('bg-white/20', 'font-medium', 'text-white');
       tab.classList.remove('text-white/60');
       activeLang = tab.dataset.lang;
-      dCode.textContent = DOSSIERS[activeCardId].code[activeLang];
+      dCode.textContent = DOSSIERS[activeCardId]?.code?.[activeLang] || '';
     });
   });
 
   // Copy code snippet
   copyCodeBtn?.addEventListener('click', () => {
     sfx.success();
-    const code = DOSSIERS[activeCardId].code[activeLang];
+    const code = DOSSIERS[activeCardId]?.code?.[activeLang] || '';
     navigator.clipboard?.writeText(code).then(() => {
       copyCodeText.textContent = '✓ Copied!';
-      setTimeout(() => { copyCodeText.textContent = 'Copy Snippet'; }, 2000);
+      setTimeout(() => { copyCodeText.textContent = 'Copy Component'; }, 2000);
     });
-  });
-
-  // Run simulation
-  runSimBtn?.addEventListener('click', () => {
-    sfx.telemetry();
-    const data = DOSSIERS[activeCardId];
-    simOutputBox.classList.remove('hidden');
-    simExecutionTime.textContent = 'EXECUTING...';
-    simOutputPayload.textContent = '// Sending payload to gateway...';
-
-    setTimeout(() => {
-      simExecutionTime.textContent = `LATENCY: ${data.simOutput.execution_time_ms ?? '0.42'}ms`;
-      simOutputPayload.textContent = JSON.stringify(data.simOutput, null, 2);
-    }, 280);
   });
 }
 
