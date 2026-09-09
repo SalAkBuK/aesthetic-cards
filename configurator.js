@@ -4,7 +4,24 @@
  * multi-component specimen workbench, and multi-format design token export (CSS, Tailwind, DTCG JSON, React/JSX).
  */
 
+import JSZip from 'jszip';
 import { ICONS, ICON_META, renderIcon } from './icons.js';
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function downloadText(text, filename, mimeType = 'text/plain;charset=utf-8') {
+  const blob = new Blob([text], { type: mimeType });
+  downloadBlob(blob, filename);
+}
 
 export const PRESETS = {
   industrial: {
@@ -1394,7 +1411,288 @@ export class BlueprintConfigurator {
       }
     });
 
+    // 1-Click Download Current Spec button (.css / .js / .json / .tsx)
+    const downloadSpecBtn = document.getElementById('cfgDownloadSpecBtn');
+    downloadSpecBtn?.addEventListener('click', () => {
+      this.downloadActiveSpec();
+    });
+
+    // 1-Click Download Preset Kit ZIP button
+    const downloadZipBtn = document.getElementById('cfgDownloadZipBtn');
+    downloadZipBtn?.addEventListener('click', () => {
+      this.downloadPresetZip(downloadZipBtn);
+    });
+
+    // 1-Click Download Active Preset JSON button
+    const downloadActivePresetBtn = document.getElementById('cfgDownloadActivePresetBtn');
+    downloadActivePresetBtn?.addEventListener('click', () => {
+      this.downloadActivePresetJson();
+    });
+
+    // 1-Click Download All Presets JSON button
+    const downloadAllPresetsBtn = document.getElementById('cfgDownloadAllPresetsBtn');
+    downloadAllPresetsBtn?.addEventListener('click', () => {
+      this.downloadAllPresetsJson();
+    });
+
+    // Import Presets file input
+    const importFileInput = document.getElementById('cfgImportPresetFileInput');
+    importFileInput?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        this.importPresetsFromFile(file);
+        e.target.value = '';
+      }
+    });
+
     this.syncControls();
+  }
+
+  downloadActiveSpec() {
+    if (!this.codeOutputEl) return;
+    const content = this.codeOutputEl.textContent;
+    const presetName = (this.tokens.name || 'blueprint').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    let filename = `kinetic-${presetName}-tokens.css`;
+    let mime = 'text/css';
+
+    if (this.activeExportTab === 'css') {
+      filename = `kinetic-${presetName}-tokens.css`;
+      mime = 'text/css';
+    } else if (this.activeExportTab === 'tailwind') {
+      filename = `tailwind.kinetic-${presetName}.config.js`;
+      mime = 'application/javascript';
+    } else if (this.activeExportTab === 'json') {
+      filename = `kinetic-${presetName}-tokens.json`;
+      mime = 'application/json';
+    } else if (this.activeExportTab === 'react') {
+      filename = 'BlueprintCard.tsx';
+      mime = 'text/typescript';
+    }
+
+    downloadText(content, filename, mime);
+    if (this.sfx) this.sfx.success();
+    this.showToast(`Downloaded ${filename}!`);
+  }
+
+  downloadActivePresetJson() {
+    const presetName = (this.tokens.name || 'custom').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    const sil = this.tokens.silhouette || 'symmetric';
+    const payload = {
+      $schema: 'https://design-tokens.github.io/community-group/format/',
+      id: presetName,
+      name: this.tokens.name || 'Custom Blueprint Preset',
+      timestamp: new Date().toISOString(),
+      tokens: { ...this.tokens },
+      specimen: this.activeSpecimen,
+      glyph: this.activeGlyph,
+      polygon: getPolygon(this.tokens.chamfer, sil)
+    };
+    downloadText(JSON.stringify(payload, null, 2), `kinetic-preset-${presetName}.json`, 'application/json');
+    if (this.sfx) this.sfx.success();
+    this.showToast(`Downloaded active preset: ${this.tokens.name || 'custom'}!`);
+  }
+
+  downloadAllPresetsJson() {
+    const custom = this.getCustomPresets();
+    const allPresets = {};
+
+    // Standard factory presets
+    Object.entries(PRESETS).forEach(([k, v]) => {
+      allPresets[k] = {
+        ...v,
+        tokens: {
+          chamfer: v.chamfer,
+          accent: v.accent,
+          accentHover: v.accentHover,
+          surface: v.surface,
+          surfaceCard: v.surfaceCard,
+          surfaceWell: v.surfaceWell,
+          textColor: v.textColor,
+          gridSize: v.gridSize,
+          gridOpacity: v.gridOpacity,
+          strokeWidth: v.strokeWidth,
+          bracketSize: v.bracketSize,
+          silhouette: 'symmetric'
+        },
+        polygon: getPolygon(v.chamfer, 'symmetric')
+      };
+    });
+
+    // Custom user presets
+    custom.forEach(cp => {
+      const sil = cp.tokens?.silhouette || 'symmetric';
+      allPresets[cp.id] = {
+        id: cp.id,
+        name: cp.name,
+        tokens: cp.tokens,
+        specimen: cp.specimen,
+        glyph: cp.glyph,
+        polygon: getPolygon(cp.tokens?.chamfer || 13, sil)
+      };
+    });
+
+    const payload = {
+      $schema: 'https://design-tokens.github.io/community-group/format/',
+      version: '1.0.0',
+      system: 'Kinetic UI Blueprint Design System',
+      description: 'Complete technical preset collection for high-assurance industrial telemetry & aerospace UI',
+      exportedAt: new Date().toISOString(),
+      totalPresets: Object.keys(allPresets).length,
+      presets: allPresets
+    };
+
+    downloadText(JSON.stringify(payload, null, 2), 'kinetic-all-presets.json', 'application/json');
+    if (this.sfx) this.sfx.success();
+    this.showToast(`Downloaded all ${Object.keys(allPresets).length} presets!`);
+  }
+
+  async downloadPresetZip(triggerBtn = null) {
+    let originalHtml = '';
+    if (triggerBtn) {
+      originalHtml = triggerBtn.innerHTML;
+      triggerBtn.innerHTML = '<span>⏳</span><span>PACKING PRESET...</span>';
+      triggerBtn.disabled = true;
+    }
+    if (this.sfx) this.sfx.telemetry();
+
+    try {
+      const zip = new JSZip();
+      const presetName = (this.tokens.name || 'custom').toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+      const folder = zip.folder(`kinetic-preset-${presetName}`);
+
+      // 1. CSS variables
+      folder.file('tokens.css', exportCSS(this.tokens));
+
+      // 2. Tailwind Config
+      folder.file('tailwind.config.js', exportTailwind(this.tokens));
+
+      // 3. DTCG Tokens JSON
+      folder.file('tokens.json', exportJSON(this.tokens));
+
+      // 4. React Component
+      folder.file('BlueprintCard.tsx', exportReact(this.tokens, this.activeSpecimen, this.activeGlyph));
+
+      // 5. Preset Metadata & Spec
+      const sil = this.tokens.silhouette || 'symmetric';
+      const meta = {
+        preset: this.tokens.name || 'Custom Blueprint Preset',
+        id: presetName,
+        createdAt: new Date().toISOString(),
+        tokens: this.tokens,
+        specimen: this.activeSpecimen,
+        glyph: this.activeGlyph,
+        polygon: getPolygon(this.tokens.chamfer, sil)
+      };
+      folder.file('preset.json', JSON.stringify(meta, null, 2));
+
+      // 6. README.md
+      const readme = `# Kinetic UI — Preset Package: ${this.tokens.name || 'Custom'}
+
+Generated by Kinetic UI Interactive Blueprint Configurator.
+
+## Contents
+- \`tokens.css\`: CSS custom properties for 8-point chamfer geometry & color palette.
+- \`tailwind.config.js\`: Tailwind extension for clip-paths and tactical colors.
+- \`tokens.json\`: W3C DTCG standard design tokens format.
+- \`BlueprintCard.tsx\`: Ready-to-use React / TSX component.
+- \`preset.json\`: Raw token metadata.
+
+## Quick Start
+Drop \`tokens.css\` into your project entry and import \`BlueprintCard.tsx\`.
+
+MIT License — Kinetic UI (https://github.com/SalAkBuK/kinetic-ui)
+`;
+      folder.file('README.md', readme);
+
+      const blob = await zip.generateAsync({ type: 'blob' });
+      downloadBlob(blob, `kinetic-preset-${presetName}.zip`);
+
+      if (this.sfx) this.sfx.success();
+      this.showToast(`1-Click Preset ZIP downloaded!`);
+    } catch (err) {
+      console.error('Failed to generate preset ZIP:', err);
+      this.showToast('Error generating ZIP archive');
+    } finally {
+      if (triggerBtn) {
+        triggerBtn.innerHTML = originalHtml;
+        triggerBtn.disabled = false;
+      }
+    }
+  }
+
+  importPresetsFromFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.presets && typeof data.presets === 'object') {
+          const custom = this.getCustomPresets();
+          let count = 0;
+          Object.values(data.presets).forEach(p => {
+            if (p.name && (p.chamfer || p.tokens)) {
+              count++;
+              custom.push({
+                id: 'custom-' + Date.now() + '-' + count,
+                name: p.name,
+                tokens: p.tokens || {
+                  chamfer: p.chamfer || 13,
+                  accent: p.accent || '#f4551d',
+                  accentHover: p.accentHover || '#ea4f1a',
+                  surface: p.surface || '#2b2b29',
+                  surfaceCard: p.surfaceCard || '#33332f',
+                  surfaceWell: p.surfaceWell || '#e2dac9',
+                  textColor: p.textColor || '#e9e2d3',
+                  gridSize: p.gridSize || 84,
+                  strokeWidth: p.strokeWidth || 1.35,
+                  bracketSize: p.bracketSize || 13,
+                  silhouette: p.silhouette || 'symmetric'
+                },
+                specimen: p.specimen || 'card',
+                glyph: p.glyph || 'cluster'
+              });
+            }
+          });
+          this.saveCustomPresets(custom);
+          this.renderCustomPresets();
+          if (this.sfx) this.sfx.success();
+          this.showToast(`Imported ${count} presets successfully!`);
+        } else if (data.name && (data.tokens || data.chamfer)) {
+          const custom = this.getCustomPresets();
+          const newP = {
+            id: 'custom-' + Date.now(),
+            name: data.name,
+            tokens: data.tokens || {
+              chamfer: data.chamfer || 13,
+              accent: data.accent || '#f4551d',
+              accentHover: data.accentHover || '#ea4f1a',
+              surface: data.surface || '#2b2b29',
+              surfaceCard: data.surfaceCard || '#33332f',
+              surfaceWell: data.surfaceWell || '#e2dac9',
+              textColor: data.textColor || '#e9e2d3',
+              gridSize: data.gridSize || 84,
+              strokeWidth: data.strokeWidth || 1.35,
+              bracketSize: data.bracketSize || 13,
+              silhouette: data.silhouette || 'symmetric'
+            },
+            specimen: data.specimen || 'card',
+            glyph: data.glyph || 'cluster'
+          };
+          custom.push(newP);
+          this.saveCustomPresets(custom);
+          this.renderCustomPresets();
+          this.loadCustomPreset(newP.id);
+          if (this.sfx) this.sfx.success();
+          this.showToast(`Imported & applied preset: "${data.name}"!`);
+        } else {
+          this.showToast('Invalid preset JSON format');
+        }
+      } catch (err) {
+        console.error('Error reading preset file:', err);
+        this.showToast('Could not parse JSON preset');
+      }
+    };
+    reader.readAsText(file);
   }
 }
 

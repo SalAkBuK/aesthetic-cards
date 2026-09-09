@@ -57,6 +57,13 @@ Built from first principles on **8-point chamfered polygon silhouettes**, **blue
 
 ## Visual Previews & System Gallery
 
+### 0. Four-Tier Kinetic Architecture
+Deterministic polygon geometry compilation, procedural zero-dependency micro-haptics, headless multi-framework adapters, and real-time hardware telemetry instrumentation.
+
+<p align="center">
+  <img src="./docs/screenshots/01b-system-architecture.png" width="100%" alt="Kinetic UI - Four-Tier Architecture Pipeline" />
+</p>
+
 ### 1. Chamfered Feature Cards Grid
 Handcrafted 8-point polygon silhouettes, blueprint coordinate grid background, and orchestrated initial-load SVG line-art vector drawings.
 

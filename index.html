@@ -248,7 +248,7 @@
       </button>
 
       <nav class="hidden sm:flex items-center gap-4 text-cream/70 text-[11px] uppercase tracking-wider mr-2">
-        <a href="#hero" class="hover:text-cream transition">Architecture</a>
+        <a href="#architecture" class="hover:text-cream transition">Architecture</a>
         <a href="#features" class="hover:text-cream transition">Features</a>
         <a href="./components.html" class="text-cream/70 hover:text-cream font-medium transition">Theme UI</a>
         <a href="./components.html#configurator" class="text-orange hover:text-orange2 font-medium transition flex items-center gap-1">
@@ -447,6 +447,252 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- Architecture Section Anchor -->
+    <section id="architecture" class="w-full max-w-[1000px] pt-16 pb-20 border-t border-white/10 font-mono">
+      
+      <!-- Section Header -->
+      <div class="mb-10 space-y-3">
+        <div class="flex items-center gap-3 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-cream/55">
+          <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true" class="shrink-0 text-orange">
+            <path d="M5 .8 9.2 5 5 9.2.8 5Z" fill="currentColor"/>
+          </svg>
+          <span class="shrink-0 text-orange font-bold">SEC-02 // SYSTEM ARCHITECTURE</span>
+          <span class="leader h-[6px] flex-1 opacity-70"></span>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 font-sans">
+          <div>
+            <h2 class="text-2xl sm:text-4xl font-bold tracking-tight text-cream">
+              The Four-Tier Kinetic Architecture
+            </h2>
+            <p class="text-sm sm:text-base text-cream/70 font-mono mt-2 max-w-[68ch] leading-relaxed">
+              Engineered from first principles: deterministic polygon geometry compilation, procedural zero-dependency micro-haptics, headless multi-framework adapters, and real-time hardware telemetry instrumentation.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <a href="./components.html#pipeline" class="btn-chamfer bg-white/10 hover:bg-orange hover:text-near text-cream px-3 py-1.5 text-xs font-mono flex items-center gap-1.5 transition">
+              <span>Interactive Pipeline ↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural Dataflow Pipeline Diagram (Visual Monospace Circuit) -->
+      <div class="mb-10 p-5 sm:p-6 rounded-xl bg-ink2/60 border border-white/10 shadow-2xl relative">
+        <div class="flex flex-wrap items-center justify-between text-[10px] text-cream/50 uppercase tracking-widest pb-3 mb-4 border-b border-white/10 gap-2">
+          <span class="flex items-center gap-2 text-orange font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-orange animate-pulse"></span>
+            PIPELINE FLOW GRAPH // DETERMINISTIC COMPILATION
+          </span>
+          <span class="text-emerald-400 font-semibold">ZERO RUNTIME OVERHEAD · ZERO LAYOUT SHIFTS</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <!-- Step 1 -->
+          <div class="p-3.5 rounded-lg bg-black/40 border border-white/10 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-1.5 py-0.5 rounded bg-orange/20 text-orange font-bold text-[9px]">TIER 01</span>
+              <span class="text-cream/40 text-[10px]">MATH</span>
+            </div>
+            <div class="font-bold text-cream text-[13px]">Geometry Compiler</div>
+            <p class="text-[11px] text-cream/60 leading-relaxed font-sans">
+              Calculates 8-point and 12-point polygon chamfers dynamically per pixel. Eliminates border-radius raster blurring.
+            </p>
+            <code class="block text-[9.5px] text-orange/90 bg-black/50 p-1.5 rounded truncate select-all">clip-path: polygon(...)</code>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="p-3.5 rounded-lg bg-black/40 border border-white/10 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-1.5 py-0.5 rounded bg-orange/20 text-orange font-bold text-[9px]">TIER 02</span>
+              <span class="text-cream/40 text-[10px]">AUDIO</span>
+            </div>
+            <div class="font-bold text-cream text-[13px]">Procedural Haptics</div>
+            <p class="text-[11px] text-cream/60 leading-relaxed font-sans">
+              Zero-asset sound synthesis via Web Audio API. Procedural sine waves, biquad filter envelopes, and transient clicks.
+            </p>
+            <code class="block text-[9.5px] text-emerald-400 bg-black/50 p-1.5 rounded truncate">0 KB Assets // Web Audio</code>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="p-3.5 rounded-lg bg-black/40 border border-white/10 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-1.5 py-0.5 rounded bg-orange/20 text-orange font-bold text-[9px]">TIER 03</span>
+              <span class="text-cream/40 text-[10px]">RUNTIME</span>
+            </div>
+            <div class="font-bold text-cream text-[13px]">Headless Adapters</div>
+            <p class="text-[11px] text-cream/60 leading-relaxed font-sans">
+              Universal token contract compiled to React 19 (TSX), Vue 3 (SFC), Svelte 5 (Runes), and semantic Tailwind HTML5.
+            </p>
+            <code class="block text-[9.5px] text-cyan-400 bg-black/50 p-1.5 rounded truncate">React · Vue · Svelte · CSS</code>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="p-3.5 rounded-lg bg-black/40 border border-white/10 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="px-1.5 py-0.5 rounded bg-orange/20 text-orange font-bold text-[9px]">TIER 04</span>
+              <span class="text-cream/40 text-[10px]">SHADERS</span>
+            </div>
+            <div class="font-bold text-cream text-[13px]">Sensor Telemetry</div>
+            <p class="text-[11px] text-cream/60 leading-relaxed font-sans">
+              3D gimbal spherical radar projection math, 4096-bin FFT oscilloscope, and CRT phosphor scanline bloom shader.
+            </p>
+            <code class="block text-[9.5px] text-amber-400 bg-black/50 p-1.5 rounded truncate">60 FPS Hardware Canvas</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural Deep-Dive Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Deep Dive 1: Geometry Tokens -->
+        <div class="p-6 rounded-xl bg-ink2/40 border border-white/10 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-orange"></span>
+              <span class="text-cream font-bold text-sm tracking-wide">01 // DETERMINISTIC GEOMETRY ENGINE</span>
+            </div>
+            <span class="text-[10px] text-cream/40 uppercase">CORE PRIMITIVE</span>
+          </div>
+
+          <p class="text-xs text-cream/75 leading-relaxed font-sans">
+            Standard CSS <code class="text-cream font-mono">border-radius</code> creates anti-aliased organic curves that degrade at non-standard pixel ratios. Kinetic UI relies exclusively on closed linear mathematical polygons using 8-point chamfer cutoffs:
+          </p>
+
+          <div class="bg-black/50 border border-white/10 p-3 rounded font-mono text-[11px] text-cream/90 space-y-1 select-all overflow-x-auto">
+            <div class="text-cream/40 text-[9.5px]">// 8-Point Chamfer Cutoff Token</div>
+            <code>--c: 13px;</code><br/>
+            <code>clip-path: polygon(var(--c) 0, calc(100% - var(--c)) 0, 100% var(--c), 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, var(--c) 100%, 0 calc(100% - var(--c)), 0 var(--c));</code>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[10.5px]">
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">SUB-PIXEL PRECISION</div>
+              <div class="text-cream font-semibold mt-0.5">Zero Raster Blur</div>
+            </div>
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">RESPONSIVE CUT</div>
+              <div class="text-cream font-semibold mt-0.5">13px Desktop · 11px Mobile</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deep Dive 2: Micro-Haptic Sound Synthesis -->
+        <div class="p-6 rounded-xl bg-ink2/40 border border-white/10 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-cream font-bold text-sm tracking-wide">02 // PROCEDURAL MICRO-HAPTICS</span>
+            </div>
+            <span class="text-[10px] text-emerald-400 uppercase">0 KB RUNTIME</span>
+          </div>
+
+          <p class="text-xs text-cream/75 leading-relaxed font-sans">
+            Instead of bundling bulky audio assets that incur network latency and battery drain, Kinetic UI synthesizes physical tactile transients procedurally directly through the browser's native Web Audio API:
+          </p>
+
+          <div class="bg-black/50 border border-white/10 p-3 rounded font-mono text-[11px] text-cream/90 space-y-1 overflow-x-auto">
+            <div class="text-cream/40 text-[9.5px]">// Pure Web Audio Transient Pulse Synthesis</div>
+            <div><code>osc.type = 'sine';</code> <span class="text-cream/40">// Pure acoustic fundamental</span></div>
+            <div><code>osc.frequency.setValueAtTime(2400, ctx.currentTime);</code></div>
+            <div><code>gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.008);</code></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[10.5px]">
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">ASSET PAYLOAD</div>
+              <div class="text-emerald-400 font-semibold mt-0.5">0 KB (Zero Downloads)</div>
+            </div>
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">TRIGGER PROFILES</div>
+              <div class="text-cream font-semibold mt-0.5">Tick · Click · Chime · Swell</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deep Dive 3: Multi-Framework Headless Engine -->
+        <div class="p-6 rounded-xl bg-ink2/40 border border-white/10 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span class="text-cream font-bold text-sm tracking-wide">03 // CROSS-FRAMEWORK PORTABILITY</span>
+            </div>
+            <span class="text-[10px] text-cyan-400 uppercase">4 STACKS</span>
+          </div>
+
+          <p class="text-xs text-cream/75 leading-relaxed font-sans">
+            Every component primitive is developed headless with universal prop schemas. You can drop the generated code directly into Next.js, Nuxt, SvelteKit, or vanilla HTML/Tailwind without installing heavy vendor runtimes:
+          </p>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[10px]">
+            <div class="p-2.5 rounded bg-black/40 border border-white/10">
+              <div class="text-cyan-400 font-bold">React (TSX)</div>
+              <div class="text-cream/50 mt-1">TypeScript 5</div>
+            </div>
+            <div class="p-2.5 rounded bg-black/40 border border-white/10">
+              <div class="text-emerald-400 font-bold">Vue 3</div>
+              <div class="text-cream/50 mt-1">Script Setup</div>
+            </div>
+            <div class="p-2.5 rounded bg-black/40 border border-white/10">
+              <div class="text-orange font-bold">Svelte 5</div>
+              <div class="text-cream/50 mt-1">Modern Runes</div>
+            </div>
+            <div class="p-2.5 rounded bg-black/40 border border-white/10">
+              <div class="text-amber-400 font-bold">HTML5</div>
+              <div class="text-cream/50 mt-1">Tailwind CSS</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] p-2 rounded bg-white/5 border border-white/5">
+            <span class="text-cream/60">Complete Suite Exporter:</span>
+            <span class="text-cream font-semibold">1-Click shadcn/ui ZIP Kit</span>
+          </div>
+        </div>
+
+        <!-- Deep Dive 4: Real-Time Instrumentation & Shaders -->
+        <div class="p-6 rounded-xl bg-ink2/40 border border-white/10 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+              <span class="text-cream font-bold text-sm tracking-wide">04 // TELEMETRY SHADERS & RADAR</span>
+            </div>
+            <span class="text-[10px] text-amber-400 uppercase">60 FPS CANVAS</span>
+          </div>
+
+          <p class="text-xs text-cream/75 leading-relaxed font-sans">
+            Built for mission-critical operations centers and telemetry dashboards. The rendering engine offloads heavy vector calculations to HTML5 Canvas 2D with requestAnimationFrame throttling and WebGL-ready shaders:
+          </p>
+
+          <div class="grid grid-cols-2 gap-2 text-[10.5px]">
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">3D GIMBAL RADAR</div>
+              <div class="text-cream font-semibold mt-0.5">Spherical Projection</div>
+            </div>
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">FFT OSCILLOSCOPE</div>
+              <div class="text-cream font-semibold mt-0.5">4096-Bin Radix-4</div>
+            </div>
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">PHOSPHOR SCANLINES</div>
+              <div class="text-cream font-semibold mt-0.5">CRT Bloom Post-FX</div>
+            </div>
+            <div class="p-2 rounded bg-white/5 border border-white/5">
+              <div class="text-cream/50 text-[9px] uppercase">THEME CASSETTES</div>
+              <div class="text-cream font-semibold mt-0.5">6 Industrial Palettes</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-[11px] p-2 rounded bg-white/5 border border-white/5">
+            <span class="text-cream/60">Animation Orchestration:</span>
+            <span class="text-orange font-semibold">Motion.dev Line-Art</span>
+          </div>
+        </div>
+
+      </div>
+
     </section>
 
     <!-- Features Section Anchor -->

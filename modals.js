@@ -7,7 +7,8 @@
 export const COMMANDS = [
   // Navigation
   { id: 'nav-hero', category: 'NAVIGATION', label: 'Go to Hero & 3D Sensor Monitor', shortcut: 'G H', action: () => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' }) },
-  { id: 'nav-cards', category: 'NAVIGATION', label: 'Feature Cards // Chamfered Blueprint Grid', shortcut: 'G C', action: () => document.getElementById('cards')?.scrollIntoView({ behavior: 'smooth' }) },
+  { id: 'nav-arch', category: 'NAVIGATION', label: 'System Architecture // 4-Tier Pipeline', shortcut: 'G A', action: () => (document.getElementById('architecture')?.scrollIntoView({ behavior: 'smooth' }) || (window.location.href = './index.html#architecture')) },
+  { id: 'nav-cards', category: 'NAVIGATION', label: 'Feature Cards // Chamfered Blueprint Grid', shortcut: 'G C', action: () => (document.getElementById('cards') || document.getElementById('features'))?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-buttons', category: 'NAVIGATION', label: 'Section 01 // Buttons & Action Triggers', shortcut: '01', action: () => document.getElementById('buttons')?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-inputs', category: 'NAVIGATION', label: 'Section 02 // Inputs, Sliders & Toggles', shortcut: '02', action: () => (document.getElementById('inputs') || document.getElementById('cards'))?.scrollIntoView({ behavior: 'smooth' }) },
   { id: 'nav-badges', category: 'NAVIGATION', label: 'Section 03 // Status Badges & Telemetry Pills', shortcut: '03', action: () => document.getElementById('badges')?.scrollIntoView({ behavior: 'smooth' }) },
@@ -41,6 +42,8 @@ export const COMMANDS = [
   { id: 'pre-ent', category: 'PRESETS', label: 'Apply Preset: 01 Production Enterprise', shortcut: 'P 1', action: () => document.querySelector('[data-param-preset="enterprise"]')?.click() },
   { id: 'pre-edge', category: 'PRESETS', label: 'Apply Preset: 02 Low-Latency Edge', shortcut: 'P 2', action: () => document.querySelector('[data-param-preset="edge"]')?.click() },
   { id: 'pre-sand', category: 'PRESETS', label: 'Apply Preset: 03 Debug / Sandbox', shortcut: 'P 3', action: () => document.querySelector('[data-param-preset="sandbox"]')?.click() },
+  { id: 'act-download-presets', category: 'PRESETS', label: 'Download All Blueprint Presets (.JSON)', shortcut: 'P D', action: () => document.getElementById('cfgDownloadAllPresetsBtn')?.click() },
+  { id: 'act-download-preset-zip', category: 'PRESETS', label: 'Download Active Preset Package (.ZIP)', shortcut: 'P Z', action: () => document.getElementById('cfgDownloadZipBtn')?.click() },
 
   // Component Exporters (shadcn/ui style)
   { id: 'exp-complete-zip', category: 'EXPORTS', label: 'Export // Complete Suite ZIP (15 Components across 4 Frameworks)', shortcut: 'X Z', action: () => (window.downloadCompleteZip?.() || document.getElementById('exportStarterBundleBtn')?.click() || document.getElementById('exportLandingKitBtn')?.click()) },

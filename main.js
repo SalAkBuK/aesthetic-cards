@@ -131,6 +131,18 @@ function run({ animate, inView, stagger }) {
     { duration: 0.4, ease: EASE_OUT, delay: 0.45 },
   );
 
+  // Architecture Section Entrance
+  const archSec = document.getElementById('architecture');
+  if (archSec && !reduced.matches) {
+    inView(archSec, () => {
+      animate(
+        archSec,
+        { opacity: [0.7, 1], transform: ['translateY(14px)', 'translateY(0px)'] },
+        { duration: 0.5, ease: EASE_OUT }
+      );
+    }, { amount: 0.08 });
+  }
+
   cards.forEach((card, i) => {
     // Cards revealed together on desktop keep a cascade; stacked on mobile each
     // one is already separated in time by the scroll itself.

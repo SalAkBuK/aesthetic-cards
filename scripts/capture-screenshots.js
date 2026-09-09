@@ -85,6 +85,17 @@ async function capture() {
     clip: { x: 0, y: 0, width: 1400, height: 760 }
   });
 
+  // 1b. Landing Page: System Architecture (4-Tier Pipeline)
+  console.log('Capturing 01b-system-architecture.png...');
+  const archEl = await page.$('#architecture');
+  if (archEl) {
+    await archEl.scrollIntoView();
+    await new Promise(r => setTimeout(r, 800));
+    await archEl.screenshot({
+      path: path.join(outDir, '01b-system-architecture.png')
+    });
+  }
+
   // 2. Landing Page: Blueprint Feature Cards
   console.log('Capturing 02-feature-cards.png...');
   const featuresEl = await page.$('#features');
