@@ -1,0 +1,8 @@
+﻿{
+  "name": "Kinetic UI",
+  "description": "High-assurance technical design system and component architecture for aerospace telemetry, industrial instrumentation, and developer platforms.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
